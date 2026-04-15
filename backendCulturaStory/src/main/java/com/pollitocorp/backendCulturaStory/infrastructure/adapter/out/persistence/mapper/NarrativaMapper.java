@@ -5,6 +5,7 @@ import com.pollitocorp.backendCulturaStory.domain.model.EstadoNarrativa;
 import com.pollitocorp.backendCulturaStory.domain.model.NarrativaCultural;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.entity.AutorEntity;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.entity.NarrativaEntity;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.entity.UsuarioEntity;
 import org.springframework.stereotype.Component;
 
 @Component
