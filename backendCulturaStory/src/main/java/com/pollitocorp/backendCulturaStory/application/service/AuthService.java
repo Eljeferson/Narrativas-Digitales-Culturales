@@ -16,7 +16,8 @@ public class AuthService {
     private final UsuarioRepositoryPort usuarioRepository;
     private final AutorRepositoryPort autorRepository;
 
-    public Usuario registrarEstudiante(Usuario usuario, String nombreCompleto, String grado, String regionCultural) {
+    public Usuario registrarEstudiante(Usuario usuario, String nombreCompleto, String grado, String regionCultural,
+                                       String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl) {
         // HU-06: Registro de usuario y perfil de autor
         usuario.setRol("estudiante");
         usuario.setActivo(true);
@@ -28,7 +29,11 @@ public class AuthService {
                 .userId(savedUser.getId())
                 .nombreCompleto(nombreCompleto)
                 .grado(grado)
+                .institucion(institucion)
                 .regionCultural(regionCultural)
+                .lenguaMaterna(lenguaMaterna)
+                .bio(bio)
+                .fotoPerfilUrl(fotoPerfilUrl)
                 .createdAt(LocalDateTime.now())
                 .build();
         autorRepository.save(autor);

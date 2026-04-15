@@ -28,7 +28,11 @@ public class AuthController {
                 usuario,
                 (String) request.get("nombreCompleto"),
                 (String) request.get("grado"),
-                (String) request.get("regionCultural")
+                (String) request.get("regionCultural"),
+                (String) request.get("institucion"),
+                (String) request.get("lenguaMaterna"),
+                (String) request.get("bio"),
+                (String) request.get("fotoPerfilUrl")
         );
         
         return ResponseEntity.ok(result);
