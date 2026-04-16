@@ -1,9 +1,11 @@
 package com.pollitocorp.backendCulturaStory.application.service;
 
+import com.pollitocorp.backendCulturaStory.domain.model.AutorEstudiante;
 import com.pollitocorp.backendCulturaStory.domain.model.EstadoNarrativa;
 import com.pollitocorp.backendCulturaStory.domain.model.NarrativaCultural;
 import com.pollitocorp.backendCulturaStory.domain.port.in.NarrativaUseCase;
 import com.pollitocorp.backendCulturaStory.domain.port.out.AIPort;
+import com.pollitocorp.backendCulturaStory.domain.port.out.AutorRepositoryPort;
 import com.pollitocorp.backendCulturaStory.domain.port.out.NarrativaRepositoryPort;
 import lombok.RequiredArgsConstructor;
 
@@ -18,10 +20,21 @@ import java.util.UUID;
 public class NarrativaService implements NarrativaUseCase {
 
     private final NarrativaRepositoryPort repositoryPort;
+    private final AutorRepositoryPort autorRepositoryPort;
     private final AIPort aiPort;
 
     @Override
     public NarrativaCultural crearNarrativa(NarrativaCultural narrativa) {
+        // Validar y cargar el autor completo desde la BD
+        if (narrativa.getAutor() == null || narrativa.getAutor().getId() == null) {
+            throw new RuntimeException("Se requiere un autor con un ID válido para crear la narrativa");
+        }
+        AutorEstudiante autorCompleto = autorRepositoryPort.findById(narrativa.getAutor().getId())
+                .orElseThrow(() -> new RuntimeException(
+                        "No se encontró el autor con ID: " + narrativa.getAutor().getId() + 
+                        ". Asegúrese de que el estudiante esté registrado como autor."));
+        narrativa.setAutor(autorCompleto);
+
         narrativa.setId(UUID.randomUUID());
         narrativa.setEstado(EstadoNarrativa.BORRADOR);
         

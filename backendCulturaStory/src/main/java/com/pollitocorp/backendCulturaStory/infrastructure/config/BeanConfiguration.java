@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    public NarrativaService narrativaService(NarrativaRepositoryPort repositoryPort, AIPort aiPort) {
-        return new NarrativaService(repositoryPort, aiPort);
+    public NarrativaService narrativaService(NarrativaRepositoryPort repositoryPort, AutorRepositoryPort autorRepositoryPort, AIPort aiPort) {
+        return new NarrativaService(repositoryPort, autorRepositoryPort, aiPort);
     }
 
     @Bean
