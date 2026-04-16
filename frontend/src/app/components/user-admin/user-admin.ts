@@ -99,7 +99,7 @@ import { User } from '../../core/domain/models/user.model';
 <td class="px-8 py-5">
 <div class="flex items-center gap-4">
 <div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center font-bold text-primary">
-    {{ user.nombreCompleto?.charAt(0) || 'U' }}
+    {{ user.nombreCompleto.charAt(0) || 'U' }}
 </div>
 <div>
 <p class="font-bold text-on-surface">{{ user.nombreCompleto }}</p>

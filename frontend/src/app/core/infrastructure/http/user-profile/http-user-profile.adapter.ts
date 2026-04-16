@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { UserProfilePort } from '../../domain/ports/user-profile.port';
-import { UserProfile } from '../../domain/models/user-profile.model';
+import { UserProfilePort } from '../../../domain/ports/user-profile.port';
+import { UserProfile } from '../../../domain/models/user-profile.model';
 
 @Injectable({ providedIn: 'root' })
 export class HttpUserProfileAdapter implements UserProfilePort {
@@ -17,6 +17,6 @@ export class HttpUserProfileAdapter implements UserProfilePort {
 
   updateProfile(userId: string, profile: Partial<UserProfile>): Observable<UserProfile> {
     console.log('[HttpUserProfileAdapter] Actualizando perfil:', userId);
-    return of({ id: userId, fullName: '', email: '', role: 'student', ...profile });
+    return of({ id: userId, fullName: '', email: '', rol: 'student', ...profile } as any);
   }
 }

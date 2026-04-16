@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AnalyticsPort, AnalyticsData } from '../../domain/ports/analytics.port';
+import { AnalyticsPort, AnalyticsData } from '../../../domain/ports/analytics.port';
 
 @Injectable({ providedIn: 'root' })
 export class HttpAnalyticsAdapter implements AnalyticsPort {

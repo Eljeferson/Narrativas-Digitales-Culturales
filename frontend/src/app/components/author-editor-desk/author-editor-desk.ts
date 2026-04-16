@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { GenerateOutlineUseCase, CreateNarrativeUseCase, SaveNarrativeUseCase } from '../../core/application/narratives/narrative-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 
 @Component({
   selector: 'app-author-editor-desk',
   standalone: true,
-  imports: [FormsModule, NgIf],
+  imports: [CommonModule, FormsModule],
   template: `
 <div class="loom-thread"></div>
 <!-- TopNavBar -->

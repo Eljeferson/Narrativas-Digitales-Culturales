@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { NarrativePort } from '../../domain/ports/narrative.port';
-import { Narrative } from '../../domain/models/narrative.model';
-import { BACKEND_CONFIG } from '../config/backend.config';
+import { NarrativePort } from '../../../domain/ports/narrative.port';
+import { Narrative } from '../../../domain/models/narrative.model';
+import { BACKEND_CONFIG } from '../../config/backend.config';
 
 @Injectable({
   providedIn: 'root'

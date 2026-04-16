@@ -89,7 +89,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <td class="py-4 px-4 rounded-l-xl">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
-    {{ student.nombreCompleto?.charAt(0) }}
+    {{ student.nombreCompleto.charAt(0) }}
 </div>
 <div class="font-bold text-on-surface">{{ student.nombreCompleto }}</div>
 </div>

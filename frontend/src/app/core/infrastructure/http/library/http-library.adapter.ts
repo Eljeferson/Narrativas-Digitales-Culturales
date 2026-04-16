@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { LibraryPort } from '../../domain/ports/library.port';
-import { Narrative } from '../../domain/models/narrative.model';
+import { LibraryPort } from '../../../domain/ports/library.port';
+import { Narrative } from '../../../domain/models/narrative.model';
 
 @Injectable({ providedIn: 'root' })
 export class HttpLibraryAdapter implements LibraryPort {

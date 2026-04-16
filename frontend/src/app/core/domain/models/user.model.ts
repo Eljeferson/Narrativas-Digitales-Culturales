@@ -4,5 +4,5 @@ export interface User {
   nombreCompleto: string;
   grado?: string;
   regionCultural?: string;
-  role?: 'student' | 'teacher' | 'admin';
+  rol?: 'ESTUDIANTE' | 'DOCENTE' | 'ADMINISTRADOR' | 'student' | 'teacher' | 'admin';
 }

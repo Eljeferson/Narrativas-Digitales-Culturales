@@ -123,9 +123,3 @@ export class StudentRegistration {
     });
   }
 }
-  `,
-  styles: `
-    :host { display: block; }
-  `
-})
-export class StudentRegistration {}

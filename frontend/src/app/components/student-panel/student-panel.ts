@@ -85,7 +85,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-widest rounded-full">{{ nar.status || 'Publicada' }}</span>
 </div>
 <div class="flex gap-4 text-xs text-on-surface-variant mb-4">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> {{ nar.region }}</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> {{ nar.regionCultural }}</span>
 </div>
 <p class="text-sm text-on-surface-variant mb-4 line-clamp-2">{{ nar.contenido }}</p>
 <div class="flex gap-3">

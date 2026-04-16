@@ -12,7 +12,7 @@ export const TEACHER_PORT = new InjectionToken<TeacherPort>('TEACHER_PORT');
 export class ListStudentsUseCase {
   constructor(@Inject(TEACHER_PORT) private teacherPort: TeacherPort) {}
 
-  execute(grade: string): Observable<User[]> {
+  execute(grade?: string): Observable<User[]> {
     return this.teacherPort.listStudents(grade);
   }
 }

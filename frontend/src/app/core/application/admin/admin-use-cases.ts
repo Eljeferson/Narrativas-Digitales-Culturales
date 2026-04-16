@@ -22,7 +22,7 @@ export class ListUsersUseCase {
 export class ChangeRoleUseCase {
   constructor(@Inject(ADMIN_PORT) private adminPort: AdminPort) {}
 
-  execute(id: string, role: string, reason: string, adminId: string): Observable<void> {
+  execute(id: string, role: string, reason?: string, adminId?: string): Observable<void> {
     return this.adminPort.changeRole(id, role, reason, adminId);
   }
 }

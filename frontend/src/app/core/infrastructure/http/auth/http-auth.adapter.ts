@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
-import { AuthPort } from '../../domain/ports/auth.port';
-import { User } from '../../domain/models/user.model';
-import { BACKEND_CONFIG } from '../config/backend.config';
+import { AuthPort } from '../../../domain/ports/auth.port';
+import { User } from '../../../domain/models/user.model';
+import { BACKEND_CONFIG } from '../../config/backend.config';
 
 @Injectable({
   providedIn: 'root'
