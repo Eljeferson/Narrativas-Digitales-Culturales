@@ -44,7 +44,7 @@ public class AutorEntity {
     private String fotoPerfilUrl;
 
     @Column(name = "narrativas_publicadas", nullable = false)
-    private int narrativasPublicadas;
+    private Integer narrativasPublicadas;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

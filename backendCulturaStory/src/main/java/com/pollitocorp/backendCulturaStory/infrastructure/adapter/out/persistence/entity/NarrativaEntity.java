@@ -54,10 +54,10 @@ public class NarrativaEntity {
     private String comentarioPedagogico;
 
     @Column(nullable = false)
-    private boolean destacada;
+    private Boolean destacada;
 
     @Column(name = "veces_vista", nullable = false)
-    private int vecesVista;
+    private Integer vecesVista;
 
     @Column(name = "fecha_publicacion")
     private LocalDateTime fechaPublicacion;

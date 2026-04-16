@@ -22,6 +22,6 @@ public class AutorEstudiante {
     private String lenguaMaterna;
     private String bio;
     private String fotoPerfilUrl;
-    private int narrativasPublicadas;
+    private Integer narrativasPublicadas;
     private LocalDateTime createdAt;
 }

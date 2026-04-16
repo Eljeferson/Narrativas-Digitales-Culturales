@@ -24,6 +24,11 @@ public class NarrativaService implements NarrativaUseCase {
     public NarrativaCultural crearNarrativa(NarrativaCultural narrativa) {
         narrativa.setId(UUID.randomUUID());
         narrativa.setEstado(EstadoNarrativa.BORRADOR);
+        
+        if (narrativa.getDestacada() == null) narrativa.setDestacada(false);
+        if (narrativa.getVecesVista() == null) narrativa.setVecesVista(0);
+        if (narrativa.getTipoRelato() == null) narrativa.setTipoRelato("leyenda"); // Default cultural type
+        
         narrativa.setCreatedAt(LocalDateTime.now());
         narrativa.setUpdatedAt(LocalDateTime.now());
         return repositoryPort.save(narrativa);

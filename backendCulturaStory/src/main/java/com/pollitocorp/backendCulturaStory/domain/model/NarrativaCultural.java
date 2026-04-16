@@ -31,8 +31,8 @@ public class NarrativaCultural {
     private String comentarioPedagogico;
     
     // Métricas y fechas
-    private boolean destacada;
-    private int vecesVista;
+    private Boolean destacada;
+    private Integer vecesVista;
     private LocalDateTime fechaPublicacion;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
