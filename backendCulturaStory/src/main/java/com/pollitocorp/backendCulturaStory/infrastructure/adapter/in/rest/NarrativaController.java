@@ -12,6 +12,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/narrativas")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class NarrativaController {
 
     private final NarrativaUseCase narrativaUseCase;

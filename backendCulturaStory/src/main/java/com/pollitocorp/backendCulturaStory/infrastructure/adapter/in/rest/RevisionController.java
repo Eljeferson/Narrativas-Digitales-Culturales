@@ -12,6 +12,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/revision")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class RevisionController {
 
     private final RevisionUseCase revisionUseCase;

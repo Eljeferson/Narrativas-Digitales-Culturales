@@ -13,6 +13,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/docente")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class DocenteController {
 
     private final DocenteService docenteService;
