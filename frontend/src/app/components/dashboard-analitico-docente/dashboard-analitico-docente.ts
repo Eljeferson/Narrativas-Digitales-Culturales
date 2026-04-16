@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { GetDashboardDataUseCase } from '../../core/application/analytics/get-dashboard-data.use-case';
+import { AnalyticsData } from '../../core/domain/ports/analytics.port';
+
 
 @Component({
   selector: 'app-dashboard-analitico-docente',
@@ -279,4 +282,16 @@ import { Component } from '@angular/core';
     :host { display: block; }
   `
 })
-export class DashboardAnaliticoDocente {}
+export class DashboardAnaliticoDocente implements OnInit {
+  private getDashboardDataUseCase = inject(GetDashboardDataUseCase);
+
+  analytics: AnalyticsData | null = null;
+
+  ngOnInit() {
+    this.getDashboardDataUseCase.execute('current-teacher-id').subscribe({
+      next: (data) => { this.analytics = data; console.log('Dashboard cargado:', data); },
+      error: (err) => console.error('Error cargando dashboard:', err)
+    });
+  }
+}
+

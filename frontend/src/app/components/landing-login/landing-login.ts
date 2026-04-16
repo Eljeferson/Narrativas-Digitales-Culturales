@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SyncSessionUseCase } from '../../core/application/auth/auth-use-cases';
 
 @Component({
   selector: 'app-landing-login',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   template: `
 <!-- Top Navigation Anchor -->
 <nav class="sticky top-0 z-50 flex justify-between items-center px-8 py-4 w-full bg-[#FFF8EF]/80 dark:bg-[#1E1B13]/80 backdrop-blur-md">
@@ -12,8 +15,8 @@ import { Component } from '@angular/core';
 <span class="text-2xl font-headline italic font-bold tracking-tight text-[#823B18] dark:text-[#A0522D]">CulturaStory AI</span>
 </div>
 <div class="hidden md:flex items-center gap-8">
-<a class="text-[#823B18] border-b-2 border-[#795900] pb-1 font-bold" href="#">Narratives</a>
-<a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors" href="#">Regions</a>
+<a class="text-[#823B18] border-b-2 border-[#795900] pb-1 font-bold" href="#">Narrativas</a>
+<a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors" href="#">Regiones</a>
 <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors" href="#">Library</a>
 </div>
 <div class="flex items-center gap-4">
@@ -70,21 +73,21 @@ import { Component } from '@angular/core';
 <h2 class="text-3xl font-headline font-bold text-on-surface">Bienvenido al Telar</h2>
 <p class="text-on-surface-variant">Ingresa para continuar tu historia</p>
 </div>
-<form class="space-y-6">
+<form (ngSubmit)="onSubmit()" class="space-y-6">
 <!-- Role Selector -->
 <div class="space-y-3">
 <label class="text-sm font-label font-semibold text-on-surface-variant">Tipo de Perfil</label>
 <div class="grid grid-cols-3 gap-2">
-<button class="flex flex-col items-center justify-center p-3 rounded-lg border-b-2 border-outline-variant bg-surface-variant hover:bg-secondary-fixed/30 transition-all group" type="button">
-<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="school">school</span>
+<button (click)="setRole('student')" [class.bg-primary]="selectedRole === 'student'" [class.text-on-primary]="selectedRole === 'student'" class="flex flex-col items-center justify-center p-3 rounded-lg border-b-2 border-outline-variant bg-surface-variant hover:bg-secondary-fixed/30 transition-all group" type="button">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" [class.text-on-primary]="selectedRole === 'student'" data-icon="school">school</span>
 <span class="text-[10px] mt-1 font-bold">Estudiante</span>
 </button>
-<button class="flex flex-col items-center justify-center p-3 rounded-lg border-b-2 border-primary bg-primary text-on-primary shadow-sm group" type="button">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="co_present">co_present</span>
+<button (click)="setRole('teacher')" [class.bg-primary]="selectedRole === 'teacher'" [class.text-on-primary]="selectedRole === 'teacher'" class="flex flex-col items-center justify-center p-3 rounded-lg border-b-2 border-outline-variant bg-surface-variant hover:bg-secondary-fixed/30 transition-all group" type="button">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" [class.text-on-primary]="selectedRole === 'teacher'" data-icon="co_present">co_present</span>
 <span class="text-[10px] mt-1 font-bold">Docente</span>
 </button>
-<button class="flex flex-col items-center justify-center p-3 rounded-lg border-b-2 border-outline-variant bg-surface-variant hover:bg-secondary-fixed/30 transition-all group" type="button">
-<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="admin_panel_settings">admin_panel_settings</span>
+<button (click)="setRole('admin')" [class.bg-primary]="selectedRole === 'admin'" [class.text-on-primary]="selectedRole === 'admin'" class="flex flex-col items-center justify-center p-3 rounded-lg border-b-2 border-outline-variant bg-surface-variant hover:bg-secondary-fixed/30 transition-all group" type="button">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" [class.text-on-primary]="selectedRole === 'admin'" data-icon="admin_panel_settings">admin_panel_settings</span>
 <span class="text-[10px] mt-1 font-bold">Admin</span>
 </button>
 </div>
@@ -94,7 +97,7 @@ import { Component } from '@angular/core';
 <label class="text-sm font-label font-semibold text-on-surface-variant" for="email">Correo Institucional</label>
 <div class="relative">
 <span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="mail">mail</span>
-<input class="w-full pl-8 pr-4 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="email" placeholder="usuario@cultura.edu" type="email"/>
+<input [(ngModel)]="email" name="email" class="w-full pl-8 pr-4 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="email" placeholder="usuario@cultura.edu" type="email"/>
 </div>
 </div>
 <!-- Input Password -->
@@ -105,7 +108,7 @@ import { Component } from '@angular/core';
 </div>
 <div class="relative">
 <span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="lock">lock</span>
-<input class="w-full pl-8 pr-4 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="password" placeholder="••••••••" type="password"/>
+<input [(ngModel)]="password" name="password" class="w-full pl-8 pr-4 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="password" placeholder="••••••••" type="password"/>
 </div>
 </div>
 <!-- CTA Button -->
@@ -120,7 +123,7 @@ import { Component } from '@angular/core';
 <!-- Registration Link -->
 <p class="text-center text-sm text-on-surface-variant">
                         ¿Nuevo en el telar? 
-                        <a class="text-primary font-bold hover:underline ml-1" href="#">Regístrate como Estudiante</a>
+                        <a (click)="goToRegistration()" class="text-primary font-bold hover:underline ml-1 cursor-pointer">Regístrate como Estudiante</a>
 </p>
 </form>
 <!-- Social/External Login Mock -->
@@ -140,7 +143,7 @@ import { Component } from '@angular/core';
 <div class="flex flex-col gap-2">
 <div class="flex items-center gap-2 opacity-60">
 <span class="material-symbols-outlined text-sm" data-icon="fingerprint">fingerprint</span>
-<span class="text-xs font-label uppercase tracking-tighter">Autenticación Segura vía Supabase</span>
+<span class="text-xs font-label uppercase tracking-tighter">Autenticación Segura</span>
 </div>
 <p class="text-xs text-on-surface-variant">© 2024 CulturaStory AI. Tejiendo identidades digitales.</p>
 </div>
@@ -158,4 +161,41 @@ import { Component } from '@angular/core';
     :host { display: block; }
   `
 })
-export class LandingLogin {}
+export class LandingLogin {
+  private syncSessionUseCase = inject(SyncSessionUseCase);
+  private router = inject(Router);
+
+  email = '';
+  password = '';
+  selectedRole: 'student' | 'teacher' | 'admin' = 'student';
+
+  setRole(role: 'student' | 'teacher' | 'admin') {
+    this.selectedRole = role;
+  }
+
+  onSubmit() {
+    console.log(`[LandingLogin] Sincronizando sesión para ${this.email}`);
+    this.syncSessionUseCase.execute(this.email)
+      .subscribe({
+        next: (user) => {
+          console.log('Sesión sincronizada:', user);
+          // Redirección basada en el rol
+          if (this.selectedRole === 'admin') {
+            this.router.navigate(['/gestion-de-usuarios']);
+          } else if (this.selectedRole === 'teacher') {
+            this.router.navigate(['/panel-del-docente']);
+          } else {
+            this.router.navigate(['/panel-del-estudiante']);
+          }
+        },
+        error: (err) => {
+          console.error('Error en sincronización:', err);
+          alert('No se pudo encontrar el perfil. Por favor, regístrate.');
+        }
+      });
+  }
+
+  goToRegistration() {
+    this.router.navigate(['/registro-de-estudiante']);
+  }
+}
