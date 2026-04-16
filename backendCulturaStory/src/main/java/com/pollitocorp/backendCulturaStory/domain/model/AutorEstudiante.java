@@ -22,6 +22,7 @@ public class AutorEstudiante {
     private String lenguaMaterna;
     private String bio;
     private String fotoPerfilUrl;
-    private Integer narrativasPublicadas;
+    @Builder.Default
+    private Integer narrativasPublicadas = 0;
     private LocalDateTime createdAt;
 }

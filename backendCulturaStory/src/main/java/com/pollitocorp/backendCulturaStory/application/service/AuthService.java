@@ -34,6 +34,7 @@ public class AuthService {
                 .lenguaMaterna(lenguaMaterna)
                 .bio(bio)
                 .fotoPerfilUrl(fotoPerfilUrl)
+                .narrativasPublicadas(0)
                 .createdAt(LocalDateTime.now())
                 .build();
         autorRepository.save(autor);
