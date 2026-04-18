@@ -1,7 +1,6 @@
 import {
   Title
-} from "./chunk-TQ7W2HAI.js";
-import "./chunk-ZKUNWIZK.js";
+} from "./chunk-SGRJELYQ.js";
 import {
   HashLocationStrategy,
   Location,
@@ -11,11 +10,12 @@ import {
   PathLocationStrategy,
   PlatformNavigation,
   ViewportScroller
-} from "./chunk-6SYW6KGO.js";
+} from "./chunk-GO3BLYFH.js";
+import "./chunk-OFIJAZHM.js";
 import {
   LOCATION_INITIALIZED,
   PlatformLocation
-} from "./chunk-LNKSQMPR.js";
+} from "./chunk-32DMAHCM.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
@@ -92,7 +92,7 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-7WGOMJJI.js";
+} from "./chunk-XWYWHSTY.js";
 import {
   BehaviorSubject,
   EMPTY,
@@ -553,7 +553,8 @@ var UrlParser = class {
     this.remaining = url;
   }
   parseRootSegment() {
-    this.consumeOptional("/");
+    while (this.consumeOptional("/")) {
+    }
     if (this.remaining === "" || this.peekStartsWith("?") || this.peekStartsWith("#")) {
       return new UrlSegmentGroup([], {});
     }
@@ -5964,7 +5965,7 @@ function mapToCanDeactivate(providers) {
 function mapToResolve(provider) {
   return (...params) => inject(provider).resolve(...params);
 }
-var VERSION = new Version("21.2.7");
+var VERSION = new Version("21.2.9");
 export {
   ActivatedRoute,
   ActivatedRouteSnapshot,

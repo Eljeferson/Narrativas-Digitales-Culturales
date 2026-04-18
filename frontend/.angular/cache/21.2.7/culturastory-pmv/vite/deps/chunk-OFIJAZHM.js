@@ -2,10 +2,11 @@ import {
   PlatformLocation,
   XhrFactory,
   parseCookieValue
-} from "./chunk-LNKSQMPR.js";
+} from "./chunk-32DMAHCM.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
+  CSP_NONCE,
   DOCUMENT,
   DestroyRef,
   EnvironmentInjector,
@@ -37,7 +38,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-7WGOMJJI.js";
+} from "./chunk-XWYWHSTY.js";
 import {
   Observable,
   __objRest,
@@ -1603,6 +1604,9 @@ var JsonpClientBackend = class _JsonpClientBackend {
   callbackMap;
   document;
   resolvedPromise = Promise.resolve();
+  nonce = inject(CSP_NONCE, {
+    optional: true
+  });
   constructor(callbackMap, document) {
     this.callbackMap = callbackMap;
     this.document = document;
@@ -1624,6 +1628,9 @@ var JsonpClientBackend = class _JsonpClientBackend {
       const url = req.urlWithParams.replace(/=JSONP_CALLBACK(&|$)/, `=${callback}$1`);
       const node = this.document.createElement("script");
       node.src = url;
+      if (this.nonce) {
+        node.setAttribute("nonce", this.nonce);
+      }
       let body = null;
       let finished = false;
       this.callbackMap[callback] = (data) => {
@@ -2487,4 +2494,4 @@ export {
   withHttpTransferCache,
   httpResource
 };
-//# sourceMappingURL=chunk-ZKUNWIZK.js.map
+//# sourceMappingURL=chunk-OFIJAZHM.js.map
