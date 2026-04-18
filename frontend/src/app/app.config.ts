@@ -36,6 +36,10 @@ import { HttpLibraryAdapter } from './core/infrastructure/http/library/http-libr
 import { ANALYTICS_PORT } from './core/application/analytics/get-dashboard-data.use-case';
 import { HttpAnalyticsAdapter } from './core/infrastructure/http/analytics/http-analytics.adapter';
 
+// Institutions
+import { INSTITUTION_PORT } from './core/application/institutions/institution.use-cases';
+import { HttpInstitutionAdapter } from './core/infrastructure/http/institutions/http-institution.adapter';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -48,7 +52,8 @@ export const appConfig: ApplicationConfig = {
     { provide: USER_PROFILE_PORT, useClass: HttpUserProfileAdapter },
     { provide: REVIEW_PORT,       useClass: HttpReviewAdapter },
     { provide: LIBRARY_PORT,      useClass: HttpLibraryAdapter },
-    { provide: ANALYTICS_PORT,    useClass: HttpAnalyticsAdapter }
+    { provide: ANALYTICS_PORT,    useClass: HttpAnalyticsAdapter },
+    { provide: INSTITUTION_PORT,   useClass: HttpInstitutionAdapter }
   ]
 };
 

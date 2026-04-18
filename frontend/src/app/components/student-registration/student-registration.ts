@@ -2,6 +2,8 @@ import { Component, inject, ViewChild, ElementRef, HostListener } from '@angular
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegisterStudentUseCase } from '../../core/application/auth/auth-use-cases';
+import { SearchInstitutionsUseCase } from '../../core/application/institutions/institution.use-cases';
+import { Institution } from '../../core/domain/models/institution.model';
 import { User } from '../../core/domain/models/user.model';
 
 @Component({
@@ -215,11 +217,35 @@ import { User } from '../../core/domain/models/user.model';
                 }
               </div>
             </div>
-            <div class="group">
+            <div class="group relative">
               <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="institution">Institución Educativa</label>
-              <input [(ngModel)]="institution" name="institution" 
-                [class.border-secondary]="showErrors && !institution.trim()"
-                class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="institution" placeholder="Nombre de tu colegio o escuela" type="text" required/>
+              <div class="relative">
+                <input [(ngModel)]="institution" name="institution" 
+                  (input)="searchInstitutions()"
+                  (focus)="institution.trim().length >= 2 && (isInstitutionDropdownOpen = true)"
+                  (click)="$event.stopPropagation()"
+                  autocomplete="off"
+                  [class.border-secondary]="showErrors && !institution.trim()"
+                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="institution" placeholder="Nombre de tu colegio o escuela" type="text" required/>
+                
+                @if (isInstitutionDropdownOpen && institutionSuggestions.length > 0) {
+                  <div class="absolute z-50 w-full mt-1 bg-white border border-[#E5D0C0] rounded-xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                    <ul class="max-h-60 overflow-y-auto py-2">
+                      @for (inst of institutionSuggestions; track inst.idInstitucion) {
+                        <li>
+                          <button type="button" (click)="selectInstitution(inst)" class="w-full text-left px-4 py-2.5 hover:bg-[#FDF8F3] text-black font-medium text-sm transition-all flex items-center gap-2">
+                            <span class="material-symbols-outlined text-secondary text-base">school</span>
+                            <div class="flex flex-col">
+                              <span>{{inst.institucionEducativa}}</span>
+                              <span class="text-[10px] text-on-surface-variant uppercase tracking-tighter opacity-70">{{inst.grado}}</span>
+                            </div>
+                          </button>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
+              </div>
               @if (showErrors && !institution.trim()) {
                 <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                   <span class="material-symbols-outlined text-sm">priority_high</span>
@@ -430,6 +456,7 @@ export class StudentRegistration {
   @ViewChild('formContainer') formContainer!: ElementRef;
   @ViewChild('avatarScrollContainer') avatarScrollContainer!: ElementRef;
   private registerUseCase = inject(RegisterStudentUseCase);
+  private searchInstitutionsUseCase = inject(SearchInstitutionsUseCase);
   private router = inject(Router);
 
   currentStep = 1;
@@ -468,7 +495,9 @@ export class StudentRegistration {
   isGradeDropdownOpen = false;
   isRegionDropdownOpen = false;
   isLanguageDropdownOpen = false;
+  isInstitutionDropdownOpen = false;
   languages = ['Castellano', 'Quechua', 'Aimara'];
+  institutionSuggestions: Institution[] = [];
 
   // Opciones de grados según el nivel
   getGradeOptions() {
@@ -522,6 +551,32 @@ export class StudentRegistration {
     this.isGradeDropdownOpen = false;
     this.isRegionDropdownOpen = false;
     this.isLanguageDropdownOpen = false;
+    this.isInstitutionDropdownOpen = false;
+  }
+
+  // Lógica de búsqueda de instituciones
+  searchInstitutions() {
+    if (this.institution.trim().length < 2) {
+      this.institutionSuggestions = [];
+      this.isInstitutionDropdownOpen = false;
+      return;
+    }
+
+    this.searchInstitutionsUseCase.execute(this.institution).subscribe({
+      next: (suggestions) => {
+        this.institutionSuggestions = suggestions;
+        this.isInstitutionDropdownOpen = suggestions.length > 0;
+      },
+      error: (err) => {
+        console.error('Error buscando instituciones:', err);
+        this.isInstitutionDropdownOpen = false;
+      }
+    });
+  }
+
+  selectInstitution(inst: Institution) {
+    this.institution = inst.institucionEducativa;
+    this.isInstitutionDropdownOpen = false;
   }
 
   isStepValid(): boolean {
