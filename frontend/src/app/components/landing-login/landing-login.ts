@@ -10,14 +10,14 @@ import { SyncSessionUseCase } from '../../core/application/auth/auth-use-cases';
   template: `
 <!-- Top Navigation Anchor -->
 <nav class="sticky top-0 z-50 flex justify-between items-center px-8 py-4 w-full bg-[#FFF8EF]/80 dark:bg-[#1E1B13]/80 backdrop-blur-md">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-3xl" data-icon="hub">hub</span>
-<span class="text-2xl font-headline italic font-bold tracking-tight text-[#823B18] dark:text-[#A0522D]">CulturaStory AI</span>
+<div class="flex items-center gap-3">
+  <img src="logo-cultura.png" alt="CulturaStory AI Logo" class="h-12 w-auto object-contain">
+  <span class="text-2xl font-headline italic font-bold tracking-tight text-[#B59449]">Historia Cultural</span>
 </div>
 <div class="hidden md:flex items-center gap-8">
-<a class="text-[#823B18] border-b-2 border-[#795900] pb-1 font-bold" href="#">Narrativas</a>
-<a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors" href="#">Regiones</a>
-<a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors" href="#">Library</a>
+  <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 border-b-2 border-[#B59449] pb-1 font-bold" href="#">Narrativas</a>
+  <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:border-b-2 hover:border-[#B59449]/50 pb-1 transition-all" href="#">Regiones</a>
+  <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:border-b-2 hover:border-[#B59449]/50 pb-1 transition-all" href="#">Library</a>
 </div>
 <div class="flex items-center gap-4">
 <button class="p-2 hover:bg-[#823B18]/5 rounded-full transition-colors">

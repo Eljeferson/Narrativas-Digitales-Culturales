@@ -15,6 +15,10 @@ import { User } from '../../core/domain/models/user.model';
   
   <!-- Sidebar with logic and indicators -->
   <div class="w-full md:w-5/12 flex flex-col space-y-6 md:sticky md:top-24">
+    <div class="flex items-center gap-3 mb-2">
+      <img src="logo-cultura.png" alt="CulturaStory Logo" class="h-16 w-auto object-contain">
+      <span class="text-2xl font-headline italic font-bold tracking-tight text-[#B59449]">Historia Cultural</span>
+    </div>
     <div class="space-y-4">
       <h1 class="text-primary font-headline text-3xl md:text-5xl font-bold leading-tight">
         Inicia tu viaje como <span class="italic text-secondary">Tejedor de Historias</span>
@@ -396,14 +400,24 @@ import { User } from '../../core/domain/models/user.model';
             <div class="group">
               <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="bio">Biografía / Sobre ti</label>
               <textarea [(ngModel)]="bio" name="bio" rows="2" 
+                (ngModelChange)="formatBio()"
                 [class.border-secondary]="showErrors && !bio.trim()"
                 class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium resize-none" id="bio" placeholder="Comparte un poco de tu historia..." required></textarea>
-              @if (showErrors && !bio.trim()) {
-                <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
-                  <span class="material-symbols-outlined text-sm">priority_high</span>
-                  Campo obligatorio
+              <div class="flex justify-between items-center mt-1.5">
+                <div>
+                  @if (showErrors && !bio.trim()) {
+                    <p class="text-[10px] text-secondary font-bold flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                      <span class="material-symbols-outlined text-sm">priority_high</span>
+                      Campo obligatorio
+                    </p>
+                  }
+                </div>
+                <p class="text-[10px] font-bold uppercase tracking-widest transition-colors" 
+                   [class.text-secondary]="getWordCount() >= 180"
+                   [class.text-on-surface-variant/50]="getWordCount() < 180">
+                  {{ getWordCount() }} / 200 palabras
                 </p>
-              }
+              </div>
             </div>
           </div>
         }
@@ -577,6 +591,30 @@ export class StudentRegistration {
   selectInstitution(inst: Institution) {
     this.institution = inst.institucionEducativa;
     this.isInstitutionDropdownOpen = false;
+  }
+
+  formatBio() {
+    if (!this.bio) return;
+
+    // Capitalizar cada palabra
+    const words = this.bio.split(' ');
+    this.bio = words.map(word => {
+      if (word.length > 0) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+      return word;
+    }).join(' ');
+
+    // Limitar a 200 palabras
+    const wordList = this.bio.trim().split(/\s+/);
+    if (wordList.length > 200) {
+      this.bio = wordList.slice(0, 200).join(' ');
+    }
+  }
+
+  getWordCount(): number {
+    if (!this.bio.trim()) return 0;
+    return this.bio.trim().split(/\s+/).length;
   }
 
   isStepValid(): boolean {
