@@ -18,7 +18,7 @@ public class InstitucionService implements InstitucionUseCase {
     }
 
     @Override
-    public List<Institucion> buscarPorNombre(String nombre) {
-        return repositoryPort.buscarPorNombre(nombre);
+    public List<Institucion> buscarPorNombreYGrado(String nombre, String grado) {
+        return repositoryPort.buscarPorNombreYGrado(nombre, grado);
     }
 }

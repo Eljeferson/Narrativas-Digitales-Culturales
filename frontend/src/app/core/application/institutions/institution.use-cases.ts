@@ -22,7 +22,7 @@ export class GetInstitutionsUseCase {
 export class SearchInstitutionsUseCase {
   constructor(@Inject(INSTITUTION_PORT) private port: InstitutionPort) {}
 
-  execute(name: string): Observable<Institution[]> {
-    return this.port.searchByName(name);
+  execute(name: string, grado?: string): Observable<Institution[]> {
+    return this.port.searchByName(name, grado);
   }
 }

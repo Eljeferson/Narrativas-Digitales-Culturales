@@ -3,5 +3,5 @@ import { Institution } from '../models/institution.model';
 
 export interface InstitutionPort {
   getAll(): Observable<Institution[]>;
-  searchByName(name: string): Observable<Institution[]>;
+  searchByName(name: string, grado?: string): Observable<Institution[]>;
 }

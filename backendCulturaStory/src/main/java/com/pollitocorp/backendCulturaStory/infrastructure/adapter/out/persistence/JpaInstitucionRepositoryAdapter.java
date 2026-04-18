@@ -25,8 +25,8 @@ public class JpaInstitucionRepositoryAdapter implements InstitucionRepositoryPor
     }
 
     @Override
-    public List<Institucion> buscarPorNombre(String nombre) {
-        return repository.searchByNombre(nombre).stream()
+    public List<Institucion> buscarPorNombreYGrado(String nombre, String grado) {
+        return repository.searchByNombreYGrado(nombre, grado).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }

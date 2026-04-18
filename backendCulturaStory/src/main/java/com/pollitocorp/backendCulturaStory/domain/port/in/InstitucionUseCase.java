@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface InstitucionUseCase {
     List<Institucion> listarInstituciones();
-    List<Institucion> buscarPorNombre(String nombre);
+    List<Institucion> buscarPorNombreYGrado(String nombre, String grado);
 }

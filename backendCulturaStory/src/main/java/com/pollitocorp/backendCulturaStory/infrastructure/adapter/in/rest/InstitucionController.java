@@ -17,9 +17,11 @@ public class InstitucionController {
     private final InstitucionUseCase institucionUseCase;
 
     @GetMapping
-    public ResponseEntity<List<Institucion>> listar(@RequestParam(required = false) String nombre) {
+    public ResponseEntity<List<Institucion>> listar(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String grado) {
         if (nombre != null && !nombre.isEmpty()) {
-            return ResponseEntity.ok(institucionUseCase.buscarPorNombre(nombre));
+            return ResponseEntity.ok(institucionUseCase.buscarPorNombreYGrado(nombre, grado));
         }
         return ResponseEntity.ok(institucionUseCase.listarInstituciones());
     }

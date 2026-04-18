@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface InstitucionRepositoryPort {
     List<Institucion> obtenerTodas();
-    List<Institucion> buscarPorNombre(String nombre);
+    List<Institucion> buscarPorNombreYGrado(String nombre, String grado);
 }

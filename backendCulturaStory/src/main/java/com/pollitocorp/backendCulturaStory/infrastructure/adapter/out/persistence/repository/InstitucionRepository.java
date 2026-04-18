@@ -14,6 +14,8 @@ public interface InstitucionRepository extends JpaRepository<InstitucionEntity, 
     @Query(value = "SELECT * FROM obtener_instituciones()", nativeQuery = true)
     List<InstitucionEntity> callObtenerInstituciones();
 
-    @Query(value = "SELECT * FROM obtener_instituciones() WHERE institucion_educativa ILIKE CONCAT('%', :nombre, '%')", nativeQuery = true)
-    List<InstitucionEntity> searchByNombre(@Param("nombre") String nombre);
+    @Query(value = "SELECT id_institucion, institucion_educativa, grado FROM tabla_institucion " +
+                   "WHERE institucion_educativa ILIKE CONCAT('%', :nombre, '%') " +
+                   "AND (:grado IS NULL OR grado ILIKE CONCAT('%', :grado, '%'))", nativeQuery = true)
+    List<InstitucionEntity> searchByNombreYGrado(@Param("nombre") String nombre, @Param("grado") String grado);
 }

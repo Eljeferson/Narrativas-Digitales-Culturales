@@ -221,8 +221,8 @@ import { User } from '../../core/domain/models/user.model';
               <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="institution">Institución Educativa</label>
               <div class="relative">
                 <input [(ngModel)]="institution" name="institution" 
-                  (input)="searchInstitutions()"
-                  (focus)="institution.trim().length >= 2 && (isInstitutionDropdownOpen = true)"
+                  (ngModelChange)="searchInstitutions()"
+                  (focus)="institution.trim().length >= 1 && (isInstitutionDropdownOpen = true)"
                   (click)="$event.stopPropagation()"
                   autocomplete="off"
                   [class.border-secondary]="showErrors && !institution.trim()"
@@ -556,13 +556,13 @@ export class StudentRegistration {
 
   // Lógica de búsqueda de instituciones
   searchInstitutions() {
-    if (this.institution.trim().length < 2) {
+    if (this.institution.trim().length < 1) {
       this.institutionSuggestions = [];
       this.isInstitutionDropdownOpen = false;
       return;
     }
 
-    this.searchInstitutionsUseCase.execute(this.institution).subscribe({
+    this.searchInstitutionsUseCase.execute(this.institution, this.educationLevel).subscribe({
       next: (suggestions) => {
         this.institutionSuggestions = suggestions;
         this.isInstitutionDropdownOpen = suggestions.length > 0;

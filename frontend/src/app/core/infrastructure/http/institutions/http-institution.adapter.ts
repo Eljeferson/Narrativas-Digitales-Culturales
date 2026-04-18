@@ -16,7 +16,11 @@ export class HttpInstitutionAdapter implements InstitutionPort {
     return this.http.get<Institution[]>(this.apiUrl);
   }
 
-  searchByName(name: string): Observable<Institution[]> {
-    return this.http.get<Institution[]>(`${this.apiUrl}?nombre=${name}`);
+  searchByName(name: string, grado?: string): Observable<Institution[]> {
+    let url = `${this.apiUrl}?nombre=${name}`;
+    if (grado) {
+      url += `&grado=${grado}`;
+    }
+    return this.http.get<Institution[]>(url);
   }
 }
