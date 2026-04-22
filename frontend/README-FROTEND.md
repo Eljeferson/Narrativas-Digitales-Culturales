@@ -25,7 +25,7 @@ Asegúrate de tener instalado lo siguiente antes de continuar:
 | Angular CLI | 17 | `ng version` |
 | Git | cualquier versión | `git --version` |
 
-> ⚠️ **Importante:** El backend debe estar corriendo en `http://localhost:8080` antes de iniciar el frontend. Consulta la [Guía de Backend](./README-BACKEND.md) si aún no lo has levantado.
+> ⚠️ **Importante:** El backend debe estar corriendo en `http://localhost:8080` antes de iniciar el frontend. Consulta la [Guía de Backend](../backendCulturaStory/README-BACKEND.md) si aún no lo has levantado.
 
 ---
 
@@ -251,6 +251,6 @@ Si todo está correcto, deberías poder:
 
 <div align="center">
 
-[← Volver al README principal](../README.md) &nbsp;|&nbsp; [← Guía de Backend](./README-BACKEND.md)
+[← Volver al README principal](../README.md) &nbsp;|&nbsp; [← Guía de Backend](../backendCulturaStory/README-BACKEND.md)
 
 </div>
