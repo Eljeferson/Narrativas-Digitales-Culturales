@@ -249,7 +249,7 @@ backendCulturaStory/
 
 Con el backend corriendo en `http://localhost:8080`, ya puedes levantar el frontend:
 
-👉 [Guía de instalación del Frontend](./frontend/README-FRONTEND.md)
+👉 [Guía de instalación del Frontend](../frontend/README-FRONTEND.md)
 
 ---
 
