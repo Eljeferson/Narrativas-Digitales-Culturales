@@ -8,7 +8,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
 [![npm](https://img.shields.io/badge/npm-9+-CB3837?style=for-the-badge&logo=npm)](https://www.npmjs.com/)
 
-[← Volver al README principal](../README.md) &nbsp;|&nbsp; [← Guía de Backend](./backendCulturaStory/README-BACKEND.md)
+[← Volver al README principal](../README.md) &nbsp;|&nbsp; [← Guía de Backend](../backendCulturaStory/README-BACKEND.md)
 
 </div>
 
