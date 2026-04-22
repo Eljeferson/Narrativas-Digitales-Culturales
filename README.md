@@ -106,7 +106,7 @@ Selecciona la guía según el componente que deseas levantar:
 <table>
   <tr>
     <td align="center">
-      <a href="./docs/README-BACKEND.md">
+      <a href="./backendCulturaStory/README-BACKEND.md">
         <img src="https://img.shields.io/badge/🔧_Guía_Backend-Spring_Boot-6DB33F?style=for-the-badge" />
         <br/>
         <strong>README-BACKEND.md</strong>
@@ -115,7 +115,7 @@ Selecciona la guía según el componente que deseas levantar:
       </a>
     </td>
     <td align="center">
-      <a href="./docs/README-FRONTEND.md">
+      <a href="./frontend/README-FRONTEND.md">
         <img src="https://img.shields.io/badge/🎨_Guía_Frontend-Angular_17-DD0031?style=for-the-badge" />
         <br/>
         <strong>README-FRONTEND.md</strong>
