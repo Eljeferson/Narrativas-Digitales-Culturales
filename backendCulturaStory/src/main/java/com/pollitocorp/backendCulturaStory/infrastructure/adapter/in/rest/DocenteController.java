@@ -1,8 +1,8 @@
 package com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest;
 
 import com.pollitocorp.backendCulturaStory.application.service.DocenteService;
-import com.pollitocorp.backendCulturaStory.domain.model.AutorEstudiante;
 import com.pollitocorp.backendCulturaStory.domain.model.NarrativaCultural;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.StudentSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class DocenteController {
     private final DocenteService docenteService;
 
     @GetMapping("/estudiantes")
-    public ResponseEntity<List<AutorEstudiante>> listarEstudiantes(@RequestParam String grado) {
+    public ResponseEntity<List<StudentSummaryResponse>> listarEstudiantes(@RequestParam String grado) {
         // HU-09: Docente puede ver el listado de estudiantes de mi grado
         return ResponseEntity.ok(docenteService.listarEstudiantesPorGrado(grado));
     }

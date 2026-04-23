@@ -99,10 +99,10 @@ import { User } from '../../core/domain/models/user.model';
 <td class="px-8 py-5">
 <div class="flex items-center gap-4">
 <div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center font-bold text-primary">
-    {{ user.nombreCompleto.charAt(0) || 'U' }}
+    {{ (user.nombreCompleto || user.email || 'U').charAt(0) }}
 </div>
 <div>
-<p class="font-bold text-on-surface">{{ user.nombreCompleto }}</p>
+<p class="font-bold text-on-surface">{{ user.nombreCompleto || 'Usuario' }}</p>
 <p class="text-xs text-on-surface-variant">{{ user.email }}</p>
 </div>
 </div>
@@ -111,11 +111,12 @@ import { User } from '../../core/domain/models/user.model';
 <span [ngClass]="{
     'bg-primary/10 text-primary': user.rol === 'DOCENTE',
     'bg-tertiary/10 text-tertiary': user.rol === 'ESTUDIANTE',
-    'bg-secondary/10 text-secondary': user.rol === 'ADMINISTRADOR'
-}" class="px-2.5 py-1 rounded text-xs font-bold uppercase">{{ user.rol }}</span>
+    'bg-secondary/10 text-secondary': user.rol === 'ADMINISTRADOR',
+    'bg-surface-variant text-on-surface-variant': user.rol === 'COMUNIDAD'
+}" class="px-2.5 py-1 rounded text-xs font-bold uppercase">{{ user.rol || 'SIN ROL' }}</span>
 </td>
 <td class="px-6 py-5">
-    <span class="text-xs font-medium">{{ user.regionCultural || 'No especificada' }}</span>
+    <span class="text-xs font-medium">{{ user.regionCultural || 'No disponible' }}</span>
 </td>
 <td class="px-6 py-5 text-right">
 <div class="flex items-center justify-end gap-2">
@@ -170,7 +171,7 @@ export class UserAdmin implements OnInit {
   promoteToTeacher(user: User) {
     if (!user.id) return;
     if (confirm(`¿Estás seguro de promover a ${user.nombreCompleto} a DOCENTE?`)) {
-      this.changeRoleUseCase.execute(user.id, 'DOCENTE').subscribe({
+      this.changeRoleUseCase.execute(user.id, 'docente').subscribe({
         next: () => {
             alert('Rol actualizado con éxito');
             this.loadUsers();

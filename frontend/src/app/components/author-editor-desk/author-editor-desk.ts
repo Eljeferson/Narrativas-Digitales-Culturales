@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { GenerateOutlineUseCase, CreateNarrativeUseCase, SaveNarrativeUseCase } from '../../core/application/narratives/narrative-use-cases';
+import { ActivatedRoute } from '@angular/router';
+import { GenerateOutlineUseCase, CreateNarrativeUseCase, SaveNarrativeUseCase, GetNarrativeByIdUseCase } from '../../core/application/narratives/narrative-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 
 @Component({
@@ -118,10 +119,12 @@ Enviar a revisión
     }
   `
 })
-export class AuthorEditorDesk {
+export class AuthorEditorDesk implements OnInit {
   private generateUseCase = inject(GenerateOutlineUseCase);
   private createUseCase = inject(CreateNarrativeUseCase);
   private saveUseCase = inject(SaveNarrativeUseCase);
+  private getByIdUseCase = inject(GetNarrativeByIdUseCase);
+  private route = inject(ActivatedRoute);
 
   title = '';
   content = '';
@@ -130,6 +133,28 @@ export class AuthorEditorDesk {
   lastSavedMsg = '';
   isGenerating = false;
   currentId: string | undefined = undefined;
+
+  ngOnInit() {
+    const narrativeId = this.route.snapshot.queryParamMap.get('id');
+    if (!narrativeId) {
+      return;
+    }
+
+    this.getByIdUseCase.execute(narrativeId).subscribe({
+      next: (narrative) => {
+        if (!narrative) {
+          return;
+        }
+
+        this.currentId = narrative.id;
+        this.title = narrative.titulo;
+        this.content = narrative.contenido;
+        this.region = narrative.regionCultural;
+        this.status = narrative.status === 'ready_for_review' ? 'ready_for_review' : 'draft';
+      },
+      error: (err) => console.error('Error loading narrative:', err)
+    });
+  }
 
   setStatus(s: 'draft' | 'ready_for_review') {
     this.status = s;
@@ -151,12 +176,13 @@ export class AuthorEditorDesk {
   }
 
   private buildNarrative(): Narrative {
+    const authorId = localStorage.getItem('currentAuthorId') || 'fbdf4968-3ac3-43f1-9457-36e4f3a9e2f4';
     return {
       id: this.currentId,
       titulo: this.title,
       contenido: this.content,
       regionCultural: this.region,
-      autor: { id: 'author-uuid-mock' }, // Esto debería venir del servicio de sesión
+      autor: { id: authorId },
       status: this.status
     };
   }

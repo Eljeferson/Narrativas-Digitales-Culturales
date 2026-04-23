@@ -1,9 +1,8 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthPort } from '../../domain/ports/auth.port';
 import { User } from '../../domain/models/user.model';
-
-export const AUTH_PORT = new InjectionToken<AuthPort>('AUTH_PORT');
+import { AUTH_PORT } from './auth-use-cases';
 
 @Injectable({
   providedIn: 'root'

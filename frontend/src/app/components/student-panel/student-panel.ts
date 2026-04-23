@@ -82,7 +82,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <div class="flex-1">
 <div class="flex justify-between items-start mb-1">
 <h4 class="text-xl font-headline font-bold text-primary">{{ nar.titulo }}</h4>
-<span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-widest rounded-full">{{ nar.status || 'Publicada' }}</span>
+<span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-widest rounded-full">{{ getNarrativeStatusLabel(nar) }}</span>
 </div>
 <div class="flex gap-4 text-xs text-on-surface-variant mb-4">
 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> {{ nar.regionCultural }}</span>
@@ -128,7 +128,6 @@ export class StudentPanel implements OnInit {
 
   loadNarratives() {
     this.isLoading = true;
-    // For MVP1, we use a generic placeholder ID if none exists in storage
     const authorId = localStorage.getItem('currentAuthorId') || 'fbdf4968-3ac3-43f1-9457-36e4f3a9e2f4';
     
     this.listNarrativesUseCase.execute(authorId).subscribe({
@@ -141,6 +140,20 @@ export class StudentPanel implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  getNarrativeStatusLabel(narrative: Narrative): string {
+    switch (narrative.status) {
+      case 'ready_for_review':
+        return 'En revision';
+      case 'published':
+        return 'Publicada';
+      case 'rejected':
+        return 'Rechazada';
+      case 'draft':
+      default:
+        return 'Borrador';
+    }
   }
 
   createNew() {

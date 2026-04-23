@@ -89,12 +89,12 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <td class="py-4 px-4 rounded-l-xl">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">
-    {{ student.nombreCompleto.charAt(0) }}
+    {{ (student.nombreCompleto || student.email || 'E').charAt(0) }}
 </div>
-<div class="font-bold text-on-surface">{{ student.nombreCompleto }}</div>
+<div class="font-bold text-on-surface">{{ student.nombreCompleto || 'Estudiante sin nombre' }}</div>
 </div>
 </td>
-<td class="py-4 px-4 text-sm text-on-surface-variant">{{ student.email }}</td>
+<td class="py-4 px-4 text-sm text-on-surface-variant">{{ student.email || 'No disponible' }}</td>
 <td class="py-4 px-4">
 <span class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-xs font-bold">{{ student.grado }}</span>
 </td>
@@ -105,7 +105,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </td>
 </tr>
 <!-- Expandible: Narrativas del estudiante -->
-<tr *ngIf="selectedStudentId === student.id">
+<tr *ngIf="selectedStudentId === (student.authorId || student.id)">
     <td colspan="4" class="p-4 bg-surface-variant/20 rounded-xl">
         <div class="space-y-4">
             <h4 class="text-sm font-bold text-primary uppercase tracking-wider">Narrativas de {{ student.nombreCompleto }}</h4>
@@ -114,7 +114,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
                     <p class="font-serif italic text-primary font-bold mb-1">{{ nar.titulo }}</p>
                     <p class="text-xs text-on-surface-variant mb-3 line-clamp-2">{{ nar.contenido }}</p>
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] px-2 py-0.5 rounded bg-outline-variant/20">{{ nar.status }}</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-outline-variant/20">{{ getNarrativeStatusLabel(nar) }}</span>
                         <button class="text-xs font-bold text-tertiary">Revisar</button>
                     </div>
                 </div>
@@ -157,12 +157,11 @@ export class TeacherPanel implements OnInit {
 
   loadStudents() {
     this.isLoading = true;
-    this.listStudentsUseCase.execute().subscribe({
+    this.listStudentsUseCase.execute('5to de Secundaria').subscribe({
       next: (students) => {
         this.students = students;
         this.isLoading = false;
-        // Mock total narratives count for stats
-        this.totalNarratives = students.length * 2; 
+        this.totalNarratives = 0;
       },
       error: (err) => {
         console.error('Error loading students:', err);
@@ -172,19 +171,36 @@ export class TeacherPanel implements OnInit {
   }
 
   viewNarratives(student: User) {
-    if (this.selectedStudentId === student.id) {
+    const authorId = student.authorId || student.id;
+
+    if (this.selectedStudentId === authorId) {
         this.selectedStudentId = undefined;
         return;
     }
 
-    if (!student.id) return;
+    if (!authorId) return;
     
-    this.selectedStudentId = student.id;
-    this.getNarrativesUseCase.execute(student.id).subscribe({
+    this.selectedStudentId = authorId;
+    this.getNarrativesUseCase.execute(authorId).subscribe({
       next: (narratives) => {
         this.studentNarratives = narratives;
+        this.totalNarratives = narratives.length;
       },
       error: (err) => console.error('Error fetching narratives:', err)
     });
+  }
+
+  getNarrativeStatusLabel(narrative: Narrative): string {
+    switch (narrative.status) {
+      case 'ready_for_review':
+        return 'En revision';
+      case 'published':
+        return 'Publicada';
+      case 'rejected':
+        return 'Rechazada';
+      case 'draft':
+      default:
+        return 'Borrador';
+    }
   }
 }

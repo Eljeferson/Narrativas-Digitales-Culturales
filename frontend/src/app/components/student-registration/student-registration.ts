@@ -1,6 +1,7 @@
 import { Component, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RegisterStudentUseCase } from '../../core/application/auth/auth-use-cases';
 import { SearchInstitutionsUseCase } from '../../core/application/institutions/institution.use-cases';
 import { Institution } from '../../core/domain/models/institution.model';
@@ -21,7 +22,7 @@ import { User } from '../../core/domain/models/user.model';
     </div>
     <div class="space-y-4">
       <h1 class="text-primary font-headline text-3xl md:text-5xl font-bold leading-tight">
-        Inicia tu viaje como <span class="italic text-secondary">Tejedor de Historias</span>
+        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guia de Historias' : 'Tejedor de Historias' }}</span>
       </h1>
       <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
         Cada gran narrativa comienza con un autor. Cuéntanos un poco sobre ti para personalizar tu experiencia.
@@ -138,6 +139,44 @@ import { User } from '../../core/domain/models/user.model';
                   Ingresa un correo con @
                 </p>
               }
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="group">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">ContraseÃ±a</label>
+                <input [(ngModel)]="password" name="password" 
+                  [class.border-secondary]="showErrors && !isPasswordStrong()"
+                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="password" placeholder="MÃ­nimo 8 caracteres" type="password" required/>
+                @if (showErrors && !password.trim()) {
+                  <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                    <span class="material-symbols-outlined text-sm">priority_high</span>
+                    Campo obligatorio
+                  </p>
+                } @else if (showErrors && !isPasswordStrong()) {
+                  <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                    <span class="material-symbols-outlined text-sm">shield_lock</span>
+                    Usa letras, nÃºmeros y un carÃ¡cter especial
+                  </p>
+                }
+              </div>
+
+              <div class="group">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar ContraseÃ±a</label>
+                <input [(ngModel)]="confirmPassword" name="confirmPassword" 
+                  [class.border-secondary]="showErrors && !passwordsMatch()"
+                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="confirmPassword" placeholder="Repite tu contraseÃ±a" type="password" required/>
+                @if (showErrors && !confirmPassword.trim()) {
+                  <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                    <span class="material-symbols-outlined text-sm">priority_high</span>
+                    Confirma tu contraseÃ±a
+                  </p>
+                } @else if (showErrors && !passwordsMatch()) {
+                  <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+                    <span class="material-symbols-outlined text-sm">lock_reset</span>
+                    Las contraseÃ±as no coinciden
+                  </p>
+                }
+              </div>
             </div>
           </div>
         }
@@ -377,7 +416,7 @@ import { User } from '../../core/domain/models/user.model';
                   @if (isRegionDropdownOpen) {
                     <div class="absolute z-50 w-full mt-2 bg-white border border-[#E5D0C0] rounded-[20px] shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200" (click)="$event.stopPropagation()">
                       <ul class="max-h-60 overflow-y-auto py-4">
-                        @for (reg of ['Sierra', 'Selva', 'Costa', 'Otros']; track reg) {
+                        @for (reg of ['andina', 'amazónica', 'afroperuana', 'costeña']; track reg) {
                           <li>
                             <button type="button" (click)="selectRegion(reg)" class="w-full text-left px-6 py-3 hover:bg-[#FDF8F3] text-black font-bold text-base transition-all">
                               {{reg}}
@@ -442,7 +481,7 @@ import { User } from '../../core/domain/models/user.model';
           <button 
             class="w-full sm:flex-[2] group relative bg-tertiary text-on-tertiary py-4 px-8 rounded-xl font-bold text-lg shadow-lg shadow-tertiary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 overflow-hidden" 
             type="submit">
-            <span class="relative z-10">Crear mi perfil</span>
+            <span class="relative z-10">{{ registrationRole === 'teacher' ? 'Crear perfil docente' : 'Crear mi perfil' }}</span>
             <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">auto_stories</span>
             <div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-all"></div>
           </button>
@@ -472,9 +511,11 @@ export class StudentRegistration {
   private registerUseCase = inject(RegisterStudentUseCase);
   private searchInstitutionsUseCase = inject(SearchInstitutionsUseCase);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   currentStep = 1;
   showErrors = false;
+  registrationRole: 'student' | 'teacher' = 'student';
 
   // Lista de Avatares de Supabase
   avatars = [
@@ -496,6 +537,8 @@ export class StudentRegistration {
   firstName = '';
   lastName = '';
   email = '';
+  password = '';
+  confirmPassword = '';
   educationLevel = ''; // Primaria o Secundaria
   grade = '';
   region = '';
@@ -512,6 +555,12 @@ export class StudentRegistration {
   isInstitutionDropdownOpen = false;
   languages = ['Castellano', 'Quechua', 'Aimara'];
   institutionSuggestions: Institution[] = [];
+  private readonly passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
+  constructor() {
+    const requestedRole = this.route.snapshot.queryParamMap.get('role');
+    this.registrationRole = requestedRole === 'teacher' ? 'teacher' : 'student';
+  }
 
   // Opciones de grados según el nivel
   getGradeOptions() {
@@ -617,13 +666,23 @@ export class StudentRegistration {
     return this.bio.trim().split(/\s+/).length;
   }
 
+  isPasswordStrong(): boolean {
+    return this.passwordPattern.test(this.password);
+  }
+
+  passwordsMatch(): boolean {
+    return !!this.password && this.password === this.confirmPassword;
+  }
+
   isStepValid(): boolean {
     const lettersOnly = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     
     if (this.currentStep === 1) {
       return !!this.firstName.trim() && lettersOnly.test(this.firstName) &&
              !!this.lastName.trim() && lettersOnly.test(this.lastName) &&
-             !!this.email.trim() && this.email.includes('@');
+             !!this.email.trim() && this.email.includes('@') &&
+             this.isPasswordStrong() &&
+             this.passwordsMatch();
     }
     if (this.currentStep === 2) {
       return !!this.educationLevel && !!this.grade && !!this.institution.trim();
@@ -674,6 +733,22 @@ export class StudentRegistration {
     }
   }
 
+  private getRegistrationErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      const backendMessage = error.error?.message;
+
+      if (error.status === 409) {
+        return backendMessage || 'Ese correo ya esta registrado. Inicia sesion o usa otro correo.';
+      }
+
+      if (typeof backendMessage === 'string' && backendMessage.toLowerCase().includes('correo ya esta registrado')) {
+        return backendMessage;
+      }
+    }
+
+    return 'Hubo un error al registrar el perfil. Por favor intenta de nuevo.';
+  }
+
   onSubmit() {
     this.showErrors = true;
     if (!this.isStepValid()) return;
@@ -684,6 +759,8 @@ export class StudentRegistration {
     // Construimos el payload exactamente como lo solicita el backend
     const user: Partial<User> = {
       email: this.email,
+      password: this.password,
+      rol: this.registrationRole === 'teacher' ? 'docente' : 'estudiante',
       nombreCompleto: fullName,
       grado: this.grade, // El grado ya incluye el nivel (ej: "1ro de Primaria")
       institucion: this.institution,
@@ -700,11 +777,11 @@ export class StudentRegistration {
       next: (saved) => {
         console.log('Usuario registrado con éxito:', saved);
         alert('Registro exitoso. Ahora puedes iniciar sesión.');
-        this.router.navigate(['/']);
+        this.router.navigate(['/'], { queryParams: { role: this.registrationRole } });
       },
       error: (err) => {
         console.error('Error al registrar:', err);
-        alert('Hubo un error al registrar el perfil. Por favor intenta de nuevo.');
+        alert(this.getRegistrationErrorMessage(err));
       }
     });
   }

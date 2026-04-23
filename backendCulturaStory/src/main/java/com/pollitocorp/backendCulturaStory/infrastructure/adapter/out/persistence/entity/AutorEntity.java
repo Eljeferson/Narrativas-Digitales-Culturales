@@ -43,6 +43,9 @@ public class AutorEntity {
     @Column(name = "foto_perfil_url")
     private String fotoPerfilUrl;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "narrativas_publicadas", nullable = false)
     private Integer narrativasPublicadas;
 

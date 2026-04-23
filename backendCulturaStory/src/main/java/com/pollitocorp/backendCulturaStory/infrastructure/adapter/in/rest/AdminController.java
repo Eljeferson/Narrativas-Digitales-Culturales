@@ -30,7 +30,8 @@ public class AdminController {
         // HU-08: Administrador puede gestionar usuarios asignando roles
         String nuevoRol = request.get("rol");
         String motivo = request.get("motivo");
-        UUID adminId = UUID.fromString(request.get("adminId")); // In real scenario, from Auth context
+        String adminIdRaw = request.get("adminId");
+        UUID adminId = adminIdRaw != null && !adminIdRaw.isBlank() ? UUID.fromString(adminIdRaw) : id;
 
         return ResponseEntity.ok(adminService.cambiarRol(id, nuevoRol, adminId, motivo));
     }

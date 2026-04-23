@@ -39,8 +39,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public DocenteService docenteService(AutorRepositoryPort autorRepository, NarrativaRepositoryPort narrativaRepository) {
-        return new DocenteService(autorRepository, narrativaRepository);
+    public DocenteService docenteService(AutorRepositoryPort autorRepository, NarrativaRepositoryPort narrativaRepository, UsuarioRepositoryPort usuarioRepository) {
+        return new DocenteService(autorRepository, narrativaRepository, usuarioRepository);
     }
 
     @Bean

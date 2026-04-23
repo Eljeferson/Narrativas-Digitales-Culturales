@@ -20,6 +20,7 @@ public class AutorMapper {
                 .lenguaMaterna(domain.getLenguaMaterna())
                 .bio(domain.getBio())
                 .fotoPerfilUrl(domain.getFotoPerfilUrl())
+                .password(domain.getPassword())
                 .narrativasPublicadas(domain.getNarrativasPublicadas())
                 .createdAt(domain.getCreatedAt())
                 .build();
@@ -37,6 +38,7 @@ public class AutorMapper {
                 .lenguaMaterna(entity.getLenguaMaterna())
                 .bio(entity.getBio())
                 .fotoPerfilUrl(entity.getFotoPerfilUrl())
+                .password(entity.getPassword())
                 .narrativasPublicadas(entity.getNarrativasPublicadas())
                 .createdAt(entity.getCreatedAt())
                 .build();

@@ -41,6 +41,17 @@ export class SaveNarrativeUseCase {
 @Injectable({
   providedIn: 'root'
 })
+export class GetNarrativeByIdUseCase {
+  constructor(@Inject(NARRATIVE_PORT) private narrativePort: NarrativePort) {}
+
+  execute(id: string): Observable<Narrative | null> {
+    return this.narrativePort.getById(id);
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ListNarrativesUseCase {
   constructor(@Inject(NARRATIVE_PORT) private narrativePort: NarrativePort) {}
 

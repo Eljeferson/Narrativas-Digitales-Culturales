@@ -1,21 +1,20 @@
-package com.pollitocorp.backendCulturaStory.domain.model;
+package com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AutorEstudiante {
+public class StudentSummaryResponse {
     private UUID id;
     private UUID userId;
+    private String email;
     private String nombreCompleto;
     private String grado;
     private String institucion;
@@ -23,9 +22,5 @@ public class AutorEstudiante {
     private String lenguaMaterna;
     private String bio;
     private String fotoPerfilUrl;
-    @JsonIgnore
-    private String password;
-    @Builder.Default
-    private Integer narrativasPublicadas = 0;
-    private LocalDateTime createdAt;
+    private Integer narrativasPublicadas;
 }

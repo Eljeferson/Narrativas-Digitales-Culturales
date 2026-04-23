@@ -1,7 +1,9 @@
 export interface User {
   id: string;
   email: string;
-  nombreCompleto: string;
+  nombreCompleto?: string;
+  authorId?: string;
+  password?: string;
   grado?: string;
   institucion?: string;
   lenguaMaterna?: string;
@@ -9,5 +11,6 @@ export interface User {
   fotoPerfilUrl?: string;
   regionCultural?: string;
   narrativasPublicadas?: number;
-  rol?: 'ESTUDIANTE' | 'DOCENTE' | 'ADMINISTRADOR' | 'student' | 'teacher' | 'admin';
+  activo?: boolean;
+  rol?: 'ESTUDIANTE' | 'DOCENTE' | 'ADMINISTRADOR' | 'COMUNIDAD' | 'estudiante' | 'docente' | 'administrador' | 'comunidad' | 'student' | 'teacher' | 'admin';
 }
