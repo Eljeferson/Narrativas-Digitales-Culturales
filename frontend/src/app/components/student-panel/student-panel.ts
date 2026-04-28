@@ -15,8 +15,9 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <aside class="fixed left-0 top-0 h-full flex flex-col p-6 space-y-4 bg-[#FFF8EF] dark:bg-[#1E1B13] h-screen w-64 border-r-0 z-50 border-r border-outline-variant/10">
 <div class="mb-8">
 <div class="flex items-center gap-3 mb-2">
-<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<div class="w-10 h-10 rounded-lg bg-primary-container overflow-hidden flex items-center justify-center text-on-primary-container shadow-sm border border-primary/20">
+  <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
+  <span *ngIf="!userAvatar" class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
 </div>
 <div>
 <h1 class="text-lg font-headline font-bold text-[#823B18] leading-none">CulturaStory</h1>
@@ -50,7 +51,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <!-- Personalized Greeting Section -->
 <header class="mb-12 relative">
 <div class="max-w-4xl">
-<h2 class="text-primary text-5xl font-headline italic font-bold tracking-tight mb-2">¡Hola, Tejedor!</h2>
+<h2 class="text-primary text-5xl font-headline italic font-bold tracking-tight mb-2">¡Hola, {{ userName }}!</h2>
 <p class="text-on-surface-variant text-xl max-w-2xl">
     Tu hilo narrativo está listo para continuar. Hoy es un gran día para tejer nuevas historias sobre tus raíces.
 </p>
@@ -60,11 +61,13 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 <!-- Primary Action & Status Summary -->
 <div class="lg:col-span-4 space-y-8">
-<button (click)="createNew()" class="w-full group relative overflow-hidden aspect-video bg-primary-container text-on-primary-container rounded-xl flex flex-col items-center justify-center gap-4 transition-transform hover:scale-[1.02] active:scale-95">
-<div class="relative z-10 bg-on-primary-container/20 p-4 rounded-full">
-<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<button (click)="createNew()" class="w-full group relative overflow-hidden aspect-video bg-[#823B18] text-white rounded-xl flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#823B18]/20 active:scale-95 border-0">
+<div class="absolute inset-0 bg-gradient-to-br from-[#823B18] to-[#56423c] opacity-90 group-hover:opacity-100 transition-opacity"></div>
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+<div class="relative z-10 bg-white/10 backdrop-blur-md p-5 rounded-full border border-white/20 shadow-inner group-hover:scale-110 transition-transform duration-500 group-hover:bg-white/20">
+<span class="material-symbols-outlined text-4xl text-white" style="font-variation-settings: 'FILL' 1;">add</span>
 </div>
-<span class="relative z-10 text-2xl font-headline font-bold">Crear Nueva Historia</span>
+<span class="relative z-10 text-2xl font-headline font-bold text-white drop-shadow-md tracking-wide">Crear Nueva Historia</span>
 </button>
 <div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden">
 <h3 class="text-tertiary font-headline font-bold text-lg mb-4">Sabiduría Cultural</h3>
@@ -98,9 +101,16 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </div>
 </div>
 </div>
-<div *ngIf="narratives.length === 0" class="p-12 text-center border-2 border-dashed border-outline-variant rounded-xl">
-    <span class="material-symbols-outlined text-4xl text-outline-variant mb-4">history_edu</span>
-    <p class="text-on-surface-variant">Aún no has comenzado a tejer tu historia. ¡Empieza hoy!</p>
+<div *ngIf="narratives.length === 0" class="p-12 text-center bg-surface-container-lowest rounded-xl flex flex-col items-center justify-center shadow-sm border border-outline-variant/30 transition-all hover:shadow-md">
+    <div class="w-20 h-20 bg-[#823B18]/10 rounded-full flex items-center justify-center mb-6">
+       <span class="material-symbols-outlined text-5xl text-[#823B18]">history_edu</span>
+    </div>
+    <h4 class="text-xl font-headline font-bold text-on-surface mb-3">No tienes historias tejidas</h4>
+    <p class="text-on-surface-variant max-w-md mb-8 text-sm leading-relaxed">Aún no has comenzado a documentar la riqueza cultural de tu región. ¡Empieza hoy mismo a crear tu primera narrativa y comparte tus raíces!</p>
+    <button (click)="createNew()" class="px-8 py-3.5 bg-[#823B18] text-white rounded-xl font-bold flex items-center gap-2 hover:bg-[#56423c] transition-colors shadow-lg shadow-[#823B18]/30">
+       <span class="material-symbols-outlined text-sm">add</span>
+       Crear mi primera historia
+    </button>
 </div>
 </div>
 <ng-template #loadingTpl>
@@ -121,9 +131,27 @@ export class StudentPanel implements OnInit {
 
   narratives: Narrative[] = [];
   isLoading = true;
+  userName = 'Tejedor';
+  userAvatar = '';
 
   ngOnInit() {
+    this.loadUserData();
     this.loadNarratives();
+  }
+
+  loadUserData() {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+      try {
+         const user = JSON.parse(userStr);
+         // Capitalizamos la primera letra del nombre
+         const rawName = user.nombre || 'Tejedor';
+         this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
+         this.userAvatar = user.fotoPerfilUrl || '';
+      } catch(e) {
+         console.error('Error parseando usuario local', e);
+      }
+    }
   }
 
   loadNarratives() {
