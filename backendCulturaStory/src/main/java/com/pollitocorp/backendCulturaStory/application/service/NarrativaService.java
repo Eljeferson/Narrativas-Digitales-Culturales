@@ -72,4 +72,19 @@ public class NarrativaService implements NarrativaUseCase {
         params.put("region", cultura);
         return aiPort.generarTexto(prompt, params);
     }
+
+    @Override
+    public String mejorarNarrativa(String titulo, String cultura, String contenido) {
+        String prompt = String.format(
+            "Eres un experto en narrativa cultural peruana. Mejora la siguiente historia titulada '%s' de la región '%s'. " +
+            "El texto actual es: '%s'. " +
+            "Tu tarea es mejorar la redacción, ortografía y sobre todo la pertinencia cultural, " +
+            "agregando detalles auténticos sin perder la esencia del autor.",
+            titulo, cultura, contenido
+        );
+        Map<String, Object> params = new HashMap<>();
+        params.put("region", cultura);
+        params.put("type", "improvement");
+        return aiPort.generarTexto(prompt, params);
+    }
 }
