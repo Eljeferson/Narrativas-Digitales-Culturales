@@ -42,7 +42,7 @@ public class GeminiAIAdapter implements AIPort {
         System.out.println("Iniciando petición a Gemini (API Key detectada)");
 
         try {
-            String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
+            String url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key="
                     + apiKey;
 
             HttpHeaders headers = new HttpHeaders();
