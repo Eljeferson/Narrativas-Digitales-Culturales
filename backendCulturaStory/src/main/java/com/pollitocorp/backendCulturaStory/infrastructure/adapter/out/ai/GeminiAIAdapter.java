@@ -33,7 +33,8 @@ public class GeminiAIAdapter implements AIPort {
 
     @Override
     public String generarTexto(String prompt, Map<String, Object> params) {
-        if (apiKey == null || apiKey.isEmpty() || apiKey.equals("TU_API_KEY_AQUI")) {
+        String cleanKey = apiKey != null ? apiKey.trim() : "";
+        if (cleanKey.isEmpty() || cleanKey.equals("TU_API_KEY_AQUI")) {
             System.out.println("Gemini API Key no configurada. Usando modo simulación.");
             return "Esquema generado (Simulado): \n1. Introducción en región "
                     + params.getOrDefault("region", "desconocida")
@@ -42,8 +43,8 @@ public class GeminiAIAdapter implements AIPort {
         System.out.println("Iniciando petición a Gemini (API Key detectada)");
 
         try {
-            String url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key="
-                    + apiKey;
+            String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
+                    + cleanKey;
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
