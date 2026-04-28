@@ -74,7 +74,7 @@ import { Component } from '@angular/core';
 <button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">auto_stories</button>
 <span class="text-[10px] font-label text-on-surface-variant/40 ml-auto">Último guardado: hace 2 min</span>
 </div>
-<textarea class="flex-1 w-full bg-transparent border-none focus:ring-0 text-lg leading-relaxed font-serif text-on-surface-variant resize-none" placeholder="Comienza a tejer tu historia aquí..." spellcheck="false">Las nubes se aferraban a los picos de granito como jirones de lana alpaca. En lo más alto del valle del Urubamba, donde el aire es tan delgado que las palabras parecen cristalizarse antes de ser pronunciadas, vivía Yupanqui.
+<textarea class="flex-1 w-full bg-transparent border-none focus:ring-0 text-lg leading-relaxed font-serif text-on-surface-variant resize-none" placeholder="Comienza a crear tu historia aquí..." spellcheck="false">Las nubes se aferraban a los picos de granito como jirones de lana alpaca. En lo más alto del valle del Urubamba, donde el aire es tan delgado que las palabras parecen cristalizarse antes de ser pronunciadas, vivía Yupanqui.
 
 No era un hombre de muchas posesiones, pero guardaba en su memoria los cantos que las piedras le susurraban durante el solsticio. Aquella mañana, un destello cobrizo interrumpió su meditación. No era oro, sino la sangre de un mensajero divino: el gran Kuntur.
 

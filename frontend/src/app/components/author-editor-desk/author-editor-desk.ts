@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { GenerateOutlineUseCase, CreateNarrativeUseCase, SaveNarrativeUseCase, GetNarrativeByIdUseCase } from '../../core/application/narratives/narrative-use-cases';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GenerateOutlineUseCase, CreateNarrativeUseCase, SaveNarrativeUseCase, GetNarrativeByIdUseCase, ImproveNarrativeUseCase } from '../../core/application/narratives/narrative-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 
 @Component({
@@ -10,26 +10,27 @@ import { Narrative } from '../../core/domain/models/narrative.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-<div class="loom-thread"></div>
+<div class="story-thread"></div>
 <!-- TopNavBar -->
 <nav class="sticky top-0 z-50 flex justify-between items-center px-8 py-4 w-full bg-[#FFF8EF]/80 dark:bg-[#1E1B13]/80 backdrop-blur-md">
 <div class="flex items-center gap-8">
 <span class="text-2xl font-headline font-bold tracking-tight text-[#823B18] dark:text-[#A0522D] italic">CulturaStory AI</span>
 <div class="hidden md:flex gap-6">
-<a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Narrativas</a>
+<a (click)="goTo('/panel-del-estudiante')" class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Narrativas</a>
 <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Regiones</a>
-<a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Biblioteca</a>
+<a (click)="goTo('/biblioteca')" class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Biblioteca</a>
 </div>
 </div>
 <div class="flex items-center gap-4">
 <button class="p-2 rounded-full hover:bg-[#823B18]/5 transition-colors">
 <span class="material-symbols-outlined text-[#823B18]">notifications</span>
 </button>
-<button class="p-2 rounded-full hover:bg-[#823B18]/5 transition-colors">
+<button (click)="goTo('/perfil-creativo-estudiante')" class="p-2 rounded-full hover:bg-[#823B18]/5 transition-colors">
 <span class="material-symbols-outlined text-[#823B18]">settings</span>
 </button>
-<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
-<img alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj86HNumaISbWtDD8CLuzs951MJiQv6XayZG3I-o1i4jXtN9ZYwRdxPge6LvHgyMPtfGsddInJrKHFTdDSPMRmNeoNthr1z295Esjn4foelB3VhPUyZOErOY9BY8f18fxN_Oh9flfxbv_VqNu4Ai0OTHEq80P65nrhBumhSLrPjYRvbu78BJXij38N41QkwpZc5ythO2bZFo24z4BauInHnLKXtlZnA5TGtCL71Ve5C7rYu9wCwIaBTKTV_FzlbD3nLHtHXkZU"/>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer hover:ring-2 hover:ring-primary transition-all" (click)="goTo('/perfil-creativo-estudiante')">
+  <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
+  <span *ngIf="!userAvatar" class="material-symbols-outlined text-[#823B18] flex items-center justify-center h-full" style="font-variation-settings: 'FILL' 1;">person</span>
 </div>
 </div>
 <div class="bg-gradient-to-r from-transparent via-[#795900]/20 to-transparent h-[1px] w-full absolute bottom-0"></div>
@@ -39,7 +40,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <div class="flex justify-between items-end mb-12">
 <div>
 <nav class="flex items-center gap-2 text-sm text-outline mb-4">
-<span class="hover:text-primary cursor-pointer">The Weaver's Hub</span>
+<span class="hover:text-primary cursor-pointer">CulturaStory Hub</span>
 <span class="material-symbols-outlined text-xs">chevron_right</span>
 <span class="text-on-surface-variant font-medium">Editor de Narrativa</span>
 </nav>
@@ -74,9 +75,9 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <button class="p-2 hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined">format_bold</span></button>
 <button class="p-2 hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined">format_italic</span></button>
 <div class="w-[1px] h-6 bg-outline-variant mx-2"></div>
-<button (click)="generateAI()" [disabled]="isGenerating" class="flex items-center gap-2 px-3 py-1.5 bg-tertiary/10 text-tertiary rounded-lg hover:bg-tertiary/20 transition-all disabled:opacity-50">
+<button (click)="improveWithAI()" [disabled]="isGenerating || !content.trim()" class="flex items-center gap-2 px-3 py-1.5 bg-tertiary/10 text-tertiary rounded-lg hover:bg-tertiary/20 transition-all disabled:opacity-50 shadow-sm border border-tertiary/20">
 <span class="material-symbols-outlined" [class.animate-spin]="isGenerating">auto_fix_high</span>
-<span class="text-xs font-bold">{{ isGenerating ? 'Generando...' : 'IA: Generar Esquema' }}</span>
+<span class="text-xs font-bold">{{ isGenerating ? 'Mejorando...' : 'IA: Mejorar Narrativa' }}</span>
 </button>
 </div>
 <span class="text-xs text-outline font-medium">Auto-guardado habilitado</span>
@@ -121,10 +122,12 @@ Enviar a revisión
 })
 export class AuthorEditorDesk implements OnInit {
   private generateUseCase = inject(GenerateOutlineUseCase);
+  private improveUseCase = inject(ImproveNarrativeUseCase);
   private createUseCase = inject(CreateNarrativeUseCase);
   private saveUseCase = inject(SaveNarrativeUseCase);
   private getByIdUseCase = inject(GetNarrativeByIdUseCase);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   title = '';
   content = '';
@@ -133,8 +136,11 @@ export class AuthorEditorDesk implements OnInit {
   lastSavedMsg = '';
   isGenerating = false;
   currentId: string | undefined = undefined;
+  userName = 'Creador';
+  userAvatar = '';
 
   ngOnInit() {
+    this.loadUserData();
     const narrativeId = this.route.snapshot.queryParamMap.get('id');
     if (!narrativeId) {
       return;
@@ -160,17 +166,36 @@ export class AuthorEditorDesk implements OnInit {
     this.status = s;
   }
 
-  generateAI() {
+  loadUserData() {
+    const userStr = localStorage.getItem('culturastory.currentUser');
+    if (userStr) {
+      try {
+         const user = JSON.parse(userStr);
+         this.userName = user.nombreCompleto || user.nombre || 'Creador';
+         this.userAvatar = user.fotoPerfilUrl || '';
+      } catch(e) {
+         console.error('Error parseando usuario local', e);
+      }
+    }
+  }
+
+  goTo(path: string) {
+    this.router.navigate([path]);
+  }
+
+  improveWithAI() {
+    if (!this.content.trim()) return;
+    
     this.isGenerating = true;
-    this.generateUseCase.execute(this.region).subscribe({
-      next: (esquema) => {
-        this.content = esquema;
+    this.improveUseCase.execute(this.title, this.region, this.content).subscribe({
+      next: (improved) => {
+        this.content = improved;
         this.isGenerating = false;
       },
       error: (err) => {
-        console.error('Error generating AI outline:', err);
+        console.error('Error improving narrative with AI:', err);
         this.isGenerating = false;
-        alert('Error al generar el esquema con IA.');
+        alert('Error al mejorar la narrativa con IA.');
       }
     });
   }

@@ -16,7 +16,7 @@ import { User } from '../../core/domain/models/user.model';
 <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
 </div>
 <div>
-<h2 class="text-lg font-headline text-[#823B18] leading-none">The Weaver's Hub</h2>
+<h2 class="text-lg font-headline text-[#823B18] leading-none">CulturaStory Hub</h2>
 <p class="text-xs font-medium opacity-60">Portal de Administrador</p>
 </div>
 </div>
@@ -135,7 +135,7 @@ import { User } from '../../core/domain/models/user.model';
 <ng-template #loadingTpl>
     <div class="p-20 text-center space-y-4">
         <span class="material-symbols-outlined text-4xl animate-spin text-primary">sync</span>
-        <p class="text-on-surface-variant">Cargando tejedores...</p>
+        <p class="text-on-surface-variant">Cargando creadores...</p>
     </div>
 </ng-template>
 </section>

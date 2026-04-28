@@ -112,4 +112,12 @@ export class HttpNarrativeAdapter implements NarrativePort {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  improveNarrative(title: string, culture: string, content: string): Observable<string> {
+    return this.http.post(`${this.apiUrl}/mejorar-narrativa`, {
+      titulo: title,
+      cultura: culture,
+      contenido: content
+    }, { responseType: 'text' });
+  }
 }

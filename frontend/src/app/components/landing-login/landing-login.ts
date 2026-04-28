@@ -37,13 +37,13 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 <div class="max-w-2xl space-y-8 relative">
 <div class="inline-flex items-center gap-2 px-4 py-2 bg-tertiary-container/10 text-tertiary rounded-full text-sm font-medium">
 <span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
-                    Tejiendo el futuro del aprendizaje cultural
+                    Creando el futuro del aprendizaje cultural
                 </div>
 <h1 class="text-6xl md:text-7xl font-headline font-bold text-primary leading-tight">
                     Preserva la Memoria, <span class="italic text-secondary">Crea</span> el Manana.
                 </h1>
 <p class="text-lg text-on-surface-variant leading-relaxed max-w-lg">
-                    Descubre una plataforma educativa donde la inteligencia artificial se encuentra con la herencia ancestral para tejer narrativas culturales inolvidables.
+                    Descubre una plataforma educativa donde la inteligencia artificial se encuentra con la herencia ancestral para crear narrativas culturales inolvidables.
                 </p>
 <div class="grid grid-cols-2 gap-8 pt-8">
 <div class="space-y-2">
@@ -66,7 +66,7 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 </div>
 <div class="w-full max-w-md bg-surface-container-lowest p-10 rounded-xl shadow-[0_32px_64px_-15px_rgba(30,27,19,0.05)] border-b-4 border-secondary/20 relative">
 <div class="space-y-2 mb-10 text-center">
-<h2 class="text-3xl font-headline font-bold text-on-surface">Bienvenido al Telar</h2>
+<h2 class="text-3xl font-headline font-bold text-on-surface">Bienvenido a CulturaStory</h2>
 <p class="text-on-surface-variant">Ingresa para continuar tu historia</p>
 </div>
 <form (ngSubmit)="onSubmit()" class="space-y-6">
@@ -100,13 +100,13 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 </div>
 <button class="w-full group relative overflow-hidden bg-primary text-on-primary py-4 rounded-md font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-[0.98]" type="submit">
 <span class="relative z-10 flex items-center justify-center gap-2">
-                            Entrar al Weaver's Hub
+                            Entrar a CulturaStory Hub
                             <span class="material-symbols-outlined text-xl">arrow_right_alt</span>
 </span>
 <div class="absolute bottom-0 left-0 w-full h-[4px] bg-[repeating-linear-gradient(45deg,#795900,#795900_10px,#823b18_10px,#823b18_20px)] opacity-50"></div>
 </button>
 <p class="text-center text-sm text-on-surface-variant">
-                        Nuevo en el telar?
+                        Nuevo en CulturaStory?
                         <a (click)="goToRegistration()" class="text-primary font-bold hover:underline ml-1 cursor-pointer">Registrate como {{ selectedRole === 'teacher' ? 'Docente' : 'Estudiante' }}</a>
 </p>
 </form>
@@ -127,11 +127,11 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 <span class="material-symbols-outlined text-sm">fingerprint</span>
 <span class="text-xs font-label uppercase tracking-tighter">Autenticacion Segura</span>
 </div>
-<p class="text-xs text-on-surface-variant">© 2024 CulturaStory AI. Tejiendo identidades digitales.</p>
+<p class="text-xs text-on-surface-variant">© 2024 CulturaStory AI. Creando identidades digitales.</p>
 </div>
 <div class="flex gap-6">
 <a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Privacidad</a>
-<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Terminos del Gremio</a>
+<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Terminos de Uso</a>
 <a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Soporte</a>
 </div>
 </footer>

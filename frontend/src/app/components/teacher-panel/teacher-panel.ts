@@ -39,7 +39,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <header class="sticky top-0 z-50 flex justify-between items-center px-0 py-4 w-full bg-[#FFF8EF]/80 backdrop-blur-md mb-12">
 <div>
 <h1 class="text-3xl font-headline italic font-bold tracking-tight text-primary">Dashboard del Docente</h1>
-<p class="text-on-surface-variant font-medium">Bienvenido al telar educativo</p>
+<p class="text-on-surface-variant font-medium">Bienvenido al panel de creación educativa</p>
 </div>
 <div class="flex items-center gap-4">
 <button class="p-2 rounded-full hover:bg-secondary/5 transition-colors text-primary">
@@ -120,7 +120,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
                 </div>
             </div>
             <ng-template #noNarratives>
-                <p class="text-xs italic text-on-surface-variant">Este estudiante aún no ha tejido historias.</p>
+                <p class="text-xs italic text-on-surface-variant">Este estudiante aún no ha creado historias.</p>
             </ng-template>
         </div>
     </td>

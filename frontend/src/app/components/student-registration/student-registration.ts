@@ -22,7 +22,7 @@ import { User } from '../../core/domain/models/user.model';
     </div>
     <div class="space-y-4">
       <h1 class="text-primary font-headline text-3xl md:text-5xl font-bold leading-tight">
-        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guia de Historias' : 'Tejedor de Historias' }}</span>
+        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guia de Historias' : 'Creador de Historias' }}</span>
       </h1>
       <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
         Cada gran narrativa comienza con un autor. Cuéntanos un poco sobre ti para personalizar tu experiencia.

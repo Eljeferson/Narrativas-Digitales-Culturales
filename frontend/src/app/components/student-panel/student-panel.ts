@@ -62,7 +62,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <div class="max-w-4xl">
 <h2 class="text-primary text-5xl font-headline italic font-bold tracking-tight mb-2">¡Hola, {{ userName }}!</h2>
 <p class="text-on-surface-variant text-xl max-w-2xl">
-    Tu hilo narrativo está listo para continuar. Hoy es un gran día para tejer nuevas historias sobre tus raíces.
+    Tu hilo narrativo está listo para continuar. Hoy es un gran día para crear nuevas historias sobre tus raíces.
 </p>
 </div>
 </header>
@@ -86,8 +86,13 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <!-- Narrative Cards List -->
 <div class="lg:col-span-8 space-y-6">
 <div class="flex justify-between items-end mb-4">
-<h3 class="text-2xl font-headline font-bold text-on-surface">Mis historias tejidas</h3>
-<span class="text-sm font-medium text-on-surface-variant border-b-2 border-secondary pb-1">Todas ({{ narratives.length }})</span>
+<h3 class="text-2xl font-headline font-bold text-on-surface">Mis historias creadas</h3>
+<div class="flex items-center gap-4">
+  <button (click)="loadNarratives()" class="p-2 rounded-full hover:bg-secondary/10 text-secondary transition-all active:rotate-180 duration-500" title="Sincronizar">
+    <span class="material-symbols-outlined text-xl">sync</span>
+  </button>
+  <span class="text-sm font-medium text-on-surface-variant border-b-2 border-secondary pb-1">Todas ({{ narratives.length }})</span>
+</div>
 </div>
 <div *ngIf="!isLoading; else loadingTpl">
 <div *ngFor="let nar of narratives" class="bg-surface-container-lowest p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start transition-all hover:bg-surface-container shadow-sm border-l-4 border-tertiary mb-4">
@@ -114,8 +119,8 @@ import { Narrative } from '../../core/domain/models/narrative.model';
     <div class="w-20 h-20 bg-[#823B18]/10 rounded-full flex items-center justify-center mb-6">
        <span class="material-symbols-outlined text-5xl text-[#823B18]">history_edu</span>
     </div>
-    <h4 class="text-xl font-headline font-bold text-on-surface mb-3">No tienes historias tejidas</h4>
-    <p class="text-on-surface-variant max-w-md mb-8 text-sm leading-relaxed">Aún no has comenzado a documentar la riqueza cultural de tu región. ¡Empieza hoy mismo a crear tu primera narrativa y comparte tus raíces!</p>
+    <h4 class="text-xl font-headline font-bold text-on-surface mb-3">No tienes historias creadas por el momento</h4>
+    <p class="text-on-surface-variant max-w-md mb-8 text-sm leading-relaxed">Aún no has comenzado a documentar la riqueza cultural de tu región. ¡Empieza hoy mismo a crear tu primera narrativa!</p>
     <button (click)="createNew()" class="px-8 py-3.5 bg-[#823B18] text-white rounded-xl font-bold flex items-center gap-2 hover:bg-[#56423c] transition-colors shadow-lg shadow-[#823B18]/30">
        <span class="material-symbols-outlined text-sm">add</span>
        Crear mi primera historia
@@ -140,7 +145,7 @@ export class StudentPanel implements OnInit {
 
   narratives: Narrative[] = [];
   isLoading = true;
-  userName = 'Tejedor';
+  userName = 'Creador';
   userAvatar = '';
 
   ngOnInit() {
@@ -154,7 +159,7 @@ export class StudentPanel implements OnInit {
       try {
          const user = JSON.parse(userStr);
          // Capitalizamos la primera letra del nombre
-         const rawName = user.nombreCompleto || user.nombre || 'Tejedor';
+         const rawName = user.nombreCompleto || user.nombre || 'Creador';
          this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
          this.userAvatar = user.fotoPerfilUrl || '';
       } catch(e) {
