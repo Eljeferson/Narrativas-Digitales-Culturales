@@ -1,3 +1,3 @@
 export const BACKEND_CONFIG = {
-  baseUrl: 'http://localhost:8080/sistema/api/v1'
+  baseUrl: 'https://narrativas-digitales-culturales.onrender.com/sistema/api/v1'
 };
