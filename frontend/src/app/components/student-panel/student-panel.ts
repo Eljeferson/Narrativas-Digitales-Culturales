@@ -15,9 +15,8 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <aside class="fixed left-0 top-0 h-full flex flex-col p-6 space-y-4 bg-[#FFF8EF] dark:bg-[#1E1B13] h-screen w-64 border-r-0 z-50 border-r border-outline-variant/10">
 <div class="mb-8">
 <div class="flex items-center gap-3 mb-2">
-<div class="w-10 h-10 rounded-lg bg-primary-container overflow-hidden flex items-center justify-center text-on-primary-container shadow-sm border border-primary/20">
-  <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
-  <span *ngIf="!userAvatar" class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
 </div>
 <div>
 <h1 class="text-lg font-headline font-bold text-[#823B18] leading-none">CulturaStory</h1>
@@ -47,7 +46,17 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </div>
 </aside>
 <!-- Main Content Canvas -->
-<main class="md:ml-64 p-8 lg:p-12">
+<main class="md:ml-64 p-8 lg:p-12 relative">
+<!-- Top Right Profile -->
+<div class="absolute top-8 right-8 lg:top-12 lg:right-12 flex items-center gap-3 z-10">
+  <button (click)="editProfile()" class="hidden sm:flex text-sm font-bold text-[#823B18] hover:bg-[#823B18]/10 px-4 py-2 rounded-full transition-colors items-center gap-2">
+    <span class="material-symbols-outlined text-sm">edit</span> Editar Perfil
+  </button>
+  <div class="w-12 h-12 rounded-full bg-surface-container-high overflow-hidden flex items-center justify-center shadow-md border-2 border-[#823B18]/20 cursor-pointer hover:border-[#823B18] hover:shadow-lg transition-all" (click)="editProfile()" title="Editar Perfil">
+    <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
+    <span *ngIf="!userAvatar" class="material-symbols-outlined text-[#823B18] text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+  </div>
+</div>
 <!-- Personalized Greeting Section -->
 <header class="mb-12 relative">
 <div class="max-w-4xl">
@@ -140,12 +149,12 @@ export class StudentPanel implements OnInit {
   }
 
   loadUserData() {
-    const userStr = localStorage.getItem('currentUser');
+    const userStr = localStorage.getItem('culturastory.currentUser');
     if (userStr) {
       try {
          const user = JSON.parse(userStr);
          // Capitalizamos la primera letra del nombre
-         const rawName = user.nombre || 'Tejedor';
+         const rawName = user.nombreCompleto || user.nombre || 'Tejedor';
          this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
          this.userAvatar = user.fotoPerfilUrl || '';
       } catch(e) {
@@ -190,6 +199,10 @@ export class StudentPanel implements OnInit {
 
   editNarrative(narrative: Narrative) {
      this.router.navigate(['/escritorio-del-autor'], { queryParams: { id: narrative.id } });
+  }
+
+  editProfile() {
+    this.router.navigate(['/perfil-creativo-estudiante']);
   }
 }
 
