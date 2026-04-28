@@ -34,10 +34,12 @@ public class GeminiAIAdapter implements AIPort {
     @Override
     public String generarTexto(String prompt, Map<String, Object> params) {
         if (apiKey == null || apiKey.isEmpty() || apiKey.equals("TU_API_KEY_AQUI")) {
+            System.out.println("Gemini API Key no configurada. Usando modo simulación.");
             return "Esquema generado (Simulado): \n1. Introducción en región "
                     + params.getOrDefault("region", "desconocida")
                     + ".\n2. Desarrollo con personajes locales.\n3. Desenlace cultural.";
         }
+        System.out.println("Iniciando petición a Gemini (API Key detectada)");
 
         try {
             String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
@@ -57,9 +59,11 @@ public class GeminiAIAdapter implements AIPort {
             bodyMap.put("contents", new Object[]{content});
 
             String requestBody = objectMapper.writeValueAsString(bodyMap);
+            System.out.println("Enviando petición a Gemini...");
 
             HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            System.out.println("Respuesta recibida de Gemini. Status: " + response.getStatusCode());
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 JsonNode rootNode = objectMapper.readTree(response.getBody());
