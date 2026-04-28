@@ -24,7 +24,10 @@ public class GeminiAIAdapter implements AIPort {
     private final ObjectMapper objectMapper;
 
     public GeminiAIAdapter() {
-        this.restTemplate = new RestTemplate();
+        org.springframework.http.client.SimpleClientHttpRequestFactory factory = new org.springframework.http.client.SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(5000);
+        factory.setReadTimeout(30000);
+        this.restTemplate = new RestTemplate(factory);
         this.objectMapper = new ObjectMapper();
     }
 
@@ -43,8 +46,17 @@ public class GeminiAIAdapter implements AIPort {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            String requestBody = "{\"contents\": [{\"parts\": [{\"text\": \""
-                    + prompt.replace("\"", "\\\"").replace("\n", "\\n") + "\"}]}]}";
+            // Construir el cuerpo de la petición usando un Map para mayor seguridad con JSON
+            Map<String, Object> part = new HashMap<>();
+            part.put("text", prompt);
+
+            Map<String, Object> content = new HashMap<>();
+            content.put("parts", new Object[]{part});
+
+            Map<String, Object> bodyMap = new HashMap<>();
+            bodyMap.put("contents", new Object[]{content});
+
+            String requestBody = objectMapper.writeValueAsString(bodyMap);
 
             HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
@@ -53,15 +65,16 @@ public class GeminiAIAdapter implements AIPort {
                 JsonNode rootNode = objectMapper.readTree(response.getBody());
                 JsonNode candidates = rootNode.path("candidates");
                 if (candidates.isArray() && candidates.size() > 0) {
-                    JsonNode content = candidates.get(0).path("content");
-                    JsonNode parts = content.path("parts");
+                    JsonNode contentNode = candidates.get(0).path("content");
+                    JsonNode parts = contentNode.path("parts");
                     if (parts.isArray() && parts.size() > 0) {
                         return parts.get(0).path("text").asText();
                     }
                 }
             }
-            return "No se pudo generar contenido válido desde Gemini.";
+            return "No se pudo generar contenido válido desde Gemini. Respuesta del servidor: " + response.getStatusCode();
         } catch (Exception e) {
+            System.err.println("Error en GeminiAIAdapter: " + e.getMessage());
             e.printStackTrace();
             return "Error al conectarse a la API de Gemini: " + e.getMessage();
         }

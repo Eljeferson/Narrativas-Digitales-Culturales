@@ -75,6 +75,7 @@ public class NarrativaService implements NarrativaUseCase {
 
     @Override
     public String mejorarNarrativa(String titulo, String cultura, String contenido) {
+        System.out.println("Mejorando narrativa: " + titulo + " (Cultura: " + cultura + ")");
         String prompt = String.format(
             "Eres un experto en narrativa cultural peruana. Mejora la siguiente historia titulada '%s' de la región '%s'. " +
             "El texto actual es: '%s'. " +
