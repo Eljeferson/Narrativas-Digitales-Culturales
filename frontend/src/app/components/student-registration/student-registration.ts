@@ -142,11 +142,16 @@ import { User } from '../../core/domain/models/user.model';
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div class="group">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">ContraseÃ±a</label>
-                <input [(ngModel)]="password" name="password" 
-                  [class.border-secondary]="showErrors && !isPasswordStrong()"
-                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="password" placeholder="MÃ­nimo 8 caracteres" type="password" required/>
+              <div class="group relative">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">Contraseña</label>
+                <div class="relative w-full">
+                  <input [(ngModel)]="password" name="password" 
+                    [class.border-secondary]="showErrors && !isPasswordStrong()"
+                    class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium pr-10" id="password" placeholder="Mínimo 8 caracteres" [type]="showPassword ? 'text' : 'password'" required/>
+                  <button type="button" (click)="showPassword = !showPassword" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/60 hover:text-primary transition-colors focus:outline-none">
+                    <span class="material-symbols-outlined text-[20px]">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+                  </button>
+                </div>
                 @if (showErrors && !password.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
@@ -155,25 +160,30 @@ import { User } from '../../core/domain/models/user.model';
                 } @else if (showErrors && !isPasswordStrong()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">shield_lock</span>
-                    Usa letras, nÃºmeros y un carÃ¡cter especial
+                    Usa letras, números y un carácter especial
                   </p>
                 }
               </div>
 
-              <div class="group">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar ContraseÃ±a</label>
-                <input [(ngModel)]="confirmPassword" name="confirmPassword" 
-                  [class.border-secondary]="showErrors && !passwordsMatch()"
-                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="confirmPassword" placeholder="Repite tu contraseÃ±a" type="password" required/>
+              <div class="group relative">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar Contraseña</label>
+                <div class="relative w-full">
+                  <input [(ngModel)]="confirmPassword" name="confirmPassword" 
+                    [class.border-secondary]="showErrors && !passwordsMatch()"
+                    class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium pr-10" id="confirmPassword" placeholder="Repite tu contraseña" [type]="showConfirmPassword ? 'text' : 'password'" required/>
+                  <button type="button" (click)="showConfirmPassword = !showConfirmPassword" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/60 hover:text-primary transition-colors focus:outline-none">
+                    <span class="material-symbols-outlined text-[20px]">{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
+                  </button>
+                </div>
                 @if (showErrors && !confirmPassword.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
-                    Confirma tu contraseÃ±a
+                    Confirma tu contraseña
                   </p>
                 } @else if (showErrors && !passwordsMatch()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">lock_reset</span>
-                    Las contraseÃ±as no coinciden
+                    Las contraseñas no coinciden
                   </p>
                 }
               </div>
@@ -516,6 +526,8 @@ export class StudentRegistration {
   currentStep = 1;
   showErrors = false;
   registrationRole: 'student' | 'teacher' = 'student';
+  showPassword = false;
+  showConfirmPassword = false;
 
   // Lista de Avatares de Supabase
   avatars = [
@@ -576,7 +588,7 @@ export class StudentRegistration {
   // Lógica del dropdown de lenguas
   getFilteredLanguages() {
     if (!this.motherTongue.trim()) return this.languages;
-    return this.languages.filter(l => 
+    return this.languages.filter(l =>
       l.toLowerCase().includes(this.motherTongue.toLowerCase())
     );
   }
@@ -676,13 +688,13 @@ export class StudentRegistration {
 
   isStepValid(): boolean {
     const lettersOnly = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-    
+
     if (this.currentStep === 1) {
       return !!this.firstName.trim() && lettersOnly.test(this.firstName) &&
-             !!this.lastName.trim() && lettersOnly.test(this.lastName) &&
-             !!this.email.trim() && this.email.includes('@') &&
-             this.isPasswordStrong() &&
-             this.passwordsMatch();
+        !!this.lastName.trim() && lettersOnly.test(this.lastName) &&
+        !!this.email.trim() && this.email.includes('@') &&
+        this.isPasswordStrong() &&
+        this.passwordsMatch();
     }
     if (this.currentStep === 2) {
       return !!this.educationLevel && !!this.grade && !!this.institution.trim();
@@ -719,16 +731,16 @@ export class StudentRegistration {
       const container = this.avatarScrollContainer.nativeElement;
       const scrollAmount = container.clientWidth * 0.8;
       const maxScroll = container.scrollWidth - container.clientWidth;
-      
+
       let newScroll = container.scrollLeft + (direction * scrollAmount);
-      
+
       // Lógica de Bucle: Si llegamos al final, volvemos al inicio y viceversa
       if (direction > 0 && container.scrollLeft >= maxScroll - 5) {
         newScroll = 0;
       } else if (direction < 0 && container.scrollLeft <= 5) {
         newScroll = maxScroll;
       }
-      
+
       container.scrollTo({ left: newScroll, behavior: 'smooth' });
     }
   }
