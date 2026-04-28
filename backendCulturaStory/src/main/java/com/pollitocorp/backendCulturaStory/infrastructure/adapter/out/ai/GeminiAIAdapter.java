@@ -33,7 +33,7 @@ public class GeminiAIAdapter implements AIPort {
 
     @Override
     public String generarTexto(String prompt, Map<String, Object> params) {
-        if (apiKey == null || apiKey.isEmpty() || apiKey.equals("TU_API_KEY_AQUI")) {
+        if (apiKey == null || apiKey.isEmpty() || apiKey.equals("AIzaSyCiK6IgzFKHKok0zDpvTi2-hbcVpLoZX8g")) {
             System.out.println("Gemini API Key no configurada. Usando modo simulación.");
             return "Esquema generado (Simulado): \n1. Introducción en región "
                     + params.getOrDefault("region", "desconocida")
@@ -48,15 +48,16 @@ public class GeminiAIAdapter implements AIPort {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            // Construir el cuerpo de la petición usando un Map para mayor seguridad con JSON
+            // Construir el cuerpo de la petición usando un Map para mayor seguridad con
+            // JSON
             Map<String, Object> part = new HashMap<>();
             part.put("text", prompt);
 
             Map<String, Object> content = new HashMap<>();
-            content.put("parts", new Object[]{part});
+            content.put("parts", new Object[] { part });
 
             Map<String, Object> bodyMap = new HashMap<>();
-            bodyMap.put("contents", new Object[]{content});
+            bodyMap.put("contents", new Object[] { content });
 
             String requestBody = objectMapper.writeValueAsString(bodyMap);
             System.out.println("Enviando petición a Gemini...");
@@ -76,7 +77,8 @@ public class GeminiAIAdapter implements AIPort {
                     }
                 }
             }
-            return "No se pudo generar contenido válido desde Gemini. Respuesta del servidor: " + response.getStatusCode();
+            return "No se pudo generar contenido válido desde Gemini. Respuesta del servidor: "
+                    + response.getStatusCode();
         } catch (Exception e) {
             System.err.println("Error en GeminiAIAdapter: " + e.getMessage());
             e.printStackTrace();

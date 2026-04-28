@@ -3,6 +3,7 @@ package com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest;
 import com.pollitocorp.backendCulturaStory.domain.model.NarrativaCultural;
 import com.pollitocorp.backendCulturaStory.domain.port.in.NarrativaUseCase;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.MejoraNarrativaRequest;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.MejoraNarrativaResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,11 +47,12 @@ public class NarrativaController {
     }
 
     @PostMapping("/mejorar-narrativa")
-    public ResponseEntity<String> mejorarNarrativa(@RequestBody MejoraNarrativaRequest request) {
-        return ResponseEntity.ok(narrativaUseCase.mejorarNarrativa(
+    public ResponseEntity<MejoraNarrativaResponse> mejorarNarrativa(@RequestBody MejoraNarrativaRequest request) {
+        String resultado = narrativaUseCase.mejorarNarrativa(
             request.getTitulo(),
             request.getCultura(),
             request.getContenido()
-        ));
+        );
+        return ResponseEntity.ok(new MejoraNarrativaResponse(resultado));
     }
 }

@@ -114,10 +114,12 @@ export class HttpNarrativeAdapter implements NarrativePort {
   }
 
   improveNarrative(title: string, culture: string, content: string): Observable<string> {
-    return this.http.post(`${this.apiUrl}/mejorar-narrativa`, {
+    return this.http.post<any>(`${this.apiUrl}/mejorar-narrativa`, {
       titulo: title,
       cultura: culture,
       contenido: content
-    }, { responseType: 'text' });
+    }).pipe(
+      map(response => response.respuesta)
+    );
   }
 }
