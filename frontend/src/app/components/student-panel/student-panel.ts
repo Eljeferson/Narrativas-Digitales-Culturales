@@ -27,11 +27,11 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </div>
 </div>
 <nav class="flex-1 space-y-2 text-sm font-medium">
-<a class="flex items-center gap-3 bg-[#823B18] text-[#FFF8EF] rounded-md px-4 py-3 shadow-sm translate-x-1 duration-200" href="#">
+<a (click)="setActiveTab('inicio')" [class.bg-[#823B18]]="activeTab === 'inicio'" [class.text-[#FFF8EF]]="activeTab === 'inicio'" [class.shadow-sm]="activeTab === 'inicio'" [class.translate-x-1]="activeTab === 'inicio'" class="flex items-center gap-3 px-4 py-3 rounded-md duration-200 cursor-pointer" [class.opacity-70]="activeTab !== 'inicio'" [class.text-[#1E1B13]]="activeTab !== 'inicio'" [class.dark:text-[#FFF8EF]]="activeTab !== 'inicio'">
 <span class="material-symbols-outlined">dashboard</span>
 <span>Inicio</span>
 </a>
-<a (click)="scrollToStories()" class="flex items-center gap-3 text-[#1E1B13] dark:text-[#FFF8EF] px-4 py-3 opacity-70 hover:bg-[#795900]/10 transition-all cursor-pointer">
+<a (click)="setActiveTab('historias')" [class.bg-[#823B18]]="activeTab === 'historias'" [class.text-[#FFF8EF]]="activeTab === 'historias'" [class.shadow-sm]="activeTab === 'historias'" [class.translate-x-1]="activeTab === 'historias'" class="flex items-center gap-3 px-4 py-3 rounded-md duration-200 cursor-pointer" [class.opacity-70]="activeTab !== 'historias'" [class.text-[#1E1B13]]="activeTab !== 'historias'" [class.dark:text-[#FFF8EF]]="activeTab !== 'historias'">
 <span class="material-symbols-outlined">auto_stories</span>
 <span>Mis Historias</span>
 </a>
@@ -60,7 +60,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
   </div>
 </div>
 <!-- Personalized Greeting Section -->
-<header class="mb-12 relative">
+<header *ngIf="activeTab === 'inicio'" class="mb-12 relative">
 <div class="max-w-4xl">
 <h2 class="text-primary text-5xl font-headline italic font-bold tracking-tight mb-2">¡Hola, {{ userName }}!</h2>
 <p class="text-on-surface-variant text-xl max-w-2xl">
@@ -71,7 +71,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <!-- Main Bento Grid Layout -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 <!-- Primary Action & Status Summary -->
-<div class="lg:col-span-4 space-y-8">
+<div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-8">
 <button (click)="createNew()" class="w-full group relative overflow-hidden aspect-video bg-[#823B18] text-white rounded-xl flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#823B18]/20 active:scale-95 border-0">
 <div class="absolute inset-0 bg-gradient-to-br from-[#823B18] to-[#56423c] opacity-90 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
@@ -86,7 +86,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </div>
 </div>
 <!-- Narrative Cards List -->
-<div id="stories-section" class="lg:col-span-8 space-y-6">
+<div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-6">
 <div class="flex justify-between items-end mb-4">
 <h3 class="text-2xl font-headline font-bold text-on-surface">Mis historias creadas</h3>
 <div class="flex items-center gap-4">
@@ -150,6 +150,7 @@ export class StudentPanel implements OnInit {
   isLoading = true;
   userName = 'Creador';
   userAvatar = '';
+  activeTab: 'inicio' | 'historias' = 'inicio';
 
   ngOnInit() {
     this.loadUserData();
@@ -211,6 +212,13 @@ export class StudentPanel implements OnInit {
 
   editProfile() {
     this.router.navigate(['/perfil-creativo-estudiante']);
+  }
+
+  setActiveTab(tab: 'inicio' | 'historias') {
+    this.activeTab = tab;
+    if (tab === 'historias') {
+      this.scrollToStories();
+    }
   }
 
   scrollToStories() {

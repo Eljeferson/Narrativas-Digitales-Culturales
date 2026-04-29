@@ -40,11 +40,10 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <!-- Header Actions -->
 <div class="flex justify-between items-end mb-12">
 <div>
-<nav class="flex items-center gap-2 text-sm text-outline mb-4">
-<span class="hover:text-primary cursor-pointer">CulturaStory Hub</span>
-<span class="material-symbols-outlined text-xs">chevron_right</span>
-<span class="text-on-surface-variant font-medium">Editor de Narrativa</span>
-</nav>
+<button (click)="goTo('/panel-del-estudiante')" class="group flex items-center gap-3 px-6 py-2.5 bg-gradient-to-r from-[#823B18] to-[#A0522D] text-white rounded-full font-bold hover:shadow-lg hover:shadow-[#823B18]/30 transition-all duration-300 mb-6 active:scale-95 border-0">
+  <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+  <span>Volver al Inicio</span>
+</button>
 <h1 class="text-4xl font-headline font-bold text-primary tracking-tight">Escritorio del Autor</h1>
 </div>
 <div class="flex items-center gap-3 bg-surface-container-low p-1.5 rounded-xl border border-outline-variant/30">
