@@ -5,6 +5,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { ListNarrativesUseCase } from '../../core/application/narratives/narrative-use-cases';
 import { AUTH_PORT } from '../../core/application/auth/auth-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
+import { AnalyzeVocationUseCase } from '../../core/application/vocation/analyze-vocation.use-case';
+import { VocationPrediction } from '../../core/domain/models/vocation.model';
 
 @Component({
   selector: 'app-student-panel',
@@ -84,6 +86,27 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <h3 class="text-tertiary font-headline font-bold text-lg mb-4">Sabiduría Cultural</h3>
 <p class="text-sm text-on-surface-variant italic mb-6">"Preservar nuestra cultura es asegurar el camino de los que vendrán."</p>
 </div>
+
+<!-- Vocational Prediction Card -->
+<div *ngIf="vocationPrediction" class="bg-gradient-to-br from-secondary/5 to-primary/5 p-6 rounded-xl border border-primary/20 relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-1000">
+  <div class="absolute -top-4 -right-4 opacity-10">
+    <span class="material-symbols-outlined text-6xl text-primary">psychology</span>
+  </div>
+  <h3 class="text-primary font-headline font-bold text-lg mb-2 flex items-center gap-2">
+    <span class="material-symbols-outlined text-sm">auto_awesome</span>
+    Tu Pasión Detectada
+  </h3>
+  <div class="space-y-3 relative z-10">
+    <div class="text-2xl font-headline font-bold text-secondary">{{ vocationPrediction.passion }}</div>
+    <p class="text-xs text-on-surface-variant leading-relaxed">{{ vocationPrediction.description }}</p>
+    <div class="pt-2">
+      <div class="text-[10px] font-bold uppercase tracking-widest text-outline mb-2">Caminos sugeridos</div>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let career of vocationPrediction.suggested_careers" class="px-2 py-1 bg-white dark:bg-black/20 text-[10px] font-bold rounded-md border border-outline-variant/30 text-on-surface-variant">{{ career }}</span>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 <!-- Narrative Cards List -->
 <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-6">
@@ -151,12 +174,15 @@ export class StudentPanel implements OnInit {
   private listNarrativesUseCase = inject(ListNarrativesUseCase);
   private authPort = inject(AUTH_PORT);
   private router = inject(Router);
+  private analyzeVocationUseCase = inject(AnalyzeVocationUseCase);
 
   narratives: Narrative[] = [];
   isLoading = true;
   userName = 'Creador';
   userAvatar = '';
   activeTab: 'inicio' | 'historias' = 'inicio';
+  vocationPrediction: VocationPrediction | null = null;
+  isAnalyzing = false;
 
   ngOnInit() {
     this.loadUserData();
@@ -186,10 +212,30 @@ export class StudentPanel implements OnInit {
       next: (data) => {
         this.narratives = data;
         this.isLoading = false;
+        
+        if (data.length > 0 && !this.vocationPrediction) {
+          this.analyzeStudentVocation(data[0]);
+        }
       },
       error: (err) => {
         console.error('Error cargando narrativas:', err);
         this.isLoading = false;
+      }
+    });
+  }
+
+  analyzeStudentVocation(narrative: Narrative) {
+    if (this.isAnalyzing) return;
+    this.isAnalyzing = true;
+    
+    this.analyzeVocationUseCase.execute(this.userName, narrative.contenido).subscribe({
+      next: (response) => {
+        this.vocationPrediction = response.prediction;
+        this.isAnalyzing = false;
+      },
+      error: (err) => {
+        console.error('Error al analizar vocación:', err);
+        this.isAnalyzing = false;
       }
     });
   }
