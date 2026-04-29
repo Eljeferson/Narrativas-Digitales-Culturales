@@ -50,6 +50,7 @@ export class HttpNarrativeAdapter implements NarrativePort {
       titulo: item?.titulo ?? '',
       contenido: item?.contenido ?? '',
       regionCultural: item?.regionCultural ?? '',
+      tipoRelato: item?.tipoRelato ?? 'otro',
       autor: { id: item?.autor?.id ?? '' },
       estado: item?.estado,
       status: this.mapStatusFromBackend(item?.estado ?? item?.status),
@@ -63,6 +64,7 @@ export class HttpNarrativeAdapter implements NarrativePort {
       titulo: narrative.titulo,
       contenido: narrative.contenido,
       regionCultural: narrative.regionCultural,
+      tipoRelato: narrative.tipoRelato || 'otro',
       autor: narrative.autor
     };
 

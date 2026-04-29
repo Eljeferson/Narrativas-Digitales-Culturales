@@ -142,6 +142,7 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
   title = '';
   content = '';
   region = 'andina';
+  tipoRelato = 'cuento';
   status: 'draft' | 'ready_for_review' | 'published' = 'draft';
   lastSavedMsg = '';
   isGenerating = false;
@@ -172,6 +173,7 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
         this.title = narrative.titulo;
         this.content = narrative.contenido;
         this.region = narrative.regionCultural;
+        this.tipoRelato = narrative.tipoRelato || 'cuento';
         this.status = narrative.status === 'ready_for_review' ? 'ready_for_review' : 'draft';
       },
       error: (err) => console.error('Error loading narrative:', err)
@@ -266,6 +268,7 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
       titulo: this.title,
       contenido: this.content,
       regionCultural: this.region,
+      tipoRelato: this.tipoRelato,
       autor: { id: authorId },
       status: this.status
     };
