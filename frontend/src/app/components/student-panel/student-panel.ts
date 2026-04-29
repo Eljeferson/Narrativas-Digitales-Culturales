@@ -97,7 +97,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </div>
 </div>
 <div *ngIf="!isLoading; else loadingTpl">
-<div *ngFor="let nar of narratives" class="bg-surface-container-lowest p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start transition-all hover:bg-surface-container shadow-sm border-l-4 border-tertiary mb-4">
+<div *ngFor="let nar of (activeTab === 'inicio' ? narratives.slice(0, 3) : narratives)" class="bg-surface-container-lowest p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start transition-all hover:bg-surface-container shadow-sm border-l-4 border-tertiary mb-4">
 <div class="flex-1">
 <div class="flex justify-between items-start mb-1">
 <h4 class="text-xl font-headline font-bold text-primary">{{ nar.titulo }}</h4>
@@ -116,6 +116,11 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </button>
 </div>
 </div>
+<div *ngIf="activeTab === 'inicio' && narratives.length > 3" class="flex justify-center pt-4">
+  <button (click)="setActiveTab('historias')" class="px-6 py-2 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary hover:text-on-primary transition-all flex items-center gap-2">
+    <span>Ver todas mis historias</span>
+    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+  </button>
 </div>
 <div *ngIf="narratives.length === 0" class="p-12 text-center bg-surface-container-lowest rounded-xl flex flex-col items-center justify-center shadow-sm border border-outline-variant/30 transition-all hover:shadow-md">
     <div class="w-20 h-20 bg-[#823B18]/10 rounded-full flex items-center justify-center mb-6">
