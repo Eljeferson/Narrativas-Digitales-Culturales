@@ -49,13 +49,30 @@ public class NarrativaService implements NarrativaUseCase {
 
     @Override
     public NarrativaCultural guardarNarrativa(NarrativaCultural narrativa) {
-        // Validar y cargar el autor completo si solo viene el ID
-        if (narrativa.getAutor() != null && narrativa.getAutor().getId() != null) {
+        if (narrativa.getId() == null) {
+            return crearNarrativa(narrativa);
+        }
+
+        NarrativaCultural existente = repositoryPort.findById(narrativa.getId())
+                .orElseThrow(() -> new RuntimeException("No se encontró la narrativa con ID: " + narrativa.getId()));
+
+        // Preservar campos que no deben cambiar o que son obligatorios
+        narrativa.setCreatedAt(existente.getCreatedAt());
+        if (narrativa.getAutor() == null) {
+            narrativa.setAutor(existente.getAutor());
+        } else if (narrativa.getAutor().getId() != null) {
+            // Validar y cargar el autor si solo viene el ID
             AutorEstudiante autorCompleto = autorRepositoryPort.findById(narrativa.getAutor().getId())
                     .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
             narrativa.setAutor(autorCompleto);
         }
-        
+
+        // Asegurar campos por defecto si vienen nulos
+        if (narrativa.getTipoRelato() == null) narrativa.setTipoRelato(existente.getTipoRelato());
+        if (narrativa.getEstado() == null) narrativa.setEstado(existente.getEstado());
+        if (narrativa.getDestacada() == null) narrativa.setDestacada(existente.getDestacada());
+        if (narrativa.getVecesVista() == null) narrativa.setVecesVista(existente.getVecesVista());
+
         narrativa.setUpdatedAt(LocalDateTime.now());
         return repositoryPort.save(narrativa);
     }
