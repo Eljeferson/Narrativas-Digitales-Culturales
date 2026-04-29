@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { GenerateOutlineUseCase, CreateNarrativeUseCase, SaveNarrativeUseCase, GetNarrativeByIdUseCase, ImproveNarrativeUseCase } from '../../core/application/narratives/narrative-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 
@@ -57,16 +58,22 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-8 border-b border-surface-variant">
 <div class="space-y-2">
 <label class="block text-xs font-bold uppercase tracking-widest text-secondary font-label">Título de la Obra</label>
-<input [(ngModel)]="title" name="title" class="w-full bg-transparent border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-tertiary transition-colors text-xl font-headline placeholder:text-outline-variant py-2" placeholder="Escribe el nombre de tu historia..." type="text"/>
+<input [(ngModel)]="title" (ngModelChange)="onContentChange()" name="title" class="w-full bg-transparent border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-tertiary transition-colors text-xl font-headline placeholder:text-outline-variant py-2" placeholder="Escribe el nombre de tu historia..." type="text"/>
 </div>
 <div class="space-y-2">
 <label class="block text-xs font-bold uppercase tracking-widest text-secondary font-label">Región Cultural</label>
-<select [(ngModel)]="region" name="region" class="w-full bg-transparent border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-tertiary transition-colors py-2 text-on-surface">
+<div class="flex gap-2">
+<select [(ngModel)]="region" (ngModelChange)="onContentChange()" name="region" class="flex-1 bg-transparent border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-tertiary transition-colors py-2 text-on-surface">
 <option value="andina">Andina</option>
 <option value="amazónica">Amazónica</option>
 <option value="afroperuana">Afroperuana</option>
 <option value="costeña">Costeña</option>
 </select>
+<button (click)="generateFromAI()" [disabled]="isGenerating" class="px-3 py-1 bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-all disabled:opacity-50 text-xs font-bold border border-secondary/20 flex items-center gap-1" title="Generar esquema base con IA">
+<span class="material-symbols-outlined text-sm" [class.animate-spin]="isGenerating">magic_button</span>
+<span>Esquema IA</span>
+</button>
+</div>
 </div>
 </div>
 <!-- Toolbar -->
@@ -88,23 +95,25 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <span class="material-symbols-outlined text-[120px] text-primary">texture</span>
 </div>
 <div class="max-w-3xl mx-auto">
-<textarea [(ngModel)]="content" name="content" class="w-full min-h-[500px] bg-transparent border-none focus:ring-0 text-lg leading-relaxed text-on-surface font-serif placeholder:text-outline-variant/30" placeholder="Hace mucho tiempo..."></textarea>
+<textarea [(ngModel)]="content" (ngModelChange)="onContentChange()" name="content" class="w-full min-h-[500px] bg-transparent border-none focus:ring-0 text-lg leading-relaxed text-on-surface font-serif placeholder:text-outline-variant/30" placeholder="Hace mucho tiempo..."></textarea>
 </div>
 </div>
 </div>
 <!-- Footer Actions -->
 <div class="mt-12 flex flex-col md:flex-row justify-between items-center gap-6">
 <div class="flex items-center gap-4 text-on-surface-variant text-sm italic">
-<span class="material-symbols-outlined text-secondary">cloud_done</span>
+<span class="material-symbols-outlined text-secondary" [class.animate-spin]="isSaving">
+{{ isSaving ? 'sync' : 'cloud_done' }}
+</span>
 <span *ngIf="lastSavedMsg">{{ lastSavedMsg }}</span>
 <span *ngIf="!lastSavedMsg">Sin cambios guardados</span>
 </div>
 <div class="flex items-center gap-4 w-full md:w-auto">
-<button (click)="saveDraft()" class="flex-1 md:flex-none px-8 py-3 rounded-lg border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">save</span>
-Guardar
+<button (click)="saveDraft()" [disabled]="isSaving" class="flex-1 md:flex-none px-8 py-3 rounded-lg border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+<span class="material-symbols-outlined">{{ currentId ? 'save' : 'add_circle' }}</span>
+{{ isSaving ? 'Guardando...' : (currentId ? 'Guardar' : 'Crear Historia') }}
 </button>
-<button (click)="submitToTeacher()" class="flex-1 md:flex-none px-8 py-3 rounded-lg bg-primary text-on-primary font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden group">
+<button (click)="submitToTeacher()" [disabled]="isSaving || !currentId" class="flex-1 md:flex-none px-8 py-3 rounded-lg bg-primary text-on-primary font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden group disabled:opacity-50">
 <span class="material-symbols-outlined">send</span>
 Enviar a revisión
 </button>
@@ -120,7 +129,7 @@ Enviar a revisión
     }
   `
 })
-export class AuthorEditorDesk implements OnInit {
+export class AuthorEditorDesk implements OnInit, OnDestroy {
   private generateUseCase = inject(GenerateOutlineUseCase);
   private improveUseCase = inject(ImproveNarrativeUseCase);
   private createUseCase = inject(CreateNarrativeUseCase);
@@ -136,12 +145,18 @@ export class AuthorEditorDesk implements OnInit {
   status: 'draft' | 'ready_for_review' | 'published' = 'draft';
   lastSavedMsg = '';
   isGenerating = false;
+  isSaving = false;
   currentId: string | undefined = undefined;
   userName = 'Creador';
   userAvatar = '';
 
+  private destroy$ = new Subject<void>();
+  private autoSave$ = new Subject<void>();
+
   ngOnInit() {
     this.loadUserData();
+    this.setupAutoSave();
+    
     const narrativeId = this.route.snapshot.queryParamMap.get('id');
     if (!narrativeId) {
       return;
@@ -161,6 +176,27 @@ export class AuthorEditorDesk implements OnInit {
       },
       error: (err) => console.error('Error loading narrative:', err)
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupAutoSave() {
+    this.autoSave$.pipe(
+      debounceTime(5000), // 5 segundos de inactividad
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      if (this.title.trim() || this.content.trim()) {
+        this.saveDraft();
+      }
+    });
+  }
+
+  onContentChange() {
+    this.autoSave$.next();
   }
 
   setStatus(s: 'draft' | 'ready_for_review') {
@@ -184,6 +220,26 @@ export class AuthorEditorDesk implements OnInit {
     this.router.navigate([path]);
   }
 
+  generateFromAI() {
+    if (!this.region) return;
+    
+    this.isGenerating = true;
+    this.generateUseCase.execute(this.region).subscribe({
+      next: (outline) => {
+        this.content = outline;
+        this.isGenerating = false;
+        if (!this.title) this.title = `Nueva historia de la región ${this.region}`;
+        this.saveDraft(); // Guardar automáticamente al generar
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error generating outline:', err);
+        this.isGenerating = false;
+        alert('Error al generar el esquema con IA.');
+      }
+    });
+  }
+
   improveWithAI() {
     if (!this.content.trim()) return;
     
@@ -192,10 +248,11 @@ export class AuthorEditorDesk implements OnInit {
       next: (improved) => {
         this.content = improved;
         this.isGenerating = false;
-        this.cdr.detectChanges(); // Asegurar que la UI se actualice inmediatamente
+        this.saveDraft(); // Guardar automáticamente tras la mejora
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error improving narrative with AI:', err);
+        console.error('Error improving narrative with IA:', err);
         this.isGenerating = false;
         alert('Error al mejorar la narrativa con IA.');
       }
@@ -215,16 +272,28 @@ export class AuthorEditorDesk implements OnInit {
   }
 
   saveDraft() {
+    if (this.isSaving) return;
+    
     const narrative = this.buildNarrative();
+    this.isSaving = true;
+    this.lastSavedMsg = 'Guardando...';
+    
     const obs = this.currentId ? this.saveUseCase.execute(narrative) : this.createUseCase.execute(narrative);
     
     obs.subscribe({
       next: (saved) => {
         this.currentId = saved.id;
-        const time = new Date().toLocaleTimeString();
+        this.isSaving = false;
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         this.lastSavedMsg = `Guardado a las ${time}`;
+        this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error saving narrative:', err)
+      error: (err) => {
+        console.error('Error saving narrative:', err);
+        this.isSaving = false;
+        this.lastSavedMsg = 'Error al guardar';
+        this.cdr.detectChanges();
+      }
     });
   }
 
