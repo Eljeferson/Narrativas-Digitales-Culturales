@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -128,6 +128,7 @@ export class AuthorEditorDesk implements OnInit {
   private getByIdUseCase = inject(GetNarrativeByIdUseCase);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   title = '';
   content = '';
@@ -191,6 +192,7 @@ export class AuthorEditorDesk implements OnInit {
       next: (improved) => {
         this.content = improved;
         this.isGenerating = false;
+        this.cdr.detectChanges(); // Asegurar que la UI se actualice inmediatamente
       },
       error: (err) => {
         console.error('Error improving narrative with AI:', err);
