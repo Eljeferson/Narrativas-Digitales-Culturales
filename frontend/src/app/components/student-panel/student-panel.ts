@@ -1,7 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { ListNarrativesUseCase } from '../../core/application/narratives/narrative-use-cases';
+import { AUTH_PORT } from '../../core/application/auth/auth-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 
 @Component({
@@ -29,7 +31,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <span class="material-symbols-outlined">dashboard</span>
 <span>Inicio</span>
 </a>
-<a class="flex items-center gap-3 text-[#1E1B13] dark:text-[#FFF8EF] px-4 py-3 opacity-70 hover:bg-[#795900]/10 transition-all" href="#">
+<a (click)="scrollToStories()" class="flex items-center gap-3 text-[#1E1B13] dark:text-[#FFF8EF] px-4 py-3 opacity-70 hover:bg-[#795900]/10 transition-all cursor-pointer">
 <span class="material-symbols-outlined">auto_stories</span>
 <span>Mis Historias</span>
 </a>
@@ -39,10 +41,10 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <span class="material-symbols-outlined">add</span>
 <span>+ Nueva Narrativa</span>
 </button>
-<a class="flex items-center gap-3 text-error px-4 py-3 opacity-70 hover:bg-error/5 transition-all font-bold cursor-pointer" href="/">
+<button (click)="logout()" class="w-full flex items-center gap-3 text-error px-4 py-3 opacity-70 hover:bg-error/5 transition-all font-bold cursor-pointer border-0 bg-transparent">
 <span class="material-symbols-outlined">logout</span>
 <span>Cerrar Sesión</span>
-</a>
+</button>
 </div>
 </aside>
 <!-- Main Content Canvas -->
@@ -84,7 +86,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </div>
 </div>
 <!-- Narrative Cards List -->
-<div class="lg:col-span-8 space-y-6">
+<div id="stories-section" class="lg:col-span-8 space-y-6">
 <div class="flex justify-between items-end mb-4">
 <h3 class="text-2xl font-headline font-bold text-on-surface">Mis historias creadas</h3>
 <div class="flex items-center gap-4">
@@ -141,6 +143,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 })
 export class StudentPanel implements OnInit {
   private listNarrativesUseCase = inject(ListNarrativesUseCase);
+  private authPort = inject(AUTH_PORT);
   private router = inject(Router);
 
   narratives: Narrative[] = [];
@@ -170,7 +173,7 @@ export class StudentPanel implements OnInit {
 
   loadNarratives() {
     this.isLoading = true;
-    const authorId = localStorage.getItem('currentAuthorId') || 'fbdf4968-3ac3-43f1-9457-36e4f3a9e2f4';
+    const authorId = localStorage.getItem('currentAuthorId') || 'aaaaaaaa-0000-0000-0000-000000000001';
     
     this.listNarrativesUseCase.execute(authorId).subscribe({
       next: (data) => {
@@ -208,6 +211,19 @@ export class StudentPanel implements OnInit {
 
   editProfile() {
     this.router.navigate(['/perfil-creativo-estudiante']);
+  }
+
+  scrollToStories() {
+    const element = document.getElementById('stories-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  logout() {
+    this.authPort.logout().subscribe(() => {
+      this.router.navigate(['/']);
+    });
   }
 }
 
