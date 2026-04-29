@@ -49,6 +49,13 @@ public class NarrativaService implements NarrativaUseCase {
 
     @Override
     public NarrativaCultural guardarNarrativa(NarrativaCultural narrativa) {
+        // Validar y cargar el autor completo si solo viene el ID
+        if (narrativa.getAutor() != null && narrativa.getAutor().getId() != null) {
+            AutorEstudiante autorCompleto = autorRepositoryPort.findById(narrativa.getAutor().getId())
+                    .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+            narrativa.setAutor(autorCompleto);
+        }
+        
         narrativa.setUpdatedAt(LocalDateTime.now());
         return repositoryPort.save(narrativa);
     }

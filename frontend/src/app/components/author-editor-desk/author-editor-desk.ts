@@ -260,7 +260,7 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
   }
 
   private buildNarrative(): Narrative {
-    const authorId = localStorage.getItem('currentAuthorId') || 'fbdf4968-3ac3-43f1-9457-36e4f3a9e2f4';
+    const authorId = localStorage.getItem('currentAuthorId') || 'aaaaaaaa-0000-0000-0000-000000000001';
     return {
       id: this.currentId,
       titulo: this.title,
