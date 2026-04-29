@@ -116,6 +116,7 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </button>
 </div>
 </div>
+</div>
 <div *ngIf="activeTab === 'inicio' && narratives.length > 3" class="flex justify-center pt-4">
   <button (click)="setActiveTab('historias')" class="px-6 py-2 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary hover:text-on-primary transition-all flex items-center gap-2">
     <span>Ver todas mis historias</span>
