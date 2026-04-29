@@ -1,8 +1,19 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from vocation_analyzer import VocationAnalyzer
 
 app = FastAPI(title="CulturaStory Vocational IA Service")
+
+# Configurar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # En producción se puede restringir a ["https://narrativasdigitalesculturales.vercel.app"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 analyzer = VocationAnalyzer()
 
 class StoryRequest(BaseModel):
