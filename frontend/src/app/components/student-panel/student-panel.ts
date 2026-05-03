@@ -15,174 +15,225 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
   template: `
 <!-- Thread Scroll Guide -->
 <div class="thread-scroll hidden md:block"></div>
+
 <!-- SideNavBar -->
-<aside class="fixed left-0 top-0 h-full flex flex-col p-6 space-y-4 bg-[#FFF8EF] dark:bg-[#1E1B13] h-screen w-64 border-r-0 z-50 border-r border-outline-variant/10">
-<div class="mb-8">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
-</div>
-<div>
-<h1 class="text-lg font-headline font-bold text-[#823B18] leading-none">CulturaStory</h1>
-<span class="text-xs opacity-60">Panel del Estudiante</span>
-</div>
-</div>
-</div>
-<nav class="flex-1 space-y-2 text-sm font-medium">
-<a (click)="setActiveTab('inicio')" [class.bg-[#823B18]]="activeTab === 'inicio'" [class.text-[#FFF8EF]]="activeTab === 'inicio'" [class.shadow-sm]="activeTab === 'inicio'" [class.translate-x-1]="activeTab === 'inicio'" class="flex items-center gap-3 px-4 py-3 rounded-md duration-200 cursor-pointer" [class.opacity-70]="activeTab !== 'inicio'" [class.text-[#1E1B13]]="activeTab !== 'inicio'" [class.dark:text-[#FFF8EF]]="activeTab !== 'inicio'">
-<span class="material-symbols-outlined">dashboard</span>
-<span>Inicio</span>
-</a>
-<a (click)="setActiveTab('historias')" [class.bg-[#823B18]]="activeTab === 'historias'" [class.text-[#FFF8EF]]="activeTab === 'historias'" [class.shadow-sm]="activeTab === 'historias'" [class.translate-x-1]="activeTab === 'historias'" class="flex items-center gap-3 px-4 py-3 rounded-md duration-200 cursor-pointer" [class.opacity-70]="activeTab !== 'historias'" [class.text-[#1E1B13]]="activeTab !== 'historias'" [class.dark:text-[#FFF8EF]]="activeTab !== 'historias'">
-<span class="material-symbols-outlined">auto_stories</span>
-<span>Mis Historias</span>
-</a>
-</nav>
-<div class="pt-6 mt-6 border-t border-outline-variant/20 space-y-2">
-<button (click)="createNew()" class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity">
-<span class="material-symbols-outlined">add</span>
-<span>+ Nueva Narrativa</span>
-</button>
-<button (click)="logout()" class="w-full flex items-center gap-3 text-error px-4 py-3 opacity-70 hover:bg-error/5 transition-all font-bold cursor-pointer border-0 bg-transparent">
-<span class="material-symbols-outlined">logout</span>
-<span>Cerrar Sesión</span>
-</button>
-</div>
+<aside class="fixed left-0 top-0 h-full flex flex-col p-6 space-y-6 bg-sidebar h-screen w-64 z-50 shadow-sidebar">
+  <div class="mb-10 px-2">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white shadow-lg rotate-3 group hover:rotate-0 transition-transform duration-500">
+        <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+      </div>
+      <div>
+        <h1 class="text-xl font-headline font-bold text-white tracking-tight">CulturaStory</h1>
+        <span class="text-[10px] uppercase tracking-widest text-white/40 font-bold">Portal Estudiantil</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flex-1 space-y-2 text-sm font-medium">
+    <a (click)="setActiveTab('inicio')" 
+       [class.active]="activeTab === 'inicio'" 
+       class="sidebar-link">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Inicio</span>
+    </a>
+    <a (click)="setActiveTab('historias')" 
+       [class.active]="activeTab === 'historias'" 
+       class="sidebar-link">
+      <span class="material-symbols-outlined">auto_stories</span>
+      <span>Mis Historias</span>
+    </a>
+  </nav>
+
+  <div class="pt-6 mt-6 border-t border-white/5 space-y-3">
+    <button (click)="createNew()" class="w-full btn-premium py-4 shadow-xl">
+      <span class="material-symbols-outlined">add</span>
+      <span>Nueva Narrativa</span>
+    </button>
+    <button (click)="logout()" class="w-full flex items-center gap-3 text-white/40 px-4 py-3 hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all font-bold cursor-pointer border-0 bg-transparent">
+      <span class="material-symbols-outlined">logout</span>
+      <span>Cerrar Sesión</span>
+    </button>
+  </div>
 </aside>
+
 <!-- Main Content Canvas -->
-<main class="md:ml-64 relative min-h-screen">
+<main class="md:ml-64 relative min-h-screen bg-background">
   <!-- Sticky Top Header -->
-  <header class="sticky top-0 z-40 bg-[#FFF8EF]/80 dark:bg-[#1E1B13]/80 backdrop-blur-md px-8 py-4 lg:px-12 flex justify-between items-center border-b border-outline-variant/10 mb-8">
+  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-8 py-6 lg:px-12 flex justify-between items-center border-b border-outline-variant/10">
     <div class="flex flex-col">
-      <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-2xl lg:text-3xl font-headline italic font-bold tracking-tight animate-in fade-in slide-in-from-left-4 duration-500">¡Hola, {{ userName }}!</h2>
-      <h2 *ngIf="activeTab === 'historias'" class="text-on-surface text-2xl lg:text-3xl font-headline font-bold tracking-tight animate-in fade-in slide-in-from-left-4 duration-500">Mis Historias</h2>
+      <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-3xl lg:text-4xl font-headline italic font-bold tracking-tight animate-slide-up">
+        ¡Hola, <span class="text-secondary-dark not-italic">{{ userName }}</span>!
+      </h2>
+      <h2 *ngIf="activeTab === 'historias'" class="text-on-surface text-3xl lg:text-4xl font-headline font-bold tracking-tight animate-slide-up">
+        Mis Historias
+      </h2>
     </div>
     
-    <div class="flex items-center gap-4">
-      <button (click)="editProfile()" class="hidden sm:flex text-sm font-bold text-[#823B18] hover:bg-[#823B18]/10 px-4 py-2 rounded-full transition-colors items-center gap-2">
+    <div class="flex items-center gap-6">
+      <button (click)="editProfile()" class="hidden sm:flex text-sm font-bold text-primary hover:bg-primary/5 px-6 py-2.5 rounded-full transition-all border border-primary/20 items-center gap-2">
         <span class="material-symbols-outlined text-sm">edit</span> Editar Perfil
       </button>
-      <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-surface-container-high overflow-hidden flex items-center justify-center shadow-md border-2 border-[#823B18]/20 cursor-pointer hover:border-[#823B18] hover:shadow-lg transition-all" (click)="editProfile()" title="Editar Perfil">
+      <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-primary/20 cursor-pointer hover:border-primary hover:scale-105 transition-all ring-4 ring-primary/5" (click)="editProfile()">
         <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
-        <span *ngIf="!userAvatar" class="material-symbols-outlined text-[#823B18] text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+        <span *ngIf="!userAvatar" class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">person</span>
       </div>
     </div>
   </header>
 
-  <div class="px-8 lg:px-12 pb-12">
-    <!-- Personalized Greeting Section (Subtitle) -->
-    <div *ngIf="activeTab === 'inicio'" class="mb-10 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <p class="text-on-surface-variant text-lg lg:text-xl max-w-2xl leading-relaxed">
+  <div class="px-8 lg:px-12 py-10">
+    <!-- Personalized Greeting Section -->
+    <div *ngIf="activeTab === 'inicio'" class="mb-12 max-w-4xl animate-slide-up" style="animation-delay: 0.1s">
+      <p class="text-on-surface-variant text-xl lg:text-2xl max-w-2xl leading-relaxed font-medium">
           Tu hilo narrativo está listo para continuar. Hoy es un gran día para crear nuevas historias sobre tus raíces.
       </p>
     </div>
-<!-- Main Bento Grid Layout -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-<!-- Primary Action & Status Summary -->
-<div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-8">
-<button (click)="createNew()" class="w-full group relative overflow-hidden aspect-video bg-[#823B18] text-white rounded-xl flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#823B18]/20 active:scale-95 border-0">
-<div class="absolute inset-0 bg-gradient-to-br from-[#823B18] to-[#56423c] opacity-90 group-hover:opacity-100 transition-opacity"></div>
-<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-<div class="relative z-10 bg-white/10 backdrop-blur-md p-5 rounded-full border border-white/20 shadow-inner group-hover:scale-110 transition-transform duration-500 group-hover:bg-white/20">
-<span class="material-symbols-outlined text-4xl text-white" style="font-variation-settings: 'FILL' 1;">add</span>
-</div>
-<span class="relative z-10 text-2xl font-headline font-bold text-white drop-shadow-md tracking-wide">Crear Nueva Historia</span>
-</button>
-<div class="bg-surface-container-low p-6 rounded-xl relative overflow-hidden">
-<h3 class="text-tertiary font-headline font-bold text-lg mb-4">Sabiduría Cultural</h3>
-<p class="text-sm text-on-surface-variant italic mb-6">"Preservar nuestra cultura es asegurar el camino de los que vendrán."</p>
-</div>
 
-<!-- Vocational Prediction Card -->
-<div *ngIf="vocationPrediction" class="bg-gradient-to-br from-secondary/5 to-primary/5 p-6 rounded-xl border border-primary/20 relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-1000">
-  <div class="absolute -top-4 -right-4 opacity-10">
-    <span class="material-symbols-outlined text-6xl text-primary">psychology</span>
-  </div>
-  <h3 class="text-primary font-headline font-bold text-lg mb-2 flex items-center gap-2">
-    <span class="material-symbols-outlined text-sm">auto_awesome</span>
-    Tu Pasión Detectada
-  </h3>
-  <div class="space-y-3 relative z-10">
-    <div class="text-2xl font-headline font-bold text-secondary">{{ vocationPrediction.passion }}</div>
-    <p class="text-xs text-on-surface-variant leading-relaxed">{{ vocationPrediction.description }}</p>
-    <div class="pt-2">
-      <div class="text-[10px] font-bold uppercase tracking-widest text-outline mb-2">Caminos sugeridos</div>
-      <div class="flex flex-wrap gap-2">
-        <span *ngFor="let career of vocationPrediction.suggested_careers" class="px-2 py-1 bg-white dark:bg-black/20 text-[10px] font-bold rounded-md border border-outline-variant/30 text-on-surface-variant">{{ career }}</span>
+    <!-- Main Bento Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <!-- Primary Action & Status Summary -->
+      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-10">
+        <button (click)="createNew()" class="w-full group relative overflow-hidden aspect-[4/3] rounded-3xl flex flex-col items-center justify-center gap-4 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl active:scale-95 border-0">
+          <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary-light to-secondary-dark transition-transform duration-700 group-hover:scale-110"></div>
+          <div class="absolute inset-0 opacity-10 textile-pattern mix-blend-overlay"></div>
+          <div class="relative z-10 bg-white/20 backdrop-blur-md p-6 rounded-3xl border border-white/30 shadow-inner group-hover:scale-110 transition-transform duration-500">
+            <span class="material-symbols-outlined text-5xl text-white" style="font-variation-settings: 'FILL' 1;">add</span>
+          </div>
+          <span class="relative z-10 text-2xl font-headline font-bold text-white drop-shadow-lg tracking-wide">Crear Nueva Historia</span>
+          <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </button>
+
+        <div class="premium-card p-8 relative overflow-hidden group">
+          <div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+          <h3 class="text-secondary-dark font-headline font-bold text-xl mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            Sabiduría Cultural
+          </h3>
+          <p class="text-base text-on-surface-variant italic mb-0 leading-relaxed">
+            "Preservar nuestra cultura es asegurar el camino de los que vendrán."
+          </p>
+        </div>
+
+        <!-- Vocational Prediction Card -->
+        <div *ngIf="vocationPrediction" class="premium-card p-8 border-l-4 border-l-accent animate-slide-up" style="animation-delay: 0.3s">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-primary font-headline font-bold text-xl flex items-center gap-2">
+              <span class="material-symbols-outlined text-accent" style="font-variation-settings: 'FILL' 1;">psychology</span>
+              Pasión Detectada
+            </h3>
+            <span class="bg-accent/10 text-accent text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tighter">AI Insight</span>
+          </div>
+          
+          <div class="space-y-4 relative z-10">
+            <div class="text-3xl font-headline font-bold text-secondary-dark">{{ vocationPrediction.passion }}</div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">{{ vocationPrediction.description }}</p>
+            
+            <div class="pt-4">
+              <div class="text-[10px] font-black uppercase tracking-widest text-outline mb-3">Caminos sugeridos</div>
+              <div class="flex flex-wrap gap-2">
+                <span *ngFor="let career of vocationPrediction.suggested_careers" 
+                      class="px-4 py-2 bg-primary/5 text-xs font-bold rounded-xl border border-primary/10 text-primary hover:bg-primary hover:text-white transition-colors cursor-default">
+                  {{ career }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Narrative Cards List -->
+      <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-8">
+        <div class="flex justify-between items-end mb-6">
+          <div>
+            <h3 class="text-3xl font-headline font-bold text-on-surface">Mis historias creadas</h3>
+            <p class="text-on-surface-variant text-sm mt-1">Tu legado digital está creciendo.</p>
+          </div>
+          <div class="flex items-center gap-6">
+            <button (click)="loadNarratives()" class="p-3 rounded-xl hover:bg-primary/5 text-primary transition-all active:rotate-180 duration-500 border border-primary/10" title="Sincronizar">
+              <span class="material-symbols-outlined text-2xl">sync</span>
+            </button>
+            <div class="flex flex-col items-end">
+              <span class="text-2xl font-headline font-bold text-primary">{{ narratives.length }}</span>
+              <span class="text-[10px] uppercase font-bold tracking-widest text-outline">Total</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!isLoading; else loadingTpl">
+          <div *ngFor="let nar of (activeTab === 'inicio' ? narratives.slice(0, 3) : narratives)" 
+               class="premium-card p-8 flex flex-col md:flex-row gap-8 items-start mb-6 border-l-8 border-l-secondary shadow-sm hover:translate-x-1">
+            <div class="flex-1 w-full">
+              <div class="flex justify-between items-start mb-4">
+                <h4 class="text-2xl font-headline font-bold text-primary group-hover:text-secondary-dark transition-colors">{{ nar.titulo }}</h4>
+                <span class="px-4 py-1.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/10">
+                  {{ getNarrativeStatusLabel(nar) }}
+                </span>
+              </div>
+              
+              <div class="flex gap-6 text-xs font-bold text-on-surface-variant mb-6">
+                <span class="flex items-center gap-2 bg-background px-3 py-1.5 rounded-lg">
+                  <span class="material-symbols-outlined text-sm text-secondary">location_on</span> {{ nar.regionCultural }}
+                </span>
+                <span class="flex items-center gap-2 bg-background px-3 py-1.5 rounded-lg">
+                  <span class="material-symbols-outlined text-sm text-secondary">history_edu</span> {{ nar.tipoRelato || 'Cuento' }}
+                </span>
+              </div>
+
+              <p class="text-base text-on-surface-variant mb-8 line-clamp-3 leading-relaxed">{{ nar.contenido }}</p>
+              
+              <div class="flex gap-4">
+                <button class="flex-1 md:flex-none btn-secondary py-3 px-8">
+                  <span class="material-symbols-outlined text-lg">visibility</span> Ver
+                </button>
+                <button (click)="editNarrative(nar)" class="flex-1 md:flex-none btn-premium py-3 px-10">
+                  <span class="material-symbols-outlined text-lg">edit</span> Continuar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="activeTab === 'inicio' && narratives.length > 3" class="flex justify-center pt-6">
+            <button (click)="setActiveTab('historias')" class="group px-10 py-4 border-2 border-primary text-primary rounded-2xl font-bold hover:bg-primary hover:text-white transition-all flex items-center gap-3 shadow-lg hover:shadow-primary/20">
+              <span>Ver todas mis historias</span>
+              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </button>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="narratives.length === 0" class="relative p-16 text-center premium-card flex flex-col items-center justify-center border-2 border-dashed border-primary/20 hover:border-primary/40 group animate-slide-up">
+              <div class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none group-hover:scale-105 transition-transform duration-1000">
+                <span class="material-symbols-outlined text-[20rem]">draw</span>
+              </div>
+              
+              <div class="relative z-10">
+                <div class="w-28 h-28 bg-gradient-to-tr from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mb-10 mx-auto shadow-inner border border-primary/10">
+                   <span class="material-symbols-outlined text-6xl text-primary animate-bounce">history_edu</span>
+                </div>
+                <h4 class="text-3xl font-headline font-bold text-primary mb-6">Tu voz es el puente entre el pasado y el futuro</h4>
+                <p class="text-on-surface-variant max-w-xl mb-12 text-lg leading-relaxed">
+                  Cada rincón de tu comunidad guarda un secreto, una leyenda o una tradición esperando ser contada. 
+                  <span class="font-bold text-secondary-dark">¿Serás tú quien la preserve para siempre?</span>
+                </p>
+                <button (click)="createNew()" class="btn-premium px-12 py-5 text-lg shadow-2xl shadow-primary/30">
+                   <span class="material-symbols-outlined group-hover:rotate-12 transition-transform text-2xl">add_circle</span>
+                   Comenzar mi Legado Cultural
+                </button>
+              </div>
+          </div>
+        </div>
+
+        <ng-template #loadingTpl>
+            <div class="p-24 text-center space-y-6">
+                <div class="relative w-16 h-16 mx-auto">
+                  <div class="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
+                  <div class="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <p class="text-on-surface-variant font-bold text-lg">Buscando tus historias en el tiempo...</p>
+            </div>
+        </ng-template>
       </div>
     </div>
   </div>
-</div>
-</div>
-<!-- Narrative Cards List -->
-<div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-6">
-<div class="flex justify-between items-end mb-4">
-<h3 class="text-2xl font-headline font-bold text-on-surface">Mis historias creadas</h3>
-<div class="flex items-center gap-4">
-  <button (click)="loadNarratives()" class="p-2 rounded-full hover:bg-secondary/10 text-secondary transition-all active:rotate-180 duration-500" title="Sincronizar">
-    <span class="material-symbols-outlined text-xl">sync</span>
-  </button>
-  <span class="text-sm font-medium text-on-surface-variant border-b-2 border-secondary pb-1">Todas ({{ narratives.length }})</span>
-</div>
-</div>
-<div *ngIf="!isLoading; else loadingTpl">
-<div *ngFor="let nar of (activeTab === 'inicio' ? narratives.slice(0, 3) : narratives)" class="bg-surface-container-lowest p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start transition-all hover:bg-surface-container shadow-sm border-l-4 border-tertiary mb-4">
-<div class="flex-1">
-<div class="flex justify-between items-start mb-1">
-<h4 class="text-xl font-headline font-bold text-primary">{{ nar.titulo }}</h4>
-<span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-widest rounded-full">{{ getNarrativeStatusLabel(nar) }}</span>
-</div>
-<div class="flex gap-4 text-xs text-on-surface-variant mb-4">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> {{ nar.regionCultural }}</span>
-</div>
-<p class="text-sm text-on-surface-variant mb-4 line-clamp-2">{{ nar.contenido }}</p>
-<div class="flex gap-3">
-<button class="flex items-center gap-2 px-4 py-2 bg-surface-variant text-on-surface-variant rounded-lg text-sm font-bold hover:bg-outline-variant/30 transition-colors">
-<span class="material-symbols-outlined text-sm">visibility</span> Ver
-</button>
-<button (click)="editNarrative(nar)" class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">
-<span class="material-symbols-outlined text-sm">edit</span> Editar
-</button>
-</div>
-</div>
-</div>
-<div *ngIf="activeTab === 'inicio' && narratives.length > 3" class="flex justify-center pt-4">
-  <button (click)="setActiveTab('historias')" class="px-6 py-2 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary hover:text-on-primary transition-all flex items-center gap-2">
-    <span>Ver todas mis historias</span>
-    <span class="material-symbols-outlined text-sm">arrow_forward</span>
-  </button>
-</div>
-<div *ngIf="narratives.length === 0" class="relative p-12 text-center bg-white/50 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/50 transition-all hover:border-primary/30 group animate-in fade-in zoom-in duration-700">
-    <!-- Decorative Background Icon -->
-    <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
-      <span class="material-symbols-outlined text-[12rem]">draw</span>
-    </div>
-    
-    <div class="relative z-10">
-      <div class="w-24 h-24 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-8 mx-auto shadow-inner">
-         <span class="material-symbols-outlined text-5xl text-secondary animate-bounce">history_edu</span>
-      </div>
-      <h4 class="text-2xl font-headline font-bold text-primary mb-4">Tu voz es el puente entre el pasado y el futuro</h4>
-      <p class="text-on-surface-variant max-w-lg mb-10 text-base leading-relaxed">
-        Cada rincón de tu comunidad guarda un secreto, una leyenda o una tradición esperando ser contada. 
-        <span class="font-bold text-secondary">¿Serás tú quien la preserve para siempre?</span>
-      </p>
-      <button (click)="createNew()" class="group px-10 py-4 bg-primary text-on-primary rounded-2xl font-bold flex items-center gap-3 hover:bg-secondary transition-all shadow-xl shadow-primary/20 hover:shadow-secondary/30 active:scale-95">
-         <span class="material-symbols-outlined group-hover:rotate-12 transition-transform">add_circle</span>
-         Comenzar mi Legado Cultural
-      </button>
-    </div>
-</div>
-</div>
-<ng-template #loadingTpl>
-    <div class="p-20 text-center space-y-4">
-        <span class="material-symbols-outlined text-4xl animate-spin text-primary">sync</span>
-        <p class="text-on-surface-variant">Buscando tus historias...</p>
-    </div>
-</ng-template>
-    </div>
-  </div>
-</div>
 </main>
   `,
   styles: `:host { display: block; }`

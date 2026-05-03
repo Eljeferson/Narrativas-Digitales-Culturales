@@ -12,173 +12,199 @@ import { Narrative } from '../../core/domain/models/narrative.model';
   imports: [CommonModule, FormsModule],
   template: `
 <div class="story-thread"></div>
-<!-- TopNavBar -->
-<nav class="sticky top-0 z-50 flex justify-between items-center px-8 py-4 w-full bg-[#FFF8EF]/80 dark:bg-[#1E1B13]/80 backdrop-blur-md">
-<div class="flex items-center gap-8">
-<span class="text-2xl font-headline font-bold tracking-tight text-[#823B18] dark:text-[#A0522D] italic">CulturaStory AI</span>
-<div class="hidden md:flex gap-6">
-<a (click)="goTo('/panel-del-estudiante')" class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Narrativas</a>
-<a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Regiones</a>
-<a (click)="goTo('/biblioteca')" class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:text-[#823B18] transition-colors font-medium cursor-pointer">Biblioteca</a>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<button class="p-2 rounded-full hover:bg-[#823B18]/5 transition-colors">
-<span class="material-symbols-outlined text-[#823B18]">notifications</span>
-</button>
-<button (click)="goTo('/perfil-creativo-estudiante')" class="p-2 rounded-full hover:bg-[#823B18]/5 transition-colors">
-<span class="material-symbols-outlined text-[#823B18]">settings</span>
-</button>
-<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer hover:ring-2 hover:ring-primary transition-all" (click)="goTo('/perfil-creativo-estudiante')">
-  <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
-  <span *ngIf="!userAvatar" class="material-symbols-outlined text-[#823B18] flex items-center justify-center h-full" style="font-variation-settings: 'FILL' 1;">person</span>
-</div>
-</div>
-<div class="bg-gradient-to-r from-transparent via-[#795900]/20 to-transparent h-[1px] w-full absolute bottom-0"></div>
-</nav>
-<main class="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-24">
-<!-- Header Actions -->
-<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
-  <div>
-    <button (click)="goTo('/panel-del-estudiante')" class="group flex items-center gap-3 px-6 py-2.5 bg-white/50 text-secondary rounded-full font-bold hover:bg-white hover:shadow-lg transition-all duration-300 mb-6 active:scale-95 border border-outline-variant/30">
-      <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
-      <span>Volver al Panel</span>
-    </button>
-    <h1 class="text-5xl font-headline font-bold text-primary tracking-tight">Mi Escritorio Creativo</h1>
-    <p class="text-on-surface-variant mt-2">Donde las leyendas cobran vida a través de tu pluma.</p>
-  </div>
-  
-  <div class="flex items-center gap-4 bg-white/30 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-sm">
-    <div class="flex flex-col items-end">
-      <span class="text-[10px] font-bold uppercase tracking-widest text-outline">Estado de Obra</span>
-      <span class="text-sm font-bold text-secondary">{{ status === 'ready_for_review' ? 'Lista para Revisión' : 'En Construcción' }}</span>
-    </div>
-    <div class="w-1 h-8 bg-outline-variant/30"></div>
-    <div class="flex items-center gap-2">
-      <span class="material-symbols-outlined text-tertiary" [class.animate-spin]="isSaving">
-        {{ isSaving ? 'sync' : 'auto_stories' }}
-      </span>
-      <span class="text-xs font-medium text-on-surface-variant">{{ lastSavedMsg || 'Sesión iniciada' }}</span>
-    </div>
-  </div>
-</div>
 
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-  <!-- Main Editor Area -->
-  <div class="lg:col-span-8 space-y-8">
-    <!-- Editor Container -->
-    <div class="bg-surface-container-lowest rounded-2xl shadow-xl border border-outline-variant/10 overflow-hidden transition-all hover:shadow-2xl hover:shadow-primary/5">
-      <!-- Metadata Bar -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-10 border-b border-surface-variant">
-        <div class="space-y-3">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 font-label">Título de la Narrativa</label>
-          <input [(ngModel)]="title" (ngModelChange)="onContentChange()" name="title" class="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 focus:ring-0 focus:border-primary transition-all text-2xl font-headline placeholder:text-outline-variant/40 py-2" placeholder="Nombra tu creación..." type="text"/>
+<!-- TopNavBar -->
+<nav class="sticky top-0 z-50 flex justify-between items-center px-8 py-4 w-full bg-background/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-sm">
+  <div class="flex items-center gap-10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md">
+        <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+      </div>
+      <span class="text-2xl font-headline font-bold tracking-tight text-primary italic">CulturaStory AI</span>
+    </div>
+    
+    <div class="hidden md:flex gap-8">
+      <a (click)="goTo('/panel-del-estudiante')" class="text-on-surface/60 hover:text-primary transition-all font-bold text-sm cursor-pointer border-b-2 border-transparent hover:border-primary pb-1">Narrativas</a>
+      <a class="text-on-surface/60 hover:text-primary transition-all font-bold text-sm cursor-pointer border-b-2 border-transparent hover:border-primary pb-1">Regiones</a>
+      <a (click)="goTo('/biblioteca')" class="text-on-surface/60 hover:text-primary transition-all font-bold text-sm cursor-pointer border-b-2 border-transparent hover:border-primary pb-1">Biblioteca</a>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-6">
+    <button class="p-2.5 rounded-xl hover:bg-primary/5 transition-all text-primary border border-primary/5">
+      <span class="material-symbols-outlined">notifications</span>
+    </button>
+    <button (click)="goTo('/perfil-creativo-estudiante')" class="p-2.5 rounded-xl hover:bg-primary/5 transition-all text-primary border border-primary/5">
+      <span class="material-symbols-outlined">settings</span>
+    </button>
+    <div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary/20 cursor-pointer hover:border-primary hover:scale-110 transition-all shadow-md" (click)="goTo('/perfil-creativo-estudiante')">
+      <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
+      <span *ngIf="!userAvatar" class="material-symbols-outlined text-primary flex items-center justify-center h-full text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+    </div>
+  </div>
+</nav>
+
+<main class="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-24">
+  <!-- Header Actions -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+    <div>
+      <button (click)="goTo('/panel-del-estudiante')" class="group flex items-center gap-3 px-6 py-3 bg-white text-primary rounded-2xl font-bold hover:shadow-xl transition-all duration-300 mb-8 active:scale-95 border border-primary/10 shadow-md">
+        <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+        <span>Volver al Panel</span>
+      </button>
+      <h1 class="text-6xl font-headline font-bold text-primary tracking-tighter leading-tight">Mi Escritorio <br/><span class="text-secondary-dark italic">Creativo</span></h1>
+      <p class="text-on-surface-variant mt-4 text-lg font-medium opacity-80">Donde las leyendas cobran vida a través de tu pluma.</p>
+    </div>
+    
+    <div class="flex items-center gap-6 bg-white/50 backdrop-blur-md p-5 rounded-3xl border border-primary/10 shadow-premium">
+      <div class="flex flex-col items-end">
+        <span class="text-[10px] font-black uppercase tracking-widest text-outline">Estado de Obra</span>
+        <span class="text-lg font-bold text-secondary-dark">{{ status === 'ready_for_review' ? 'Lista para Revisión' : 'En Construcción' }}</span>
+      </div>
+      <div class="w-[2px] h-10 bg-primary/10"></div>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary" [class.animate-spin]="isSaving">
+            {{ isSaving ? 'sync' : 'auto_stories' }}
+          </span>
         </div>
-        <div class="space-y-3">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 font-label">Inspiración Regional</label>
-          <select [(ngModel)]="region" (ngModelChange)="onContentChange()" name="region" class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant/30 focus:ring-0 focus:border-primary transition-all py-3 px-4 rounded-t-lg text-on-surface font-medium">
-            <option value="andina">Tradición Andina</option>
-            <option value="amazónica">Misterios Amazónicos</option>
-            <option value="afroperuana">Ritmo Afroperuano</option>
-            <option value="costeña">Relatos de la Costa</option>
-          </select>
+        <span class="text-xs font-bold text-on-surface-variant">{{ lastSavedMsg || 'Sesión iniciada' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+    <!-- Main Editor Area -->
+    <div class="lg:col-span-8 space-y-10">
+      <!-- Editor Container -->
+      <div class="premium-card overflow-hidden !shadow-2xl">
+        <!-- Metadata Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 p-10 bg-white">
+          <div class="space-y-4">
+            <label class="block text-[10px] font-black uppercase tracking-widest text-primary/60 font-label">Título de la Narrativa</label>
+            <input [(ngModel)]="title" (ngModelChange)="onContentChange()" name="title" 
+                   class="w-full bg-transparent border-0 border-b-2 border-primary/10 focus:ring-0 focus:border-primary transition-all text-3xl font-headline font-bold placeholder:text-outline-variant/40 py-3" 
+                   placeholder="Nombra tu creación..." type="text"/>
+          </div>
+          <div class="space-y-4">
+            <label class="block text-[10px] font-black uppercase tracking-widest text-primary/60 font-label">Inspiración Regional</label>
+            <div class="relative group">
+              <select [(ngModel)]="region" (ngModelChange)="onContentChange()" name="region" 
+                      class="w-full appearance-none bg-primary/5 border-0 border-b-2 border-primary/10 focus:ring-0 focus:border-primary transition-all py-4 px-6 rounded-t-2xl text-on-surface font-bold text-sm cursor-pointer group-hover:bg-primary/10">
+                <option value="andina">Tradición Andina</option>
+                <option value="amazónica">Misterios Amazónicos</option>
+                <option value="afroperuana">Ritmo Afroperuano</option>
+                <option value="costeña">Relatos de la Costa</option>
+              </select>
+              <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary pointer-events-none group-hover:translate-y-[-40%] transition-transform">expand_more</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="flex items-center justify-between px-10 py-5 bg-background border-y border-outline-variant/10">
+          <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 bg-white rounded-xl p-1.5 shadow-sm border border-primary/5">
+              <button class="p-2.5 hover:bg-primary/10 hover:text-primary rounded-lg transition-all" title="Negrita"><span class="material-symbols-outlined text-xl">format_bold</span></button>
+              <button class="p-2.5 hover:bg-primary/10 hover:text-primary rounded-lg transition-all" title="Cursiva"><span class="material-symbols-outlined text-xl">format_italic</span></button>
+            </div>
+            <button (click)="improveWithAI()" [disabled]="isGenerating || !content.trim()" 
+                    class="group relative flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-primary to-primary-light text-white rounded-2xl hover:shadow-xl transition-all disabled:opacity-50 overflow-hidden active:scale-95 shadow-lg shadow-primary/20">
+              <span class="material-symbols-outlined text-xl" [class.animate-spin]="isGenerating">auto_fix_high</span>
+              <span class="text-sm font-black tracking-wide">{{ isGenerating ? 'Inspirando...' : 'IA: Perfeccionar Relato' }}</span>
+              <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </button>
+          </div>
+          <div class="hidden sm:flex items-center gap-3 text-outline text-[10px] font-black uppercase tracking-widest bg-white px-4 py-2 rounded-full border border-primary/5 shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+            Escritura en Vivo
+          </div>
+        </div>
+
+        <!-- Text Content Area -->
+        <div class="paper-texture p-12 min-h-[700px] relative bg-white">
+          <div class="absolute top-12 right-12 opacity-5 pointer-events-none">
+            <span class="material-symbols-outlined text-[200px] text-primary rotate-12">history_edu</span>
+          </div>
+          <div class="max-w-3xl mx-auto relative z-10">
+            <textarea [(ngModel)]="content" (ngModelChange)="onContentChange()" name="content" 
+                      class="w-full min-h-[600px] bg-transparent border-none focus:ring-0 text-2xl leading-[2] text-on-surface font-serif placeholder:text-outline-variant/30 resize-none font-medium" 
+                      placeholder="Había una vez, entre las sombras de los cerros..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Resources Area -->
+    <div class="lg:col-span-4 space-y-10 animate-slide-up" style="animation-delay: 0.2s">
+      <!-- Baúl del Autor -->
+      <div class="premium-card p-10 space-y-8 bg-white">
+        <div class="flex items-center gap-4 border-b border-outline-variant/10 pb-6">
+          <div class="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary-dark">
+            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">backpack</span>
+          </div>
+          <h3 class="font-headline font-bold text-2xl text-primary">Baúl del Autor</h3>
+        </div>
+        
+        <!-- Word Counter & Stats -->
+        <div class="grid grid-cols-2 gap-6">
+          <div class="bg-background p-6 rounded-2xl border border-primary/5 shadow-inner transition-transform hover:scale-105">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-outline mb-2">Palabras</span>
+            <span class="text-3xl font-headline font-bold text-secondary-dark">{{ content.trim() ? content.trim().split(/\s+/).length : 0 }}</span>
+          </div>
+          <div class="bg-background p-6 rounded-2xl border border-primary/5 shadow-inner transition-transform hover:scale-105">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-outline mb-2">Lectura</span>
+            <span class="text-3xl font-headline font-bold text-secondary-dark">~{{ content.trim() ? Math.ceil(content.trim().split(/\s+/).length / 200) : 0 }} <span class="text-xs">min</span></span>
+          </div>
+        </div>
+
+        <!-- Regional Tips -->
+        <div class="space-y-5 pt-4">
+          <div class="flex items-center gap-3 text-base font-bold text-primary">
+            <span class="material-symbols-outlined text-xl text-secondary" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+            Inspiración Regional
+          </div>
+          <div class="space-y-4">
+            <div *ngIf="region === 'andina'" class="text-sm bg-primary/5 p-5 rounded-2xl border-l-4 border-primary italic leading-relaxed text-on-surface-variant font-medium">"Menciona los Apus o guardianes de los cerros para dar más fuerza a tu relato."</div>
+            <div *ngIf="region === 'amazónica'" class="text-sm bg-primary/5 p-5 rounded-2xl border-l-4 border-primary italic leading-relaxed text-on-surface-variant font-medium">"El sonido de la lluvia y los misterios del río pueden ser protagonistas de tu historia."</div>
+            <div *ngIf="region === 'afroperuana'" class="text-sm bg-primary/5 p-5 rounded-2xl border-l-4 border-primary italic leading-relaxed text-on-surface-variant font-medium">"Integra el ritmo del cajón o historias de la costa sur para enriquecer la narrativa."</div>
+            <div *ngIf="region === 'costeña'" class="text-sm bg-primary/5 p-5 rounded-2xl border-l-4 border-primary italic leading-relaxed text-on-surface-variant font-medium">"Los valles y las huacas olvidadas son excelentes escenarios para un relato costero."</div>
+          </div>
+        </div>
+
+        <!-- Vocabulary -->
+        <div class="space-y-5 pt-4">
+          <div class="flex items-center gap-3 text-base font-bold text-primary">
+            <span class="material-symbols-outlined text-xl text-secondary" style="font-variation-settings: 'FILL' 1;">translate</span>
+            Vocabulario Sugerido
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <span *ngFor="let word of ['Ancestro', 'Memoria', 'Identidad', 'Raíces', 'Legado']" 
+                  class="px-5 py-2.5 bg-secondary/10 text-xs font-black rounded-xl text-secondary-dark border border-secondary/20 hover:bg-secondary-dark hover:text-white transition-all cursor-default">
+              {{ word }}
+            </span>
+          </div>
         </div>
       </div>
 
-      <!-- Toolbar -->
-      <div class="flex items-center justify-between px-10 py-4 bg-surface-container-low/30 border-b border-surface-variant">
-        <div class="flex items-center gap-4">
-          <div class="flex items-center gap-1 bg-white/50 rounded-lg p-1 border border-outline-variant/20">
-            <button class="p-2 hover:bg-primary/10 hover:text-primary rounded transition-colors" title="Negrita"><span class="material-symbols-outlined text-lg">format_bold</span></button>
-            <button class="p-2 hover:bg-primary/10 hover:text-primary rounded transition-colors" title="Cursiva"><span class="material-symbols-outlined text-lg">format_italic</span></button>
-          </div>
-          <button (click)="improveWithAI()" [disabled]="isGenerating || !content.trim()" class="group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-tertiary to-secondary text-white rounded-xl hover:shadow-lg transition-all disabled:opacity-50 overflow-hidden">
-            <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <span class="material-symbols-outlined text-lg" [class.animate-spin]="isGenerating">auto_fix_high</span>
-            <span class="text-xs font-bold">{{ isGenerating ? 'Inspirando...' : 'IA: Perfeccionar Relato' }}</span>
+      <!-- Finalize Action -->
+      <div class="bg-primary p-10 rounded-[2.5rem] text-white shadow-2xl shadow-primary/40 space-y-8 relative overflow-hidden group">
+        <div class="absolute -right-12 -bottom-12 opacity-10 group-hover:scale-125 group-hover:-rotate-12 transition-transform duration-1000">
+          <span class="material-symbols-outlined text-[220px]">send</span>
+        </div>
+        <div class="relative z-10">
+          <h4 class="font-headline font-bold text-3xl mb-4">¿Tu obra está lista?</h4>
+          <p class="text-base opacity-90 mb-10 leading-relaxed font-medium">Una vez enviada, tu docente podrá leerla y ayudarte a pulir los detalles finales de tu legado.</p>
+          <button (click)="submitToTeacher()" [disabled]="isSaving || !currentId || !content.trim()" 
+                  class="w-full py-5 bg-white text-primary rounded-2xl font-black text-lg flex items-center justify-center gap-4 hover:bg-secondary-dark hover:text-white transition-all shadow-xl active:scale-95 disabled:opacity-50">
+            <span>Enviar a Revisión</span>
+            <span class="material-symbols-outlined text-2xl">rocket_launch</span>
           </button>
         </div>
-        <div class="hidden sm:flex items-center gap-2 text-outline text-[10px] font-bold uppercase tracking-widest">
-          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-          Escritura en Vivo
-        </div>
-      </div>
-
-      <!-- Text Content Area -->
-      <div class="paper-texture p-12 min-h-[650px] relative">
-        <div class="absolute top-8 right-8 opacity-5 pointer-events-none">
-          <span class="material-symbols-outlined text-[150px] text-primary rotate-12">history_edu</span>
-        </div>
-        <div class="max-w-3xl mx-auto relative z-10">
-          <textarea [(ngModel)]="content" (ngModelChange)="onContentChange()" name="content" class="w-full min-h-[550px] bg-transparent border-none focus:ring-0 text-xl leading-loose text-on-surface font-serif placeholder:text-outline-variant/20 resize-none" placeholder="Había una vez, entre las sombras de los cerros..."></textarea>
-        </div>
       </div>
     </div>
   </div>
-
-  <!-- Sidebar Resources Area -->
-  <div class="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-8 duration-700">
-    <!-- Baúl del Autor -->
-    <div class="bg-white/40 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-lg space-y-6">
-      <div class="flex items-center gap-3 border-b border-outline-variant/20 pb-4">
-        <span class="material-symbols-outlined text-secondary">backpack</span>
-        <h3 class="font-headline font-bold text-xl text-primary">Baúl del Autor</h3>
-      </div>
-      
-      <!-- Word Counter & Stats -->
-      <div class="grid grid-cols-2 gap-4">
-        <div class="bg-white/60 p-4 rounded-xl border border-outline-variant/10">
-          <span class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1">Palabras</span>
-          <span class="text-2xl font-headline font-bold text-secondary">{{ content.trim() ? content.trim().split(/\s+/).length : 0 }}</span>
-        </div>
-        <div class="bg-white/60 p-4 rounded-xl border border-outline-variant/10">
-          <span class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1">Lectura</span>
-          <span class="text-2xl font-headline font-bold text-secondary">~{{ content.trim() ? Math.ceil(content.trim().split(/\s+/).length / 200) : 0 }} min</span>
-        </div>
-      </div>
-
-      <!-- Regional Tips -->
-      <div class="space-y-4 pt-4">
-        <div class="flex items-center gap-2 text-sm font-bold text-primary">
-          <span class="material-symbols-outlined text-sm">lightbulb</span>
-          Inspiración para tu región:
-        </div>
-        <ul class="space-y-3">
-          <li *ngIf="region === 'andina'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"Menciona los Apus o guardianes de los cerros para dar más fuerza a tu relato."</li>
-          <li *ngIf="region === 'amazónica'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"El sonido de la lluvia y los misterios del río pueden ser protagonistas de tu historia."</li>
-          <li *ngIf="region === 'afroperuana'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"Integra el ritmo del cajón o historias de la costa sur para enriquecer la narrativa."</li>
-          <li *ngIf="region === 'costeña'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"Los valles y las huacas olvidadas son excelentes escenarios para un relato costero."</li>
-        </ul>
-      </div>
-
-      <!-- Vocabulary -->
-      <div class="space-y-3 pt-4">
-        <div class="flex items-center gap-2 text-sm font-bold text-primary">
-          <span class="material-symbols-outlined text-sm">translate</span>
-          Vocabulario Sugerido:
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <span *ngFor="let word of ['Ancestro', 'Memoria', 'Identidad', 'Raíces', 'Legado']" class="px-3 py-1 bg-primary/10 text-[10px] font-bold rounded-full text-primary border border-primary/20">{{ word }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Finalize Action -->
-    <div class="bg-primary p-8 rounded-2xl text-on-primary shadow-2xl shadow-primary/30 space-y-6 relative overflow-hidden group">
-      <div class="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-125 transition-transform duration-1000">
-        <span class="material-symbols-outlined text-[180px]">send</span>
-      </div>
-      <div class="relative z-10">
-        <h4 class="font-headline font-bold text-xl mb-2">¿Tu obra está lista?</h4>
-        <p class="text-sm opacity-80 mb-6">Una vez enviada, tu docente podrá leerla y ayudarte a pulir los detalles finales.</p>
-        <button (click)="submitToTeacher()" [disabled]="isSaving || !currentId || !content.trim()" class="w-full py-4 bg-white text-primary rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-secondary hover:text-white transition-all shadow-lg disabled:opacity-50">
-          <span>Enviar a Revisión Docente</span>
-          <span class="material-symbols-outlined">rocket_launch</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+</main>
 </main>
   `,
   styles: `
