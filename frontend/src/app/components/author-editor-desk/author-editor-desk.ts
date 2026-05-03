@@ -205,7 +205,6 @@ import { Narrative } from '../../core/domain/models/narrative.model';
     </div>
   </div>
 </main>
-</main>
   `,
   styles: `
     :host { display: block; }
