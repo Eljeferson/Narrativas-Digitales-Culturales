@@ -502,6 +502,27 @@ import { User } from '../../core/domain/models/user.model';
         Paso {{currentStep}} de 3
       </p>
     </form>
+
+    <!-- Premium Notification Toast -->
+    @if (notification) {
+      <div class="fixed top-8 right-8 z-[100] animate-slide-up">
+        <div class="flex items-center gap-4 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/20" 
+             [class.bg-green-500/90]="notification.type === 'success'"
+             [class.bg-red-500/90]="notification.type === 'error'"
+             [class.text-white]="true">
+          <span class="material-symbols-outlined text-2xl">
+            {{ notification.type === 'success' ? 'check_circle' : 'error' }}
+          </span>
+          <div class="flex flex-col">
+            <span class="font-bold text-sm uppercase tracking-wider">{{ notification.type === 'success' ? 'Completado' : 'Aviso' }}</span>
+            <span class="text-sm opacity-90">{{ notification.message }}</span>
+          </div>
+          <button (click)="notification = null" class="ml-4 hover:rotate-90 transition-transform">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      </div>
+    }
   </div>
 </main>
 <div class="fixed bottom-0 left-0 w-full h-32 pointer-events-none overflow-hidden opacity-20 -z-10">
@@ -528,6 +549,7 @@ export class StudentRegistration {
   registrationRole: 'student' | 'teacher' = 'student';
   showPassword = false;
   showConfirmPassword = false;
+  notification: { message: string, type: 'success' | 'error' } | null = null;
 
   // Lista de Avatares de Supabase
   avatars = [
@@ -761,6 +783,11 @@ export class StudentRegistration {
     return 'Hubo un error al registrar el perfil. Por favor intenta de nuevo.';
   }
 
+  private showNotification(message: string, type: 'success' | 'error') {
+    this.notification = { message, type };
+    setTimeout(() => this.notification = null, 5000);
+  }
+
   onSubmit() {
     this.showErrors = true;
     if (!this.isStepValid()) return;
@@ -788,12 +815,14 @@ export class StudentRegistration {
     this.registerUseCase.execute(user).subscribe({
       next: (saved) => {
         console.log('Usuario registrado con éxito:', saved);
-        alert('Registro exitoso. Ahora puedes iniciar sesión.');
-        this.router.navigate(['/'], { queryParams: { role: this.registrationRole } });
+        this.showNotification('¡Registro exitoso! Redirigiendo al login...', 'success');
+        setTimeout(() => {
+          this.router.navigate(['/'], { queryParams: { role: this.registrationRole } });
+        }, 2000);
       },
       error: (err) => {
         console.error('Error al registrar:', err);
-        alert(this.getRegistrationErrorMessage(err));
+        this.showNotification(this.getRegistrationErrorMessage(err), 'error');
       }
     });
   }

@@ -36,87 +36,148 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 </div>
 <div class="bg-gradient-to-r from-transparent via-[#795900]/20 to-transparent h-[1px] w-full absolute bottom-0"></div>
 </nav>
-<main class="relative z-10 max-w-5xl mx-auto px-6 pt-12 pb-24">
+<main class="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-24">
 <!-- Header Actions -->
-<div class="flex justify-between items-end mb-12">
-<div>
-<button (click)="goTo('/panel-del-estudiante')" class="group flex items-center gap-3 px-6 py-2.5 bg-gradient-to-r from-[#823B18] to-[#A0522D] text-white rounded-full font-bold hover:shadow-lg hover:shadow-[#823B18]/30 transition-all duration-300 mb-6 active:scale-95 border-0">
-  <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
-  <span>Volver al Inicio</span>
-</button>
-<h1 class="text-4xl font-headline font-bold text-primary tracking-tight">Escritorio del Autor</h1>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+  <div>
+    <button (click)="goTo('/panel-del-estudiante')" class="group flex items-center gap-3 px-6 py-2.5 bg-white/50 text-secondary rounded-full font-bold hover:bg-white hover:shadow-lg transition-all duration-300 mb-6 active:scale-95 border border-outline-variant/30">
+      <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      <span>Volver al Panel</span>
+    </button>
+    <h1 class="text-5xl font-headline font-bold text-primary tracking-tight">Mi Escritorio Creativo</h1>
+    <p class="text-on-surface-variant mt-2">Donde las leyendas cobran vida a través de tu pluma.</p>
+  </div>
+  
+  <div class="flex items-center gap-4 bg-white/30 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-sm">
+    <div class="flex flex-col items-end">
+      <span class="text-[10px] font-bold uppercase tracking-widest text-outline">Estado de Obra</span>
+      <span class="text-sm font-bold text-secondary">{{ status === 'ready_for_review' ? 'Lista para Revisión' : 'En Construcción' }}</span>
+    </div>
+    <div class="w-1 h-8 bg-outline-variant/30"></div>
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-tertiary" [class.animate-spin]="isSaving">
+        {{ isSaving ? 'sync' : 'auto_stories' }}
+      </span>
+      <span class="text-xs font-medium text-on-surface-variant">{{ lastSavedMsg || 'Sesión iniciada' }}</span>
+    </div>
+  </div>
 </div>
-<div class="flex items-center gap-3 bg-surface-container-low p-1.5 rounded-xl border border-outline-variant/30">
-<button (click)="setStatus('draft')" [class.bg-primary]="status === 'draft'" [class.text-on-primary]="status === 'draft'" class="px-4 py-2 text-sm font-bold rounded-lg shadow-sm transition-all">Borrador</button>
-<button (click)="setStatus('ready_for_review')" [class.bg-primary]="status === 'ready_for_review'" [class.text-on-primary]="status === 'ready_for_review'" class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all">Listo para revisión</button>
-</div>
-</div>
-<!-- Editor Container -->
-<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 overflow-hidden">
-<!-- Metadata Bar -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-8 border-b border-surface-variant">
-<div class="space-y-2">
-<label class="block text-xs font-bold uppercase tracking-widest text-secondary font-label">Título de la Obra</label>
-<input [(ngModel)]="title" (ngModelChange)="onContentChange()" name="title" class="w-full bg-transparent border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-tertiary transition-colors text-xl font-headline placeholder:text-outline-variant py-2" placeholder="Escribe el nombre de tu historia..." type="text"/>
-</div>
-<div class="space-y-2">
-<label class="block text-xs font-bold uppercase tracking-widest text-secondary font-label">Región Cultural</label>
-<div class="flex gap-2">
-<select [(ngModel)]="region" (ngModelChange)="onContentChange()" name="region" class="flex-1 bg-transparent border-0 border-b-2 border-outline-variant focus:ring-0 focus:border-tertiary transition-colors py-2 text-on-surface">
-<option value="andina">Andina</option>
-<option value="amazónica">Amazónica</option>
-<option value="afroperuana">Afroperuana</option>
-<option value="costeña">Costeña</option>
-</select>
-<button (click)="generateFromAI()" [disabled]="isGenerating" class="px-3 py-1 bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-all disabled:opacity-50 text-xs font-bold border border-secondary/20 flex items-center gap-1" title="Generar esquema base con IA">
-<span class="material-symbols-outlined text-sm" [class.animate-spin]="isGenerating">magic_button</span>
-<span>Esquema IA</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Toolbar -->
-<div class="flex items-center justify-between px-8 py-3 bg-surface-container-low/50 border-b border-surface-variant">
-<div class="flex items-center gap-2">
-<button class="p-2 hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined">format_bold</span></button>
-<button class="p-2 hover:bg-surface-variant rounded text-on-surface-variant"><span class="material-symbols-outlined">format_italic</span></button>
-<div class="w-[1px] h-6 bg-outline-variant mx-2"></div>
-<button (click)="improveWithAI()" [disabled]="isGenerating || !content.trim()" class="flex items-center gap-2 px-3 py-1.5 bg-tertiary/10 text-tertiary rounded-lg hover:bg-tertiary/20 transition-all disabled:opacity-50 shadow-sm border border-tertiary/20">
-<span class="material-symbols-outlined" [class.animate-spin]="isGenerating">auto_fix_high</span>
-<span class="text-xs font-bold">{{ isGenerating ? 'Mejorando...' : 'IA: Mejorar Narrativa' }}</span>
-</button>
-</div>
-<span class="text-xs text-outline font-medium">Auto-guardado habilitado</span>
-</div>
-<!-- Text Content Area -->
-<div class="paper-texture p-12 min-h-[600px] relative">
-<div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-<span class="material-symbols-outlined text-[120px] text-primary">texture</span>
-</div>
-<div class="max-w-3xl mx-auto">
-<textarea [(ngModel)]="content" (ngModelChange)="onContentChange()" name="content" class="w-full min-h-[500px] bg-transparent border-none focus:ring-0 text-lg leading-relaxed text-on-surface font-serif placeholder:text-outline-variant/30" placeholder="Hace mucho tiempo..."></textarea>
-</div>
-</div>
-</div>
-<!-- Footer Actions -->
-<div class="mt-12 flex flex-col md:flex-row justify-between items-center gap-6">
-<div class="flex items-center gap-4 text-on-surface-variant text-sm italic">
-<span class="material-symbols-outlined text-secondary" [class.animate-spin]="isSaving">
-{{ isSaving ? 'sync' : 'cloud_done' }}
-</span>
-<span *ngIf="lastSavedMsg">{{ lastSavedMsg }}</span>
-<span *ngIf="!lastSavedMsg">Sin cambios guardados</span>
-</div>
-<div class="flex items-center gap-4 w-full md:w-auto">
-<button (click)="saveDraft()" [disabled]="isSaving" class="flex-1 md:flex-none px-8 py-3 rounded-lg border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all flex items-center justify-center gap-2 disabled:opacity-50">
-<span class="material-symbols-outlined">{{ currentId ? 'save' : 'add_circle' }}</span>
-{{ isSaving ? 'Guardando...' : (currentId ? 'Guardar' : 'Crear Historia') }}
-</button>
-<button (click)="submitToTeacher()" [disabled]="isSaving || !currentId" class="flex-1 md:flex-none px-8 py-3 rounded-lg bg-primary text-on-primary font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden group disabled:opacity-50">
-<span class="material-symbols-outlined">send</span>
-Enviar a revisión
-</button>
-</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+  <!-- Main Editor Area -->
+  <div class="lg:col-span-8 space-y-8">
+    <!-- Editor Container -->
+    <div class="bg-surface-container-lowest rounded-2xl shadow-xl border border-outline-variant/10 overflow-hidden transition-all hover:shadow-2xl hover:shadow-primary/5">
+      <!-- Metadata Bar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-10 border-b border-surface-variant">
+        <div class="space-y-3">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 font-label">Título de la Narrativa</label>
+          <input [(ngModel)]="title" (ngModelChange)="onContentChange()" name="title" class="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 focus:ring-0 focus:border-primary transition-all text-2xl font-headline placeholder:text-outline-variant/40 py-2" placeholder="Nombra tu creación..." type="text"/>
+        </div>
+        <div class="space-y-3">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 font-label">Inspiración Regional</label>
+          <select [(ngModel)]="region" (ngModelChange)="onContentChange()" name="region" class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant/30 focus:ring-0 focus:border-primary transition-all py-3 px-4 rounded-t-lg text-on-surface font-medium">
+            <option value="andina">Tradición Andina</option>
+            <option value="amazónica">Misterios Amazónicos</option>
+            <option value="afroperuana">Ritmo Afroperuano</option>
+            <option value="costeña">Relatos de la Costa</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="flex items-center justify-between px-10 py-4 bg-surface-container-low/30 border-b border-surface-variant">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1 bg-white/50 rounded-lg p-1 border border-outline-variant/20">
+            <button class="p-2 hover:bg-primary/10 hover:text-primary rounded transition-colors" title="Negrita"><span class="material-symbols-outlined text-lg">format_bold</span></button>
+            <button class="p-2 hover:bg-primary/10 hover:text-primary rounded transition-colors" title="Cursiva"><span class="material-symbols-outlined text-lg">format_italic</span></button>
+          </div>
+          <button (click)="improveWithAI()" [disabled]="isGenerating || !content.trim()" class="group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-tertiary to-secondary text-white rounded-xl hover:shadow-lg transition-all disabled:opacity-50 overflow-hidden">
+            <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <span class="material-symbols-outlined text-lg" [class.animate-spin]="isGenerating">auto_fix_high</span>
+            <span class="text-xs font-bold">{{ isGenerating ? 'Inspirando...' : 'IA: Perfeccionar Relato' }}</span>
+          </button>
+        </div>
+        <div class="hidden sm:flex items-center gap-2 text-outline text-[10px] font-bold uppercase tracking-widest">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          Escritura en Vivo
+        </div>
+      </div>
+
+      <!-- Text Content Area -->
+      <div class="paper-texture p-12 min-h-[650px] relative">
+        <div class="absolute top-8 right-8 opacity-5 pointer-events-none">
+          <span class="material-symbols-outlined text-[150px] text-primary rotate-12">history_edu</span>
+        </div>
+        <div class="max-w-3xl mx-auto relative z-10">
+          <textarea [(ngModel)]="content" (ngModelChange)="onContentChange()" name="content" class="w-full min-h-[550px] bg-transparent border-none focus:ring-0 text-xl leading-loose text-on-surface font-serif placeholder:text-outline-variant/20 resize-none" placeholder="Había una vez, entre las sombras de los cerros..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Resources Area -->
+  <div class="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-8 duration-700">
+    <!-- Baúl del Autor -->
+    <div class="bg-white/40 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-lg space-y-6">
+      <div class="flex items-center gap-3 border-b border-outline-variant/20 pb-4">
+        <span class="material-symbols-outlined text-secondary">backpack</span>
+        <h3 class="font-headline font-bold text-xl text-primary">Baúl del Autor</h3>
+      </div>
+      
+      <!-- Word Counter & Stats -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white/60 p-4 rounded-xl border border-outline-variant/10">
+          <span class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1">Palabras</span>
+          <span class="text-2xl font-headline font-bold text-secondary">{{ content.trim() ? content.trim().split(/\s+/).length : 0 }}</span>
+        </div>
+        <div class="bg-white/60 p-4 rounded-xl border border-outline-variant/10">
+          <span class="block text-[10px] font-bold uppercase tracking-widest text-outline mb-1">Lectura</span>
+          <span class="text-2xl font-headline font-bold text-secondary">~{{ content.trim() ? Math.ceil(content.trim().split(/\s+/).length / 200) : 0 }} min</span>
+        </div>
+      </div>
+
+      <!-- Regional Tips -->
+      <div class="space-y-4 pt-4">
+        <div class="flex items-center gap-2 text-sm font-bold text-primary">
+          <span class="material-symbols-outlined text-sm">lightbulb</span>
+          Inspiración para tu región:
+        </div>
+        <ul class="space-y-3">
+          <li *ngIf="region === 'andina'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"Menciona los Apus o guardianes de los cerros para dar más fuerza a tu relato."</li>
+          <li *ngIf="region === 'amazónica'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"El sonido de la lluvia y los misterios del río pueden ser protagonistas de tu historia."</li>
+          <li *ngIf="region === 'afroperuana'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"Integra el ritmo del cajón o historias de la costa sur para enriquecer la narrativa."</li>
+          <li *ngIf="region === 'costeña'" class="text-xs bg-white/50 p-3 rounded-lg border-l-4 border-primary italic">"Los valles y las huacas olvidadas son excelentes escenarios para un relato costero."</li>
+        </ul>
+      </div>
+
+      <!-- Vocabulary -->
+      <div class="space-y-3 pt-4">
+        <div class="flex items-center gap-2 text-sm font-bold text-primary">
+          <span class="material-symbols-outlined text-sm">translate</span>
+          Vocabulario Sugerido:
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let word of ['Ancestro', 'Memoria', 'Identidad', 'Raíces', 'Legado']" class="px-3 py-1 bg-primary/10 text-[10px] font-bold rounded-full text-primary border border-primary/20">{{ word }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Finalize Action -->
+    <div class="bg-primary p-8 rounded-2xl text-on-primary shadow-2xl shadow-primary/30 space-y-6 relative overflow-hidden group">
+      <div class="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-125 transition-transform duration-1000">
+        <span class="material-symbols-outlined text-[180px]">send</span>
+      </div>
+      <div class="relative z-10">
+        <h4 class="font-headline font-bold text-xl mb-2">¿Tu obra está lista?</h4>
+        <p class="text-sm opacity-80 mb-6">Una vez enviada, tu docente podrá leerla y ayudarte a pulir los detalles finales.</p>
+        <button (click)="submitToTeacher()" [disabled]="isSaving || !currentId || !content.trim()" class="w-full py-4 bg-white text-primary rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-secondary hover:text-white transition-all shadow-lg disabled:opacity-50">
+          <span>Enviar a Revisión Docente</span>
+          <span class="material-symbols-outlined">rocket_launch</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 </main>
   `,
@@ -149,6 +210,7 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
   currentId: string | undefined = undefined;
   userName = 'Creador';
   userAvatar = '';
+  Math = Math;
 
   private destroy$ = new Subject<void>();
   private autoSave$ = new Subject<void>();
@@ -219,26 +281,6 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
 
   goTo(path: string) {
     this.router.navigate([path]);
-  }
-
-  generateFromAI() {
-    if (!this.region) return;
-    
-    this.isGenerating = true;
-    this.generateUseCase.execute(this.region).subscribe({
-      next: (outline) => {
-        this.content = outline;
-        this.isGenerating = false;
-        if (!this.title) this.title = `Nueva historia de la región ${this.region}`;
-        this.saveDraft(); // Guardar automáticamente al generar
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error generating outline:', err);
-        this.isGenerating = false;
-        alert('Error al generar el esquema con IA.');
-      }
-    });
   }
 
   improveWithAI() {

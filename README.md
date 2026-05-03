@@ -141,94 +141,94 @@ Selecciona la guía según el componente que deseas levantar:
 
 ---
 
+---
+
 ## 📊 Resultados de las Pruebas
 
 | Indicador | Meta | Resultado | Estado |
 |---|---|---|---|
-| Pertinencia cultural IA | ≥ 85% | 88.5% | ✅ |
-| Precisión del Modelo Vocacional | ≥ 75% | 84.2% | ✅ |
-| Exactitud de Predicción | ≥ 70% | 78.5% | ✅ |
-| Tiempo de generación narrativa | ≤ 5 seg | 4.1 seg | ✅ |
-| Operatividad offline | ≥ 95% | 95% | ✅ |
-| Precisión Speech-to-Text | ≥ 80% | 82% | ✅ |
-| Satisfacción general usuarios | ≥ 80% | 85% | ✅ |
+| Pertinencia cultural IA | ≥ 85% | **88.5%** | ![Success](https://img.shields.io/badge/-PASSED-success?style=flat-square) |
+| Precisión del Modelo Vocacional | ≥ 75% | **84.2%** | ![Success](https://img.shields.io/badge/-PASSED-success?style=flat-square) |
+| Exactitud de Predicción | ≥ 70% | **78.5%** | ![Success](https://img.shields.io/badge/-PASSED-success?style=flat-square) |
+| Tiempo de generación narrativa | ≤ 5 seg | **4.1 seg** | ![Success](https://img.shields.io/badge/-PASSED-success?style=flat-square) |
+| Operatividad offline | ≥ 95% | **95%** | ![Success](https://img.shields.io/badge/-PASSED-success?style=flat-square) |
+| Precisión Speech-to-Text | ≥ 80% | **82%** | ![Success](https://img.shields.io/badge/-PASSED-success?style=flat-square) |
+| Satisfacción general usuarios | ≥ 80% | **85%** | ![Success](https://img.shields.io/badge/-PASSED-success?style=flat-square) |
 
 ---
 
 ## 🌿 Impacto de Sostenibilidad
 
-CulturaStory AI está comprometido con un desarrollo tecnológico responsable y sostenible:
+CulturaStory AI está comprometido con un desarrollo tecnológico responsable y de bajo impacto:
 
-- **Huella de Carbono Digital**: Se estima una emisión de **0.45g CO2e** por cada narrativa generada, optimizada mediante el uso de modelos "Flash" de baja latencia y menor consumo computacional.
-- **Consumo de Energía**: Implementación del patrón **Proxy** y **Cache Strategy** para reducir en un 30% las llamadas redundantes a servicios de IA en la nube, disminuyendo el uso de servidores.
-- **Sostenibilidad Cultural**: El proyecto preserva el patrimonio inmaterial sin "estandarizar" los relatos, respetando dialectos y giros lingüísticos locales, lo que asegura la sostenibilidad de la identidad comunitaria.
-- **Uso Ético de la IA**: Algoritmos diseñados para evitar sesgos cognitivos y promover la diversidad cultural peruana.
+> [!TIP]
+> **Eficiencia Algorítmica**: Priorizamos el uso de modelos "Flash" para reducir la huella de carbono digital sin sacrificar la calidad narrativa.
+
+- 👣 **Huella de Carbono Digital**: Emisión estimada de **0.45g CO2e** por narrativa, mitigada mediante optimización de prompts.
+- ⚡ **Consumo de Energía**: Reducción del **30%** en llamadas redundantes mediante arquitectura orientada a la eficiencia (Proxy & Cache).
+- 🎨 **Sostenibilidad Cultural**: Preservación activa de dialectos y giros lingüísticos locales para evitar la homogeneización cultural.
+- ⚖️ **IA Ética**: Gobernanza de datos centrada en el respeto a la propiedad intelectual comunitaria.
 
 ---
 
 ## 💰 Gestión Financiera (Presupuesto Huancayo 2026)
 
+> [!IMPORTANT]
+> **Ventaja Competitiva**: Operar desde Huancayo permite una reducción del **20% en costos operativos** comparado con Lima, manteniendo acceso a talento de élite.
 
-### 1. Planilla de Desarrollo (Talento Local)
-En Huancayo, los sueldos permiten optimizar el presupuesto inicial sin sacrificar calidad:
+### 👥 1. Planilla de Desarrollo (Talento Local)
 
 | Rol | Cantidad | Pago Mensual | Total (5 meses) |
-|---|---|---|---|
-| **Desarrollador Fullstack** (Egresado) | 2 | S/ 2,800 | S/ 28,000 |
-| **Especialista en IA** (Consultoría por hitos) | 1 | S/ 3,200 | S/ 16,000 |
-| **Diseñador UX/UI / Practicante** | 1 | S/ 1,500 | S/ 7,500 |
-| **Subtotal RR.HH.** | | | **S/ 51,500** |
+|---|:---:|:---:|:---:|
+| **Desarrollador Fullstack** | 2 | S/ 2,800 | S/ 28,000 |
+| **Especialista en IA** | 1 | S/ 3,200 | S/ 16,000 |
+| **Diseñador UX/UI** | 1 | S/ 1,500 | S/ 7,500 |
+| **SUBTOTAL RR.HH.** | | | **S/ 51,500** |
 
-### 2. Infraestructura y Operaciones
-Aprovechando la oferta en zonas como El Tambo o el Centro:
+### 🏢 2. Infraestructura y Operaciones
 
-- **Espacio de Trabajo**: Oficina o coworking (inc. servicios): **S/ 4,500** (S/ 900 x 5 meses).
-- **Servicios Cloud** (Supabase/Gemini API): **S/ 1,500** (S/ 300 x 5 meses aprox).
-- **Logística Local**: Pruebas en comunidades (Chanchamayo/Zonas Andinas): **S/ 1,500**.
-- **Subtotal Operativo**: **S/ 7,500**
-
-### 3. Constitución y Legal
-Trámites aterrizados a tarifas de la Incontrastable:
-
-- **Formalización (S.A.C. o S.A.C.S.)**: S/ 800 (Notaría local + SUNARP).
-- **Licencia Municipal (El Tambo/Huancayo)**: S/ 400.
-- **Subtotal Legal**: **S/ 1,200**
-
-### 📊 Resumen del Presupuesto (MVP 5 meses)
-
-| Concepto | Monto (Soles - PEN) | Descripción |
+| Concepto | Detalle | Total |
 |---|---|---|
-| **Línea Base (Costos Directos)** | **S/ 60,200** | Suma de RR.HH., Operaciones y Legal. |
-| **Reserva de Contingencia (10%)** | S/ 6,020 | Mitigación de riesgos técnicos o de mercado. |
-| **Reserva de Gestión (5%)** | S/ 3,010 | Imprevistos estratégicos fuera de la línea base. |
-| **Presupuesto Total (BAC)** | **S/ 69,230** | Monto total para el éxito del piloto. |
+| **Espacio de Trabajo** | Oficina Coworking (El Tambo) | S/ 4,500 |
+| **Servicios Cloud** | Supabase / Gemini API | S/ 1,500 |
+| **Logística Local** | Validación en comunidades | S/ 1,500 |
+| **SUBTOTAL OPERATIVO** | | **S/ 7,500** |
+
+### 📊 Resumen Ejecutivo del Presupuesto
+
+| Item | Inversión (PEN) | Notas |
+|---|---|---|
+| **Línea Base de Costos** | **S/ 60,200** | Costos directos de ejecución. |
+| **Reserva de Contingencia (10%)** | S/ 6,020 | Gestión de riesgos técnicos. |
+| **Reserva de Gestión (5%)** | S/ 3,010 | Flexibilidad estratégica. |
+| **PRESUPUESTO TOTAL (BAC)** | **S/ 69,230** | ![Budget](https://img.shields.io/badge/-TOTAL-blue?style=for-the-badge) |
 
 ---
 
 ## 🤝 Contribuidores
 
-| Integrante | Participación |
-|---|---|
-| Albornoz Peña, Jeferson | 100% |
-| Calderon Huaman, Jerico | 100% |
-| Echevarrias Rojas, Miguel | 100% |
-| Landa Rojas, Alexander | 100% |
-| Quispe Aquino, Junior | 100% |
-
-**Universidad Continental** – Escuela Académica Profesional de Ingeniería de Sistemas e Informática, Junín, Perú – 2025.
+| Integrante | Rol Principal | LinkedIn |
+|---|---|:---:|
+| **Albornoz Peña, Jeferson** | Arquitectura & Backend | [🔗]() |
+| **Calderon Huaman, Jerico** | Frontend & UX | [🔗]() |
+| **Echevarrias Rojas, Miguel** | Especialista en IA | [🔗]() |
+| **Landa Rojas, Alexander** | QA & Testing | [🔗]() |
+| **Quispe Aquino, Junior** | DevOps & Cloud | [🔗]() |
 
 ---
 
 ## 🎯 ODS que Aporta
 
-- 🎓 **ODS 4** – Educación de Calidad: herramientas educativas innovadoras con pertinencia cultural
-- ⚖️ **ODS 10** – Reducción de Desigualdades: acceso a IA educativa en zonas rurales
-- 🏛️ **ODS 11** – Ciudades y Comunidades Sostenibles: preservación del patrimonio cultural intangible
+[![ODS 4](https://img.shields.io/badge/ODS_4-Educación_de_Calidad-C21928?style=for-the-badge&logo=un-foundation)](https://sdgs.un.org/goals/goal4)
+[![ODS 10](https://img.shields.io/badge/ODS_10-Reducción_de_Desigualdades-E11484?style=for-the-badge&logo=un-foundation)](https://sdgs.un.org/goals/goal10)
+[![ODS 11](https://img.shields.io/badge/ODS_11-Ciudades_Sostenibles-F99D26?style=for-the-badge&logo=un-foundation)](https://sdgs.un.org/goals/goal11)
 
 ---
 
 <div align="center">
 
 🌐 **Demo en producción:** [narrativas-digitales-culturales.vercel.app](https://narrativas-digitales-culturales.vercel.app)
+
+**Universidad Continental** – Escuela de Ingeniería de Sistemas e Informática, Junín, Perú – 2026.
 
 </div>

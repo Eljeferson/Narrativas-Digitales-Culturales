@@ -50,26 +50,32 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 </div>
 </aside>
 <!-- Main Content Canvas -->
-<main class="md:ml-64 p-8 lg:p-12 relative">
-<!-- Top Right Profile -->
-<div class="absolute top-8 right-8 lg:top-12 lg:right-12 flex items-center gap-3 z-10">
-  <button (click)="editProfile()" class="hidden sm:flex text-sm font-bold text-[#823B18] hover:bg-[#823B18]/10 px-4 py-2 rounded-full transition-colors items-center gap-2">
-    <span class="material-symbols-outlined text-sm">edit</span> Editar Perfil
-  </button>
-  <div class="w-12 h-12 rounded-full bg-surface-container-high overflow-hidden flex items-center justify-center shadow-md border-2 border-[#823B18]/20 cursor-pointer hover:border-[#823B18] hover:shadow-lg transition-all" (click)="editProfile()" title="Editar Perfil">
-    <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
-    <span *ngIf="!userAvatar" class="material-symbols-outlined text-[#823B18] text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
-  </div>
-</div>
-<!-- Personalized Greeting Section -->
-<header *ngIf="activeTab === 'inicio'" class="mb-12 relative">
-<div class="max-w-4xl">
-<h2 class="text-primary text-5xl font-headline italic font-bold tracking-tight mb-2">¡Hola, {{ userName }}!</h2>
-<p class="text-on-surface-variant text-xl max-w-2xl">
-    Tu hilo narrativo está listo para continuar. Hoy es un gran día para crear nuevas historias sobre tus raíces.
-</p>
-</div>
-</header>
+<main class="md:ml-64 relative min-h-screen">
+  <!-- Sticky Top Header -->
+  <header class="sticky top-0 z-40 bg-[#FFF8EF]/80 dark:bg-[#1E1B13]/80 backdrop-blur-md px-8 py-4 lg:px-12 flex justify-between items-center border-b border-outline-variant/10 mb-8">
+    <div class="flex flex-col">
+      <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-2xl lg:text-3xl font-headline italic font-bold tracking-tight animate-in fade-in slide-in-from-left-4 duration-500">¡Hola, {{ userName }}!</h2>
+      <h2 *ngIf="activeTab === 'historias'" class="text-on-surface text-2xl lg:text-3xl font-headline font-bold tracking-tight animate-in fade-in slide-in-from-left-4 duration-500">Mis Historias</h2>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <button (click)="editProfile()" class="hidden sm:flex text-sm font-bold text-[#823B18] hover:bg-[#823B18]/10 px-4 py-2 rounded-full transition-colors items-center gap-2">
+        <span class="material-symbols-outlined text-sm">edit</span> Editar Perfil
+      </button>
+      <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-surface-container-high overflow-hidden flex items-center justify-center shadow-md border-2 border-[#823B18]/20 cursor-pointer hover:border-[#823B18] hover:shadow-lg transition-all" (click)="editProfile()" title="Editar Perfil">
+        <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
+        <span *ngIf="!userAvatar" class="material-symbols-outlined text-[#823B18] text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="px-8 lg:px-12 pb-12">
+    <!-- Personalized Greeting Section (Subtitle) -->
+    <div *ngIf="activeTab === 'inicio'" class="mb-10 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <p class="text-on-surface-variant text-lg lg:text-xl max-w-2xl leading-relaxed">
+          Tu hilo narrativo está listo para continuar. Hoy es un gran día para crear nuevas historias sobre tus raíces.
+      </p>
+    </div>
 <!-- Main Bento Grid Layout -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 <!-- Primary Action & Status Summary -->
@@ -146,16 +152,26 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
     <span class="material-symbols-outlined text-sm">arrow_forward</span>
   </button>
 </div>
-<div *ngIf="narratives.length === 0" class="p-12 text-center bg-surface-container-lowest rounded-xl flex flex-col items-center justify-center shadow-sm border border-outline-variant/30 transition-all hover:shadow-md">
-    <div class="w-20 h-20 bg-[#823B18]/10 rounded-full flex items-center justify-center mb-6">
-       <span class="material-symbols-outlined text-5xl text-[#823B18]">history_edu</span>
+<div *ngIf="narratives.length === 0" class="relative p-12 text-center bg-white/50 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/50 transition-all hover:border-primary/30 group animate-in fade-in zoom-in duration-700">
+    <!-- Decorative Background Icon -->
+    <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
+      <span class="material-symbols-outlined text-[12rem]">draw</span>
     </div>
-    <h4 class="text-xl font-headline font-bold text-on-surface mb-3">No tienes historias creadas por el momento</h4>
-    <p class="text-on-surface-variant max-w-md mb-8 text-sm leading-relaxed">Aún no has comenzado a documentar la riqueza cultural de tu región. ¡Empieza hoy mismo a crear tu primera narrativa!</p>
-    <button (click)="createNew()" class="px-8 py-3.5 bg-[#823B18] text-white rounded-xl font-bold flex items-center gap-2 hover:bg-[#56423c] transition-colors shadow-lg shadow-[#823B18]/30">
-       <span class="material-symbols-outlined text-sm">add</span>
-       Crear mi primera historia
-    </button>
+    
+    <div class="relative z-10">
+      <div class="w-24 h-24 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-8 mx-auto shadow-inner">
+         <span class="material-symbols-outlined text-5xl text-secondary animate-bounce">history_edu</span>
+      </div>
+      <h4 class="text-2xl font-headline font-bold text-primary mb-4">Tu voz es el puente entre el pasado y el futuro</h4>
+      <p class="text-on-surface-variant max-w-lg mb-10 text-base leading-relaxed">
+        Cada rincón de tu comunidad guarda un secreto, una leyenda o una tradición esperando ser contada. 
+        <span class="font-bold text-secondary">¿Serás tú quien la preserve para siempre?</span>
+      </p>
+      <button (click)="createNew()" class="group px-10 py-4 bg-primary text-on-primary rounded-2xl font-bold flex items-center gap-3 hover:bg-secondary transition-all shadow-xl shadow-primary/20 hover:shadow-secondary/30 active:scale-95">
+         <span class="material-symbols-outlined group-hover:rotate-12 transition-transform">add_circle</span>
+         Comenzar mi Legado Cultural
+      </button>
+    </div>
 </div>
 </div>
 <ng-template #loadingTpl>

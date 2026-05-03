@@ -94,7 +94,10 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 <label class="text-sm font-label font-semibold text-on-surface-variant" for="password">Contrasena</label>
 <div class="relative">
 <span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">lock</span>
-<input [(ngModel)]="password" name="password" class="w-full pl-8 pr-4 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="password" placeholder="••••••••" type="password"/>
+<input [(ngModel)]="password" name="password" class="w-full pl-8 pr-12 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="password" placeholder="••••••••" [type]="showPassword ? 'text' : 'password'"/>
+<button type="button" (click)="showPassword = !showPassword" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/60 hover:text-primary transition-colors focus:outline-none">
+  <span class="material-symbols-outlined text-[20px]">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+</button>
 </div>
 <a class="text-xs text-tertiary hover:underline block pt-2" href="#">Olvidaste tu clave?</a>
 </div>
@@ -110,6 +113,28 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
                         <a (click)="goToRegistration()" class="text-primary font-bold hover:underline ml-1 cursor-pointer">Registrate como {{ selectedRole === 'teacher' ? 'Docente' : 'Estudiante' }}</a>
 </p>
 </form>
+
+<!-- Premium Notification Toast -->
+@if (notification) {
+  <div class="fixed top-24 right-8 z-[100] animate-slide-up">
+    <div class="flex items-center gap-4 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/20" 
+         [class.bg-green-500/90]="notification.type === 'success'"
+         [class.bg-red-500/90]="notification.type === 'error'"
+         [class.text-white]="true">
+      <span class="material-symbols-outlined text-2xl">
+        {{ notification.type === 'success' ? 'check_circle' : 'error' }}
+      </span>
+      <div class="flex flex-col">
+        <span class="font-bold text-sm uppercase tracking-wider">{{ notification.type === 'success' ? 'Éxito' : 'Error' }}</span>
+        <span class="text-sm opacity-90">{{ notification.message }}</span>
+      </div>
+      <button (click)="notification = null" class="ml-4 hover:rotate-90 transition-transform">
+        <span class="material-symbols-outlined text-sm">close</span>
+      </button>
+    </div>
+  </div>
+}
+
 <div class="mt-8 pt-8 border-t border-surface-variant space-y-4">
 <p class="text-[10px] uppercase tracking-widest text-center text-outline font-bold">O accede via</p>
 <div class="flex gap-4 justify-center">
@@ -148,10 +173,17 @@ export class LandingLogin {
 
   email = '';
   password = '';
+  showPassword = false;
   selectedRole: 'student' | 'teacher' = 'student';
+  notification: { message: string, type: 'success' | 'error' } | null = null;
 
   setRole(role: 'student' | 'teacher') {
     this.selectedRole = role;
+  }
+
+  private showNotification(message: string, type: 'success' | 'error') {
+    this.notification = { message, type };
+    setTimeout(() => this.notification = null, 5000);
   }
 
   private getLoginErrorMessage(error: unknown): string {
@@ -168,25 +200,28 @@ export class LandingLogin {
 
   onSubmit() {
     if (!this.email.trim() || !this.password.trim()) {
-      alert('Ingresa tu correo y contrasena.');
+      this.showNotification('Ingresa tu correo y contrasena.', 'error');
       return;
     }
 
     this.loginUseCase.execute(this.email, this.password, this.selectedRole)
       .subscribe({
         next: (user) => {
-          const role = user.rol?.toString().toUpperCase();
-          if (role === 'ADMINISTRADOR') {
-            this.router.navigate(['/gestion-de-usuarios']);
-          } else if (role === 'DOCENTE') {
-            this.router.navigate(['/panel-del-docente']);
-          } else {
-            this.router.navigate(['/panel-del-estudiante']);
-          }
+          this.showNotification('Bienvenido a CulturaStory Hub', 'success');
+          setTimeout(() => {
+            const role = user.rol?.toString().toUpperCase();
+            if (role === 'ADMINISTRADOR') {
+              this.router.navigate(['/gestion-de-usuarios']);
+            } else if (role === 'DOCENTE') {
+              this.router.navigate(['/panel-del-docente']);
+            } else {
+              this.router.navigate(['/panel-del-estudiante']);
+            }
+          }, 800);
         },
         error: (err) => {
           console.error('Error de login:', err);
-          alert(this.getLoginErrorMessage(err));
+          this.showNotification(this.getLoginErrorMessage(err), 'error');
         }
       });
   }
