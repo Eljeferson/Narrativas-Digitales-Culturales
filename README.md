@@ -166,6 +166,45 @@ CulturaStory AI está comprometido con un desarrollo tecnológico responsable y 
 
 ---
 
+## 💰 Gestión Financiera (Presupuesto Huancayo 2026)
+
+
+### 1. Planilla de Desarrollo (Talento Local)
+En Huancayo, los sueldos permiten optimizar el presupuesto inicial sin sacrificar calidad:
+
+| Rol | Cantidad | Pago Mensual | Total (5 meses) |
+|---|---|---|---|
+| **Desarrollador Fullstack** (Egresado) | 2 | S/ 2,800 | S/ 28,000 |
+| **Especialista en IA** (Consultoría por hitos) | 1 | S/ 3,200 | S/ 16,000 |
+| **Diseñador UX/UI / Practicante** | 1 | S/ 1,500 | S/ 7,500 |
+| **Subtotal RR.HH.** | | | **S/ 51,500** |
+
+### 2. Infraestructura y Operaciones
+Aprovechando la oferta en zonas como El Tambo o el Centro:
+
+- **Espacio de Trabajo**: Oficina o coworking (inc. servicios): **S/ 4,500** (S/ 900 x 5 meses).
+- **Servicios Cloud** (Supabase/Gemini API): **S/ 1,500** (S/ 300 x 5 meses aprox).
+- **Logística Local**: Pruebas en comunidades (Chanchamayo/Zonas Andinas): **S/ 1,500**.
+- **Subtotal Operativo**: **S/ 7,500**
+
+### 3. Constitución y Legal
+Trámites aterrizados a tarifas de la Incontrastable:
+
+- **Formalización (S.A.C. o S.A.C.S.)**: S/ 800 (Notaría local + SUNARP).
+- **Licencia Municipal (El Tambo/Huancayo)**: S/ 400.
+- **Subtotal Legal**: **S/ 1,200**
+
+### 📊 Resumen del Presupuesto (MVP 5 meses)
+
+| Concepto | Monto (Soles - PEN) | Descripción |
+|---|---|---|
+| **Línea Base (Costos Directos)** | **S/ 60,200** | Suma de RR.HH., Operaciones y Legal. |
+| **Reserva de Contingencia (10%)** | S/ 6,020 | Mitigación de riesgos técnicos o de mercado. |
+| **Reserva de Gestión (5%)** | S/ 3,010 | Imprevistos estratégicos fuera de la línea base. |
+| **Presupuesto Total (BAC)** | **S/ 69,230** | Monto total para el éxito del piloto. |
+
+---
+
 ## 🤝 Contribuidores
 
 | Integrante | Participación |
