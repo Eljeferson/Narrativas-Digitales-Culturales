@@ -166,19 +166,6 @@ CulturaStory AI está comprometido con un desarrollo tecnológico responsable y 
 
 ---
 
-## 💰 Gestión Financiera (Presupuesto)
-
-El proyecto se gestiona bajo una estructura de costos basada en el PMBOK, asegurando la viabilidad económica del MVP:
-
-| Concepto | Monto (USD) | Descripción |
-|---|---|---|
-| **Línea Base de Costos** | $12,000.00 | Desarrollo, Infraestructura Cloud (Supabase/Render), Licencias API. |
-| **Reserva de Contingencia (10%)** | $1,200.00 | Mitigación de riesgos identificados (ej. fluctuación de costos de API). |
-| **Reserva de Gestión (5%)** | $600.00 | Cambios de alcance estratégicos o imprevistos no identificados. |
-| **Presupuesto Total (BAC)** | **$13,800.00** | Presupuesto total para la fase de lanzamiento del MVP. |
-
----
-
 ## 🤝 Contribuidores
 
 | Integrante | Participación |
