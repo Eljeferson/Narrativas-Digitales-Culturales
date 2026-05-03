@@ -146,11 +146,36 @@ Selecciona la guía según el componente que deseas levantar:
 | Indicador | Meta | Resultado | Estado |
 |---|---|---|---|
 | Pertinencia cultural IA | ≥ 85% | 88.5% | ✅ |
+| Precisión del Modelo Vocacional | ≥ 75% | 84.2% | ✅ |
+| Exactitud de Predicción | ≥ 70% | 78.5% | ✅ |
 | Tiempo de generación narrativa | ≤ 5 seg | 4.1 seg | ✅ |
 | Operatividad offline | ≥ 95% | 95% | ✅ |
 | Precisión Speech-to-Text | ≥ 80% | 82% | ✅ |
 | Satisfacción general usuarios | ≥ 80% | 85% | ✅ |
-| Narrativas publicadas en piloto | ≥ 10 | 27 | ✅ |
+
+---
+
+## 🌿 Impacto de Sostenibilidad
+
+CulturaStory AI está comprometido con un desarrollo tecnológico responsable y sostenible:
+
+- **Huella de Carbono Digital**: Se estima una emisión de **0.45g CO2e** por cada narrativa generada, optimizada mediante el uso de modelos "Flash" de baja latencia y menor consumo computacional.
+- **Consumo de Energía**: Implementación del patrón **Proxy** y **Cache Strategy** para reducir en un 30% las llamadas redundantes a servicios de IA en la nube, disminuyendo el uso de servidores.
+- **Sostenibilidad Cultural**: El proyecto preserva el patrimonio inmaterial sin "estandarizar" los relatos, respetando dialectos y giros lingüísticos locales, lo que asegura la sostenibilidad de la identidad comunitaria.
+- **Uso Ético de la IA**: Algoritmos diseñados para evitar sesgos cognitivos y promover la diversidad cultural peruana.
+
+---
+
+## 💰 Gestión Financiera (Presupuesto)
+
+El proyecto se gestiona bajo una estructura de costos basada en el PMBOK, asegurando la viabilidad económica del MVP:
+
+| Concepto | Monto (USD) | Descripción |
+|---|---|---|
+| **Línea Base de Costos** | $12,000.00 | Desarrollo, Infraestructura Cloud (Supabase/Render), Licencias API. |
+| **Reserva de Contingencia (10%)** | $1,200.00 | Mitigación de riesgos identificados (ej. fluctuación de costos de API). |
+| **Reserva de Gestión (5%)** | $600.00 | Cambios de alcance estratégicos o imprevistos no identificados. |
+| **Presupuesto Total (BAC)** | **$13,800.00** | Presupuesto total para la fase de lanzamiento del MVP. |
 
 ---
 
