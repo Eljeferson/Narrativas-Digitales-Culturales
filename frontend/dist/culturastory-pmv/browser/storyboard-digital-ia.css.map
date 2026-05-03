@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["storyboard-digital-ia.ts"],
-  "sourcesContent": ["\n    :host { display: block; }\n  "],
-  "mappings": ";AACI;AAAQ,WAAA;AAAgB;",
-  "names": []
-}

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["grabacion-voz-stt.ts"],
-  "sourcesContent": ["\n    :host { display: block; }\n  "],
-  "mappings": ";AACI;AAAQ,WAAA;AAAgB;",
-  "names": []
-}
