@@ -21,56 +21,56 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 
 
 <!-- SideNavBar -->
-<aside class="fixed left-0 top-0 h-screen w-64 bg-sidebar flex flex-col p-8 z-50 border-r border-outline-variant/30">
-  <div class="mb-12 flex flex-col gap-2 group cursor-pointer">
+<aside class="fixed left-0 top-0 h-screen w-64 bg-sidebar flex flex-col p-6 z-50 border-r border-outline-variant/30">
+  <div class="mb-10 flex flex-col gap-1 group cursor-pointer">
     <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform duration-300">
-            <span class="material-symbols-outlined text-xl font-bold">menu_book</span>
+        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-md group-hover:rotate-6 transition-transform duration-300">
+            <span class="material-symbols-outlined text-lg font-bold">menu_book</span>
         </div>
-        <h1 class="text-xl font-serif font-bold text-primary tracking-tight leading-none">The Weaver's Hub</h1>
+        <h1 class="text-lg font-serif font-bold text-primary tracking-tight leading-none">El Telar</h1>
     </div>
-    <p class="text-[11px] uppercase tracking-widest text-on-sidebar font-bold ml-13">Student Portal</p>
+    <p class="text-[10px] uppercase tracking-widest text-on-sidebar font-bold ml-11">Portal del Estudiante</p>
   </div>
 
-  <nav class="flex-1 flex flex-col gap-1">
+  <nav class="flex-1 flex flex-col gap-0.5">
     <a (click)="setActiveTab('inicio')" 
        [class.active]="activeTab === 'inicio'" 
-       class="sidebar-link group">
-      <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
-      <span class="font-bold">Dashboard</span>
+       class="sidebar-link group !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">dashboard</span>
+      <span class="font-bold text-sm">Panel Principal</span>
     </a>
     <a (click)="setActiveTab('historias')" 
        [class.active]="activeTab === 'historias'" 
-       class="sidebar-link group">
-      <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">auto_stories</span>
-      <span class="font-bold">My Stories</span>
+       class="sidebar-link group !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">auto_stories</span>
+      <span class="font-bold text-sm">Mis Historias</span>
     </a>
-    <a class="sidebar-link group opacity-60">
-      <span class="material-symbols-outlined text-2xl">school</span>
-      <span class="font-bold">Classroom</span>
+    <a class="sidebar-link group opacity-50 !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl">school</span>
+      <span class="font-bold text-sm">Aula Virtual</span>
     </a>
-    <a class="sidebar-link group opacity-60">
-      <span class="material-symbols-outlined text-2xl">map</span>
-      <span class="font-bold">Cultural Map</span>
+    <a class="sidebar-link group opacity-50 !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl">map</span>
+      <span class="font-bold text-sm">Mapa Cultural</span>
     </a>
-    <a class="sidebar-link group opacity-60">
-      <span class="material-symbols-outlined text-2xl">analytics</span>
-      <span class="font-bold">Analytics</span>
+    <a class="sidebar-link group opacity-50 !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl">analytics</span>
+      <span class="font-bold text-sm">Estadísticas</span>
     </a>
   </nav>
 
-  <div class="mt-auto pt-8 space-y-3">
-    <button (click)="createNew()" class="w-full btn-premium !py-3">
-      <span class="material-symbols-outlined text-xl">add</span>
-      <span class="text-sm">+ New Narrative</span>
+  <div class="mt-auto pt-6 space-y-2">
+    <button (click)="createNew()" class="w-full btn-premium !py-2.5 !text-xs">
+      <span class="material-symbols-outlined text-base">add</span>
+      <span>+ Nueva Narrativa</span>
     </button>
-    <button (click)="logout()" class="w-full flex items-center gap-4 text-on-sidebar px-4 py-3 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold cursor-pointer border-0 bg-transparent text-sm">
-      <span class="material-symbols-outlined text-xl">help</span>
-      <span>Support</span>
+    <button class="w-full flex items-center gap-3 text-on-sidebar px-4 py-2 hover:text-primary hover:bg-primary/5 rounded-xl transition-all font-bold cursor-pointer border-0 bg-transparent text-xs">
+      <span class="material-symbols-outlined text-lg">help</span>
+      <span>Soporte</span>
     </button>
-    <button (click)="logout()" class="w-full flex items-center gap-4 text-on-sidebar px-4 py-3 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold cursor-pointer border-0 bg-transparent text-sm">
-      <span class="material-symbols-outlined text-xl">logout</span>
-      <span>Sign Out</span>
+    <button (click)="logout()" class="w-full flex items-center gap-3 text-on-sidebar px-4 py-2 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold cursor-pointer border-0 bg-transparent text-xs">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span>Cerrar Sesión</span>
     </button>
   </div>
 </aside>
@@ -78,23 +78,23 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 <!-- Main Content Canvas -->
 <main class="md:ml-64 relative min-h-screen bg-background z-10">
   <!-- Sticky Top Header -->
-  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-12 py-10 flex justify-between items-start">
-    <div class="flex flex-col gap-2">
-      <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-6xl font-serif italic font-bold tracking-tight animate-slide-up">
+  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-10 py-8 flex justify-between items-start">
+    <div class="flex flex-col gap-1">
+      <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-4xl font-serif italic font-bold tracking-tight animate-slide-up">
         ¡Hola, <span class="text-primary not-italic">{{ userName }}!</span>
       </h2>
-      <h2 *ngIf="activeTab === 'historias'" class="text-primary text-6xl font-serif font-bold tracking-tight animate-slide-up">
+      <h2 *ngIf="activeTab === 'historias'" class="text-primary text-4xl font-serif font-bold tracking-tight animate-slide-up">
         Mis Historias
       </h2>
-      <p class="text-on-surface-variant text-lg font-medium">
-        Tu hilo narrativo fluye desde la <span class="text-accent font-bold">región Amazónica</span>. Hoy es un gran día para tejer nuevas historias sobre el río y la selva.
+      <p class="text-on-surface-variant text-sm font-medium max-w-2xl">
+        Tu hilo narrativo fluye desde la <span class="text-accent font-bold">región Amazónica</span>. Hoy es un buen día para tejer historias.
       </p>
     </div>
     
-    <div class="flex items-center gap-6">
-      <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-xl cursor-pointer hover:scale-110 transition-all" (click)="editProfile()">
+    <div class="flex items-center gap-4">
+      <div class="w-11 h-11 rounded-full overflow-hidden border border-outline-variant shadow-lg cursor-pointer hover:scale-105 transition-all" (click)="editProfile()">
         <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
-        <span *ngIf="!userAvatar" class="material-symbols-outlined text-primary text-3xl flex items-center justify-center h-full">person</span>
+        <span *ngIf="!userAvatar" class="material-symbols-outlined text-primary text-2xl flex items-center justify-center h-full">person</span>
       </div>
     </div>
   </header>
@@ -107,24 +107,24 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
       <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-12">
         
         <!-- Create New Story Hero Card -->
-        <button (click)="createNew()" class="w-full group relative overflow-hidden aspect-[4/3] rounded-2xl flex flex-col items-center justify-center transition-all duration-700 hover:shadow-2xl active:scale-[0.98] border-0 shadow-lg bg-primary">
-          <div class="relative z-10 bg-white/20 p-6 rounded-2xl border border-white/30 shadow-inner mb-6 group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-4xl text-white font-bold">add</span>
+        <button (click)="createNew()" class="w-full group relative overflow-hidden aspect-[1.5/1] rounded-xl flex flex-col items-center justify-center transition-all duration-500 hover:shadow-xl active:scale-[0.98] border-0 shadow-md bg-primary">
+          <div class="relative z-10 bg-white/10 p-4 rounded-xl border border-white/20 shadow-inner mb-4 group-hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined text-2xl text-white font-bold">add</span>
           </div>
-          <h3 class="relative z-10 text-3xl font-serif font-bold text-white tracking-tight">Crear Nueva Narrativa</h3>
+          <h3 class="relative z-10 text-xl font-serif font-bold text-white tracking-tight">Crear Nueva Narrativa</h3>
         </button>
 
         <!-- Wisdom Card -->
-        <div class="bg-secondary/40 p-8 rounded-2xl relative overflow-hidden group">
-          <div class="flex items-center justify-between mb-4">
-             <h3 class="text-accent font-serif font-bold text-2xl">Sabiduría del Río</h3>
-             <span class="material-symbols-outlined text-accent/20 text-5xl">water_drop</span>
+        <div class="bg-secondary/30 p-6 rounded-xl relative overflow-hidden group border border-outline-variant/30">
+          <div class="flex items-center justify-between mb-3">
+             <h3 class="text-accent font-serif font-bold text-lg">Sabiduría del Río</h3>
+             <span class="material-symbols-outlined text-accent/20 text-3xl">water_drop</span>
           </div>
-          <p class="text-lg text-on-surface-variant italic font-medium leading-relaxed opacity-90">
+          <p class="text-sm text-on-surface-variant italic font-medium leading-relaxed opacity-90">
             "El río no solo lleva agua, lleva los susurros de los abuelos que cuidaron la selva antes que nosotros."
           </p>
-          <button class="mt-6 flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs">
-            <span class="material-symbols-outlined text-lg">local_library</span>
+          <button class="mt-4 flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-[10px] hover:underline transition-all">
+            <span class="material-symbols-outlined text-base">local_library</span>
             Explorar Biblioteca
           </button>
         </div>
@@ -157,10 +157,10 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
       </div>
 
       <!-- Right Column: Stories List -->
-      <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-12">
-        <div class="flex justify-between items-center">
-            <h3 class="text-3xl font-serif font-bold text-on-surface tracking-tight">Mis historias recientes</h3>
-            <div class="flex gap-4 text-sm font-bold text-on-surface-variant/60">
+      <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-10">
+        <div class="flex justify-between items-center border-b border-outline-variant/30 pb-4">
+            <h3 class="text-xl font-serif font-bold text-on-surface tracking-tight">Mis historias recientes</h3>
+            <div class="flex gap-4 text-[11px] font-bold text-on-surface-variant/50">
                 <span class="text-primary border-b-2 border-primary pb-1">Todas</span>
                 <span class="hover:text-primary transition-colors cursor-pointer">Borradores</span>
                 <span class="hover:text-primary transition-colors cursor-pointer">Publicadas</span>
@@ -222,22 +222,18 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
           </div>
 
           <!-- Empty State -->
-          <div *ngIf="narratives.length === 0" class="relative p-24 text-center premium-card flex flex-col items-center justify-center border-4 border-dashed border-primary/20 hover:border-primary/40 group animate-slide-up shadow-2xl">
-              <div class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none group-hover:scale-105 transition-transform duration-1000">
-                <span class="material-symbols-outlined text-[30rem]">draw</span>
-              </div>
-              
+          <div *ngIf="narratives.length === 0" class="relative p-12 text-center bg-white border border-outline-variant/30 rounded-xl flex flex-col items-center justify-center animate-slide-up shadow-sm">
               <div class="relative z-10">
-                <div class="w-32 h-32 bg-primary/5 rounded-[2.5rem] flex items-center justify-center mb-12 mx-auto shadow-inner border-2 border-primary/10">
-                   <span class="material-symbols-outlined text-7xl text-primary animate-bounce font-black">history_edu</span>
+                <div class="w-20 h-20 bg-primary/5 rounded-2xl flex items-center justify-center mb-6 mx-auto border border-primary/10">
+                   <span class="material-symbols-outlined text-4xl text-primary font-black">history_edu</span>
                 </div>
-                <h4 class="text-4xl font-headline font-black text-primary mb-8 leading-tight">Tu voz es el puente entre el <br/>pasado y el futuro</h4>
-                <p class="text-on-surface-variant max-w-2xl mb-16 text-xl leading-relaxed font-medium opacity-70">
-                  Cada rincón de tu comunidad guarda un secreto, una leyenda o una tradición esperando ser contada. 
-                  <span class="font-black text-secondary-dark">¿Serás tú quien la preserve para siempre?</span>
+                <h4 class="text-2xl font-serif font-bold text-primary mb-4 leading-tight">Tu voz es el puente entre el <br/>pasado y el futuro</h4>
+                <p class="text-on-surface-variant max-w-lg mb-8 text-sm leading-relaxed font-medium opacity-70">
+                  Cada rincón de tu comunidad guarda un secreto esperando ser contado. 
+                  <span class="font-bold text-primary">¿Serás tú quien la preserve?</span>
                 </p>
-                <button (click)="createNew()" class="btn-premium !px-16 !py-6 !text-2xl shadow-2xl shadow-primary/40">
-                   <span class="material-symbols-outlined text-3xl font-black">add_circle</span>
+                <button (click)="createNew()" class="btn-premium !px-10 !py-3 !text-sm shadow-lg">
+                   <span class="material-symbols-outlined text-xl">add_circle</span>
                    Comenzar mi Legado
                 </button>
               </div>

@@ -21,11 +21,11 @@
   --font-serif: "Noto Serif", serif;
   --font-body: "Inter", sans-serif;
   
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
   
-  --shadow-premium: 0 10px 40px -10px rgba(122, 62, 35, 0.1);
-  --shadow-sidebar: 2px 0 20px rgba(0, 0, 0, 0.02);
+  --shadow-premium: 0 4px 20px -5px rgba(122, 62, 35, 0.08);
+  --shadow-sidebar: 1px 0 10px rgba(0, 0, 0, 0.01);
 }
 
 @layer base {
