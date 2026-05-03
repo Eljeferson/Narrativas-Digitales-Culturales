@@ -54,9 +54,9 @@ import { Narrative } from '../../core/domain/models/narrative.model';
     </div>
 
     <div class="flex items-center gap-6">
-       <div class="bg-white border border-outline-variant/50 rounded-2xl px-6 py-4 shadow-sm flex items-center gap-6">
+       <div class="bg-surface border border-outline-variant/50 rounded-2xl px-6 py-4 shadow-sm flex items-center gap-6">
           <div class="flex flex-col">
-            <span class="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1">Estado de Obra</span>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-primary/60 mb-1">Estado de Obra</span>
             <span class="text-sm font-bold text-primary flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-green-500"></span>
               En Construcción
@@ -64,10 +64,10 @@ import { Narrative } from '../../core/domain/models/narrative.model';
           </div>
           <div class="w-px h-8 bg-outline-variant/30"></div>
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
+            <div class="w-8 h-8 rounded-lg bg-secondary/50 flex items-center justify-center">
               <span class="material-symbols-outlined text-primary text-lg font-bold">draw</span>
             </div>
-            <span class="text-xs font-bold text-on-surface-variant">Sesión Iniciada</span>
+            <span class="text-xs font-bold text-primary">Sesión Iniciada</span>
           </div>
        </div>
     </div>
@@ -76,11 +76,11 @@ import { Narrative } from '../../core/domain/models/narrative.model';
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
     <!-- Writing Area -->
     <div class="lg:col-span-8 space-y-8 animate-slide-up" style="animation-delay: 0.1s">
-      <div class="premium-card !p-0 overflow-hidden shadow-lg border border-outline-variant/30">
+      <div class="premium-card !p-0 overflow-hidden shadow-lg border border-outline-variant/30 !bg-surface">
         <!-- Toolbar -->
-        <div class="bg-secondary/20 px-8 py-5 border-b border-outline-variant/30 flex flex-wrap items-center justify-between gap-4">
+        <div class="bg-secondary/40 px-8 py-5 border-b border-outline-variant/30 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-4">
-            <div class="flex bg-white rounded-xl shadow-sm p-1 border border-outline-variant/30">
+            <div class="flex bg-surface rounded-xl shadow-sm p-1 border border-outline-variant/30">
                <button class="p-3 rounded-lg hover:bg-primary/5 text-primary transition-all font-bold text-sm">B</button>
                <button class="p-3 rounded-lg hover:bg-primary/5 text-primary transition-all italic font-serif text-sm">I</button>
             </div>
@@ -140,9 +140,9 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 
     <!-- Author's Resource Sidebar -->
     <div class="lg:col-span-4 space-y-10 animate-slide-up" style="animation-delay: 0.2s">
-      <div class="premium-card p-8 space-y-10 border-t-4 border-t-primary shadow-lg">
+      <div class="premium-card p-8 space-y-10 border-t-4 border-t-primary shadow-lg !bg-surface">
         <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
+          <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
             <span class="material-symbols-outlined text-2xl font-bold">inventory_2</span>
           </div>
           <h3 class="text-xl font-serif font-bold text-primary tracking-tight">Baúl del Autor</h3>
@@ -150,12 +150,12 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 
         <!-- Metrics -->
         <div class="grid grid-cols-2 gap-6">
-          <div class="bg-secondary/10 p-6 rounded-2xl border border-outline-variant/30 shadow-inner group hover:border-primary transition-all">
-            <span class="block text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2 group-hover:text-primary transition-colors">Palabras</span>
+          <div class="bg-secondary/30 p-6 rounded-2xl border border-outline-variant/30 shadow-inner group hover:border-primary transition-all">
+            <span class="block text-[9px] font-bold uppercase tracking-widest text-primary/60 mb-2 group-hover:text-primary transition-colors">Palabras</span>
             <span class="text-3xl font-serif font-bold text-primary">{{ content.trim() ? content.trim().split(/\s+/).length : 0 }}</span>
           </div>
-          <div class="bg-secondary/10 p-6 rounded-2xl border border-outline-variant/30 shadow-inner group hover:border-primary transition-all">
-            <span class="block text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2 group-hover:text-primary transition-colors">Lectura</span>
+          <div class="bg-secondary/30 p-6 rounded-2xl border border-outline-variant/30 shadow-inner group hover:border-primary transition-all">
+            <span class="block text-[9px] font-bold uppercase tracking-widest text-primary/60 mb-2 group-hover:text-primary transition-colors">Lectura</span>
             <span class="text-3xl font-serif font-bold text-primary">~{{ content.trim() ? Math.ceil(content.trim().split(/\s+/).length / 200) : 0 }} <span class="text-[10px] uppercase tracking-widest">min</span></span>
           </div>
         </div>

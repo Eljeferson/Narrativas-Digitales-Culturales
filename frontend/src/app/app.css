@@ -3,17 +3,17 @@
 @theme {
   --color-primary: #7A3E23;
   --color-primary-light: #A0522D;
-  --color-secondary: #F4EBDC;
+  --color-secondary: #EBE0D0;
   --color-secondary-dark: #D4C5A9;
   --color-accent: #146B6B;
   
-  --color-background: #FDF8F3;
-  --color-surface: #FFFFFF;
+  --color-background: #F4EBDC;
+  --color-surface: #FDF8F3;
   --color-sidebar: #FDF8F3;
-  --color-on-sidebar: #7D6B5D;
+  --color-on-sidebar: #5D4A3A;
   
   --color-on-surface: #332211;
-  --color-on-surface-variant: #7D6B5D;
+  --color-on-surface-variant: #5D4A3A;
   --color-outline: #D4C5A9;
   --color-outline-variant: #EBE0D0;
   
@@ -24,8 +24,8 @@
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
   
-  --shadow-premium: 0 4px 20px -5px rgba(122, 62, 35, 0.08);
-  --shadow-sidebar: 1px 0 10px rgba(0, 0, 0, 0.01);
+  --shadow-premium: 0 10px 30px -5px rgba(122, 62, 35, 0.15);
+  --shadow-sidebar: 2px 0 15px rgba(0, 0, 0, 0.03);
 }
 
 @layer base {
