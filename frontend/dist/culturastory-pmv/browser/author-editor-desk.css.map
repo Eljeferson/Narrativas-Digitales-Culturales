@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["author-editor-desk.ts"],
+  "sourcesContent": ["\n    :host { display: block; }\n    .paper-texture {\n      background: radial-gradient(#00000005 1px, transparent 0);\n      background-size: 24px 24px;\n    }\n  "],
+  "mappings": ";AACI;AAAQ,WAAA;AAAgB;AACxB,CAAA;AACE,cAAA,gBAAA,UAAA,GAAA,EAAA,YAAA;AACA,mBAAA,KAAA;AACF;",
+  "names": []
+}

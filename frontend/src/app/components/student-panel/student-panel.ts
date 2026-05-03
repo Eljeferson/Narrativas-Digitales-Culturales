@@ -180,7 +180,8 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
         <p class="text-on-surface-variant">Buscando tus historias...</p>
     </div>
 </ng-template>
-</div>
+    </div>
+  </div>
 </div>
 </main>
   `,

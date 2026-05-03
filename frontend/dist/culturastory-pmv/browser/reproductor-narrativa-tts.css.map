@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["reproductor-narrativa-tts.ts"],
+  "sourcesContent": ["\n    :host { display: block; }\n  "],
+  "mappings": ";AACI;AAAQ,WAAA;AAAgB;",
+  "names": []
+}
