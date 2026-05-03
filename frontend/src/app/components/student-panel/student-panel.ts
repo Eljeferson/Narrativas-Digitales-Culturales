@@ -16,64 +16,83 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 <!-- Thread Scroll Guide -->
 <div class="thread-scroll hidden md:block"></div>
 
+<!-- Decorative Background Elements -->
+<div class="fixed top-0 right-0 w-96 h-96 bg-secondary/30 rotate-45 translate-x-32 -translate-y-32 pointer-events-none z-0"></div>
+
+
 <!-- SideNavBar -->
-<aside class="fixed left-0 top-0 h-screen w-64 bg-[#1A120B] flex flex-col p-8 z-50 shadow-2xl border-r border-white/5">
-  <div class="mb-12 flex items-center gap-4 group cursor-pointer">
-    <div class="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-[#1A120B] shadow-lg shadow-secondary/20 group-hover:rotate-6 transition-transform duration-300">
-      <span class="material-symbols-outlined text-2xl font-bold">auto_stories</span>
+<aside class="fixed left-0 top-0 h-screen w-64 bg-sidebar flex flex-col p-8 z-50 border-r border-outline-variant/30">
+  <div class="mb-12 flex flex-col gap-2 group cursor-pointer">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform duration-300">
+            <span class="material-symbols-outlined text-xl font-bold">menu_book</span>
+        </div>
+        <h1 class="text-xl font-serif font-bold text-primary tracking-tight leading-none">The Weaver's Hub</h1>
     </div>
-    <div>
-      <h1 class="text-xl font-headline font-bold text-[#F4EBD0] tracking-tight leading-none">CulturaStory</h1>
-      <p class="text-[10px] uppercase tracking-widest text-[#F4EBD0]/40 font-black mt-1">Estudiante</p>
-    </div>
+    <p class="text-[11px] uppercase tracking-widest text-on-sidebar font-bold ml-13">Student Portal</p>
   </div>
 
-  <nav class="flex-1 flex flex-col gap-2">
+  <nav class="flex-1 flex flex-col gap-1">
     <a (click)="setActiveTab('inicio')" 
        [class.active]="activeTab === 'inicio'" 
        class="sidebar-link group">
       <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
-      <span class="font-bold">Inicio</span>
+      <span class="font-bold">Dashboard</span>
     </a>
     <a (click)="setActiveTab('historias')" 
        [class.active]="activeTab === 'historias'" 
        class="sidebar-link group">
       <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">auto_stories</span>
-      <span class="font-bold">Mis Historias</span>
+      <span class="font-bold">My Stories</span>
+    </a>
+    <a class="sidebar-link group opacity-60">
+      <span class="material-symbols-outlined text-2xl">school</span>
+      <span class="font-bold">Classroom</span>
+    </a>
+    <a class="sidebar-link group opacity-60">
+      <span class="material-symbols-outlined text-2xl">map</span>
+      <span class="font-bold">Cultural Map</span>
+    </a>
+    <a class="sidebar-link group opacity-60">
+      <span class="material-symbols-outlined text-2xl">analytics</span>
+      <span class="font-bold">Analytics</span>
     </a>
   </nav>
 
-  <div class="mt-auto pt-8 border-t border-white/5 space-y-4">
-    <button (click)="createNew()" class="w-full btn-premium">
-      <span class="material-symbols-outlined">add_circle</span>
-      <span>Nueva Historia</span>
+  <div class="mt-auto pt-8 space-y-3">
+    <button (click)="createNew()" class="w-full btn-premium !py-3">
+      <span class="material-symbols-outlined text-xl">add</span>
+      <span class="text-sm">+ New Narrative</span>
     </button>
-    <button (click)="logout()" class="w-full flex items-center gap-4 text-white/30 px-6 py-4 hover:text-red-400 hover:bg-red-400/5 rounded-2xl transition-all font-black cursor-pointer border-0 bg-transparent">
-      <span class="material-symbols-outlined">logout</span>
-      <span>Cerrar Sesión</span>
+    <button (click)="logout()" class="w-full flex items-center gap-4 text-on-sidebar px-4 py-3 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold cursor-pointer border-0 bg-transparent text-sm">
+      <span class="material-symbols-outlined text-xl">help</span>
+      <span>Support</span>
+    </button>
+    <button (click)="logout()" class="w-full flex items-center gap-4 text-on-sidebar px-4 py-3 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-bold cursor-pointer border-0 bg-transparent text-sm">
+      <span class="material-symbols-outlined text-xl">logout</span>
+      <span>Sign Out</span>
     </button>
   </div>
 </aside>
 
 <!-- Main Content Canvas -->
-<main class="md:ml-64 relative min-h-screen bg-[#FCF9F5]">
+<main class="md:ml-64 relative min-h-screen bg-background z-10">
   <!-- Sticky Top Header -->
-  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl px-12 py-8 flex justify-between items-center border-b border-outline-variant/20 shadow-sm">
-    <div class="flex flex-col gap-1">
-      <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-4xl font-headline italic font-black tracking-tight animate-slide-up">
-        ¡Hola, <span class="text-secondary-dark not-italic">{{ userName }}</span>!
+  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-12 py-10 flex justify-between items-start">
+    <div class="flex flex-col gap-2">
+      <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-6xl font-serif italic font-bold tracking-tight animate-slide-up">
+        ¡Hola, <span class="text-primary not-italic">{{ userName }}!</span>
       </h2>
-      <h2 *ngIf="activeTab === 'historias'" class="text-on-surface text-4xl font-headline font-black tracking-tight animate-slide-up">
+      <h2 *ngIf="activeTab === 'historias'" class="text-primary text-6xl font-serif font-bold tracking-tight animate-slide-up">
         Mis Historias
       </h2>
-      <p class="text-on-surface-variant text-sm font-medium opacity-60">Hoy es un gran día para preservar tus raíces.</p>
+      <p class="text-on-surface-variant text-lg font-medium">
+        Tu hilo narrativo fluye desde la <span class="text-accent font-bold">región Amazónica</span>. Hoy es un gran día para tejer nuevas historias sobre el río y la selva.
+      </p>
     </div>
     
-    <div class="flex items-center gap-8">
-      <button (click)="editProfile()" class="hidden sm:flex btn-secondary !px-6 !py-3 !text-sm">
-        <span class="material-symbols-outlined text-sm">edit</span> Editar Perfil
-      </button>
-      <div class="w-14 h-14 rounded-full overflow-hidden border-4 border-white shadow-xl cursor-pointer hover:scale-110 transition-all ring-2 ring-primary/10" (click)="editProfile()">
+    <div class="flex items-center gap-6">
+      <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-xl cursor-pointer hover:scale-110 transition-all" (click)="editProfile()">
         <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover" alt="User Avatar">
         <span *ngIf="!userAvatar" class="material-symbols-outlined text-primary text-3xl flex items-center justify-center h-full">person</span>
       </div>
@@ -88,26 +107,26 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
       <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-12">
         
         <!-- Create New Story Hero Card -->
-        <button (click)="createNew()" class="w-full group relative overflow-hidden aspect-[4/3] rounded-[2.5rem] flex flex-col items-center justify-center transition-all duration-700 hover:shadow-2xl hover:shadow-primary/30 active:scale-[0.98] border-0 shadow-xl">
-          <div class="absolute inset-0 bg-gradient-to-br from-[#823B18] via-[#5D2B12] to-[#1A120B] transition-transform duration-700 group-hover:scale-110"></div>
-          <div class="absolute inset-0 opacity-10 textile-pattern mix-blend-overlay"></div>
-          <div class="relative z-10 bg-white/10 backdrop-blur-md p-8 rounded-full border border-white/20 shadow-inner group-hover:rotate-12 transition-transform duration-500">
-            <span class="material-symbols-outlined text-6xl text-white font-bold">add</span>
+        <button (click)="createNew()" class="w-full group relative overflow-hidden aspect-[4/3] rounded-2xl flex flex-col items-center justify-center transition-all duration-700 hover:shadow-2xl active:scale-[0.98] border-0 shadow-lg bg-primary">
+          <div class="relative z-10 bg-white/20 p-6 rounded-2xl border border-white/30 shadow-inner mb-6 group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-4xl text-white font-bold">add</span>
           </div>
-          <h3 class="relative z-10 text-3xl font-headline font-bold text-white mt-8 drop-shadow-2xl">Crear Nueva Historia</h3>
-          <p class="relative z-10 text-[#F4EBD0]/60 text-sm font-bold mt-2 uppercase tracking-widest">Inicia tu legado</p>
+          <h3 class="relative z-10 text-3xl font-serif font-bold text-white tracking-tight">Crear Nueva Narrativa</h3>
         </button>
 
         <!-- Wisdom Card -->
-        <div class="premium-card p-10 relative overflow-hidden group border-l-8 border-l-secondary">
-          <div class="absolute -right-8 -top-8 w-32 h-32 bg-secondary/5 rounded-full blur-3xl group-hover:bg-secondary/10 transition-colors"></div>
-          <div class="flex items-center gap-3 mb-6">
-            <span class="material-symbols-outlined text-secondary text-2xl font-black">auto_awesome</span>
-            <h3 class="text-secondary-dark font-headline font-black text-xl">Sabiduría Cultural</h3>
+        <div class="bg-secondary/40 p-8 rounded-2xl relative overflow-hidden group">
+          <div class="flex items-center justify-between mb-4">
+             <h3 class="text-accent font-serif font-bold text-2xl">Sabiduría del Río</h3>
+             <span class="material-symbols-outlined text-accent/20 text-5xl">water_drop</span>
           </div>
-          <p class="text-xl text-on-surface-variant italic font-medium leading-relaxed opacity-80">
-            "Preservar nuestra cultura es asegurar el camino de los que vendrán."
+          <p class="text-lg text-on-surface-variant italic font-medium leading-relaxed opacity-90">
+            "El río no solo lleva agua, lleva los susurros de los abuelos que cuidaron la selva antes que nosotros."
           </p>
+          <button class="mt-6 flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs">
+            <span class="material-symbols-outlined text-lg">local_library</span>
+            Explorar Biblioteca
+          </button>
         </div>
 
         <!-- Vocational Card -->
@@ -139,51 +158,57 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 
       <!-- Right Column: Stories List -->
       <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-12">
-        <div class="flex justify-between items-end pb-8 border-b-2 border-outline-variant/20">
-          <div>
-            <h3 class="text-4xl font-headline font-black text-on-surface tracking-tight">Mis historias creadas</h3>
-            <p class="text-on-surface-variant font-bold text-base mt-2 opacity-60">Tu legado digital está creciendo con cada palabra.</p>
-          </div>
-          <div class="flex items-center gap-8">
-            <button (click)="loadNarratives()" class="w-14 h-14 rounded-2xl hover:bg-primary/5 text-primary transition-all active:rotate-180 duration-500 border-2 border-primary/10 flex items-center justify-center shadow-lg bg-white" title="Sincronizar">
-              <span class="material-symbols-outlined text-3xl">sync</span>
-            </button>
-            <div class="flex flex-col items-end">
-              <span class="text-5xl font-headline font-black text-primary leading-none">{{ narratives.length }}</span>
-              <span class="text-[10px] uppercase font-black tracking-widest text-outline mt-2">Historias en total</span>
+        <div class="flex justify-between items-center">
+            <h3 class="text-3xl font-serif font-bold text-on-surface tracking-tight">Mis historias recientes</h3>
+            <div class="flex gap-4 text-sm font-bold text-on-surface-variant/60">
+                <span class="text-primary border-b-2 border-primary pb-1">Todas</span>
+                <span class="hover:text-primary transition-colors cursor-pointer">Borradores</span>
+                <span class="hover:text-primary transition-colors cursor-pointer">Publicadas</span>
             </div>
-          </div>
         </div>
 
         <!-- Cards Container -->
         <div *ngIf="!isLoading; else loadingTpl" class="space-y-8">
           <div *ngFor="let nar of (activeTab === 'inicio' ? narratives.slice(0, 3) : narratives)" 
-               class="premium-card p-10 flex flex-col md:flex-row gap-10 items-start hover:border-primary/30 group">
+               class="premium-card p-6 flex flex-col md:flex-row gap-8 items-center hover:border-primary/30 group border-l-[6px]"
+               [class.border-l-accent]="nar.status === 'published'"
+               [class.border-l-primary/20]="nar.status !== 'published'">
+            
+            <!-- Thumbnail Placeholder -->
+            <div class="w-full md:w-48 h-32 rounded-lg bg-secondary/30 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Story cover">
+                <div class="absolute inset-0 bg-black/10"></div>
+            </div>
+
             <div class="flex-1 w-full">
-              <div class="flex justify-between items-start mb-6">
-                <h4 class="text-3xl font-headline font-black text-primary group-hover:text-secondary-dark transition-colors tracking-tight">{{ nar.titulo }}</h4>
-                <span class="px-5 py-2 bg-primary/5 text-primary text-xs font-black uppercase tracking-widest rounded-2xl border border-primary/10 shadow-sm">
+              <div class="flex justify-between items-start mb-2">
+                <h4 class="text-2xl font-serif font-bold text-primary tracking-tight">{{ nar.titulo }}</h4>
+                <span [class]="nar.status === 'published' ? 'bg-accent text-white' : 'bg-secondary text-on-surface-variant'" 
+                      class="px-4 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
                   {{ getNarrativeStatusLabel(nar) }}
                 </span>
               </div>
               
-              <div class="flex gap-8 text-xs font-black text-on-surface-variant mb-8 uppercase tracking-widest">
-                <span class="flex items-center gap-3">
-                  <span class="material-symbols-outlined text-secondary text-xl">location_on</span> {{ nar.regionCultural }}
+              <div class="flex gap-6 text-[11px] font-bold text-on-surface-variant/60 mb-6 uppercase tracking-widest">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm">location_on</span> {{ nar.regionCultural }}
                 </span>
-                <span class="flex items-center gap-3">
-                  <span class="material-symbols-outlined text-secondary text-xl">history_edu</span> {{ nar.tipoRelato || 'Cuento' }}
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm">calendar_month</span> 12 Oct, 2023
                 </span>
               </div>
 
-              <p class="text-lg text-on-surface-variant mb-10 line-clamp-3 leading-relaxed font-medium opacity-80">{{ nar.contenido }}</p>
-              
-              <div class="flex gap-6 pt-8 border-t border-outline-variant/10">
-                <button class="btn-secondary !px-10">
-                  <span class="material-symbols-outlined text-xl">visibility</span> Ver
-                </button>
-                <button (click)="editNarrative(nar)" class="btn-premium !px-12">
-                  <span class="material-symbols-outlined text-xl">edit</span> Continuar
+              <div class="flex items-center justify-between pt-4 border-t border-outline-variant/30">
+                <div class="flex gap-4">
+                    <button class="flex items-center gap-2 text-xs font-bold bg-secondary/50 px-5 py-2 rounded-lg hover:bg-secondary transition-colors">
+                      <span class="material-symbols-outlined text-lg">visibility</span> Ver
+                    </button>
+                    <button (click)="editNarrative(nar)" class="flex items-center gap-2 text-xs font-bold bg-primary text-white px-5 py-2 rounded-lg hover:brightness-110 transition-colors">
+                      <span class="material-symbols-outlined text-lg">edit</span> {{ nar.status === 'published' ? 'Editar' : 'Continuar' }}
+                    </button>
+                </div>
+                <button class="flex items-center gap-2 text-xs font-bold text-red-500 hover:text-red-700 transition-colors">
+                    <span class="material-symbols-outlined text-lg">delete</span> Eliminar
                 </button>
               </div>
             </div>

@@ -1,30 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #5D2B12;
-  --color-primary-light: #823B18;
-  --color-secondary: #B59449;
-  --color-secondary-dark: #8C6F30;
-  --color-accent: #FF5722;
+  --color-primary: #7A3E23;
+  --color-primary-light: #A0522D;
+  --color-secondary: #F4EBDC;
+  --color-secondary-dark: #D4C5A9;
+  --color-accent: #146B6B;
   
-  --color-background: #FCF9F5;
+  --color-background: #FDF8F3;
   --color-surface: #FFFFFF;
-  --color-sidebar: #1A120B;
-  --color-on-sidebar: #F4EBD0;
+  --color-sidebar: #FDF8F3;
+  --color-on-sidebar: #7D6B5D;
   
-  --color-on-surface: #2C1E12;
-  --color-on-surface-variant: #5D4A3A;
-  --color-outline: #A68E74;
-  --color-outline-variant: #E3D5C1;
+  --color-on-surface: #332211;
+  --color-on-surface-variant: #7D6B5D;
+  --color-outline: #D4C5A9;
+  --color-outline-variant: #EBE0D0;
   
-  --font-headline: "Noto Serif", serif;
-  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-headline: "Outfit", sans-serif;
+  --font-serif: "Noto Serif", serif;
+  --font-body: "Inter", sans-serif;
   
-  --radius-xl: 1.25rem;
-  --radius-2xl: 1.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
   
-  --shadow-premium: 0 20px 50px -12px rgba(93, 43, 18, 0.15);
-  --shadow-sidebar: 10px 0 30px rgba(0, 0, 0, 0.05);
+  --shadow-premium: 0 10px 40px -10px rgba(122, 62, 35, 0.1);
+  --shadow-sidebar: 2px 0 20px rgba(0, 0, 0, 0.02);
 }
 
 @layer base {
@@ -43,45 +44,42 @@
 
 @layer components {
   .premium-card {
-    @apply bg-white border border-outline-variant/30 shadow-premium rounded-2xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-1;
+    @apply bg-white border border-outline-variant/50 shadow-premium rounded-2xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-1;
   }
   
   .btn-premium {
-    @apply relative overflow-hidden px-8 py-4 rounded-2xl font-bold transition-all active:scale-95 flex items-center justify-center gap-3 text-white;
-    background: linear-gradient(135deg, #823B18 0%, #5D2B12 100%);
-    box-shadow: 0 8px 20px -6px rgba(93, 43, 18, 0.4);
+    @apply relative overflow-hidden px-8 py-4 rounded-xl font-bold transition-all active:scale-95 flex items-center justify-center gap-3 text-white;
+    background: var(--color-primary);
   }
 
   .btn-premium:hover {
-    @apply shadow-2xl brightness-110;
-    transform: translateY(-2px);
+    @apply brightness-110;
+    transform: translateY(-1px);
   }
 
   .btn-secondary {
-    @apply relative overflow-hidden px-8 py-4 rounded-2xl font-bold transition-all active:scale-95 flex items-center justify-center gap-3;
-    @apply bg-white border-2 border-primary/20 text-primary hover:bg-primary/5 hover:border-primary/40;
+    @apply relative overflow-hidden px-8 py-4 rounded-xl font-bold transition-all active:scale-95 flex items-center justify-center gap-3;
+    @apply bg-secondary text-primary hover:bg-secondary-dark/20;
   }
   
   .sidebar-link {
-    @apply flex items-center gap-4 px-5 py-4 rounded-2xl duration-300 cursor-pointer transition-all mb-2;
-    color: rgba(244, 235, 208, 0.5);
+    @apply flex items-center gap-4 px-5 py-4 rounded-xl duration-300 cursor-pointer transition-all mb-2 font-medium;
+    color: var(--color-on-sidebar);
   }
 
   .sidebar-link:hover {
-    @apply bg-white/5;
-    color: rgba(244, 235, 208, 0.9);
+    @apply bg-primary/5;
+    color: var(--color-primary);
   }
 
   .sidebar-link.active {
-    @apply bg-white/10 shadow-lg scale-[1.02];
-    color: #F4EBD0;
-    border-right: 4px solid var(--color-secondary);
+    @apply bg-primary text-white shadow-md;
   }
 
   .textile-pattern {
-    background-image: radial-gradient(#B59449 0.5px, transparent 0.5px);
+    background-image: radial-gradient(var(--color-primary) 0.5px, transparent 0.5px);
     background-size: 24px 24px;
-    opacity: 0.03;
+    opacity: 0.05;
   }
 }
 
