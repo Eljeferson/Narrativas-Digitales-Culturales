@@ -14,60 +14,60 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 <div class="story-thread"></div>
 
 <!-- TopNavBar -->
-<nav class="sticky top-0 z-50 flex justify-between items-center px-12 py-6 w-full bg-white/90 backdrop-blur-2xl border-b-2 border-outline-variant/30 shadow-sm">
-  <div class="flex items-center gap-12">
-    <div class="flex items-center gap-4 group cursor-pointer" (click)="goTo('/panel-del-estudiante')">
-      <div class="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white shadow-xl group-hover:rotate-6 transition-transform">
-        <span class="material-symbols-outlined text-2xl font-bold">auto_stories</span>
+<nav class="sticky top-0 z-50 flex justify-between items-center px-10 py-4 w-full bg-sidebar/95 backdrop-blur-2xl border-b border-outline-variant/30 shadow-sm">
+  <div class="flex items-center gap-10">
+    <div class="flex items-center gap-3 group cursor-pointer" (click)="goTo('/panel-del-estudiante')">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform duration-300">
+        <span class="material-symbols-outlined text-xl font-bold">menu_book</span>
       </div>
-      <span class="text-3xl font-headline font-black tracking-tighter text-primary italic">CulturaStory AI</span>
+      <span class="text-2xl font-serif font-bold text-primary tracking-tight">CulturaStory</span>
     </div>
     
-    <div class="hidden md:flex gap-10">
-      <a (click)="goTo('/panel-del-estudiante')" class="text-on-surface-variant font-black text-sm uppercase tracking-widest hover:text-primary transition-all cursor-pointer">Narrativas</a>
-      <a class="text-on-surface-variant font-black text-sm uppercase tracking-widest hover:text-primary transition-all cursor-pointer opacity-40">Regiones</a>
-      <a (click)="goTo('/biblioteca')" class="text-on-surface-variant font-black text-sm uppercase tracking-widest hover:text-primary transition-all cursor-pointer opacity-40">Biblioteca</a>
+    <div class="hidden md:flex gap-8">
+      <a (click)="goTo('/panel-del-estudiante')" class="text-primary font-bold text-xs uppercase tracking-widest hover:opacity-70 transition-all cursor-pointer">Panel Principal</a>
+      <a class="text-on-surface-variant font-bold text-xs uppercase tracking-widest hover:text-primary transition-all cursor-pointer opacity-40">Regiones</a>
+      <a (click)="goTo('/biblioteca')" class="text-on-surface-variant font-bold text-xs uppercase tracking-widest hover:text-primary transition-all cursor-pointer opacity-40">Biblioteca</a>
     </div>
   </div>
 
-  <div class="flex items-center gap-8">
-    <button class="w-12 h-12 rounded-2xl hover:bg-primary/5 transition-all text-primary border-2 border-primary/10 flex items-center justify-center">
-      <span class="material-symbols-outlined text-2xl">notifications</span>
+  <div class="flex items-center gap-6">
+    <button class="w-10 h-10 rounded-xl hover:bg-primary/5 transition-all text-primary border border-primary/10 flex items-center justify-center">
+      <span class="material-symbols-outlined text-xl">notifications</span>
     </button>
-    <div class="w-14 h-14 rounded-full border-4 border-white shadow-2xl ring-2 ring-primary/5 overflow-hidden">
+    <div class="w-11 h-11 rounded-full border border-outline-variant shadow-lg overflow-hidden cursor-pointer" (click)="goTo('/perfil-creativo-estudiante')">
       <img *ngIf="userAvatar" [src]="userAvatar" class="w-full h-full object-cover">
-      <span *ngIf="!userAvatar" class="material-symbols-outlined text-primary text-3xl flex items-center justify-center h-full">person</span>
+      <span *ngIf="!userAvatar" class="material-symbols-outlined text-primary text-2xl flex items-center justify-center h-full">person</span>
     </div>
   </div>
 </nav>
 
-<main class="max-w-[1600px] mx-auto px-12 py-12">
+<main class="max-w-[1400px] mx-auto px-10 py-10">
   <!-- Editor Header -->
-  <header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 animate-slide-up">
-    <div class="space-y-4">
-      <button (click)="goTo('/panel-del-estudiante')" class="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-[0.2em] hover:gap-5 transition-all group">
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 animate-slide-up">
+    <div class="space-y-3">
+      <button (click)="goTo('/panel-del-estudiante')" class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest hover:gap-3 transition-all group">
         <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
         Volver al Panel
       </button>
-      <h2 class="text-6xl font-headline font-black text-primary leading-none tracking-tight">Mi Escritorio <br/> <span class="text-secondary-dark italic">Creativo</span></h2>
-      <p class="text-on-surface-variant text-xl font-medium opacity-60">Donde las leyendas cobran vida a través de tu pluma.</p>
+      <h2 class="text-4xl font-serif font-bold text-primary leading-tight tracking-tight">Mi Escritorio <span class="italic text-primary-light">Creativo</span></h2>
+      <p class="text-on-surface-variant text-sm font-medium">Donde las leyendas cobran vida a través de tu pluma.</p>
     </div>
 
-    <div class="flex flex-col items-end gap-4">
-       <div class="bg-white border-2 border-outline-variant/30 rounded-3xl p-6 shadow-xl flex items-center gap-8">
+    <div class="flex items-center gap-6">
+       <div class="bg-white border border-outline-variant/50 rounded-2xl px-6 py-4 shadow-sm flex items-center gap-6">
           <div class="flex flex-col">
-            <span class="text-[10px] font-black uppercase tracking-widest text-outline mb-1">Estado de Obra</span>
-            <span class="text-lg font-black text-primary flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1">Estado de Obra</span>
+            <span class="text-sm font-bold text-primary flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-green-500"></span>
               En Construcción
             </span>
           </div>
-          <div class="w-px h-10 bg-outline-variant/30"></div>
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center">
-              <span class="material-symbols-outlined text-secondary text-2xl font-black">draw</span>
+          <div class="w-px h-8 bg-outline-variant/30"></div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary text-lg font-bold">draw</span>
             </div>
-            <span class="text-sm font-black text-on-surface-variant">Sesión Iniciada</span>
+            <span class="text-xs font-bold text-on-surface-variant">Sesión Iniciada</span>
           </div>
        </div>
     </div>
@@ -75,24 +75,24 @@ import { Narrative } from '../../core/domain/models/narrative.model';
 
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
     <!-- Writing Area -->
-    <div class="lg:col-span-8 space-y-10 animate-slide-up" style="animation-delay: 0.1s">
-      <div class="premium-card !p-0 overflow-hidden shadow-2xl border-2 border-outline-variant/20">
+    <div class="lg:col-span-8 space-y-8 animate-slide-up" style="animation-delay: 0.1s">
+      <div class="premium-card !p-0 overflow-hidden shadow-lg border border-outline-variant/30">
         <!-- Toolbar -->
-        <div class="bg-[#F8F5F1] px-10 py-8 border-b-2 border-outline-variant/30 flex flex-wrap items-center justify-between gap-6">
+        <div class="bg-secondary/20 px-8 py-5 border-b border-outline-variant/30 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-4">
-            <div class="flex bg-white rounded-2xl shadow-sm p-1.5 border border-outline-variant/30">
-               <button class="p-4 rounded-xl hover:bg-primary/5 text-primary transition-all font-black">B</button>
-               <button class="p-4 rounded-xl hover:bg-primary/5 text-primary transition-all italic font-serif">I</button>
+            <div class="flex bg-white rounded-xl shadow-sm p-1 border border-outline-variant/30">
+               <button class="p-3 rounded-lg hover:bg-primary/5 text-primary transition-all font-bold text-sm">B</button>
+               <button class="p-3 rounded-lg hover:bg-primary/5 text-primary transition-all italic font-serif text-sm">I</button>
             </div>
             <button (click)="improveWithAI()" [disabled]="isSaving || !content.trim()" 
-                    class="btn-premium !py-4 !px-8 shadow-primary/20 hover:scale-105 active:scale-95 disabled:opacity-50">
-              <span class="material-symbols-outlined font-black">magic_button</span>
+                    class="btn-premium !py-3 !px-6 shadow-sm hover:scale-105 active:scale-95 disabled:opacity-50 !text-xs">
+              <span class="material-symbols-outlined text-lg">magic_button</span>
               IA: Perfeccionar Relato
             </button>
           </div>
           
           <div class="flex items-center gap-4">
-             <span class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40 bg-white px-4 py-2 rounded-full border border-outline-variant/30">
+             <span class="flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 bg-white px-3 py-1.5 rounded-full border border-outline-variant/30">
                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                Escritura en vivo
              </span>
@@ -100,16 +100,16 @@ import { Narrative } from '../../core/domain/models/narrative.model';
         </div>
 
         <!-- Inputs -->
-        <div class="p-12 space-y-10 bg-white paper-texture">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div class="space-y-3">
-              <label class="text-[10px] font-black uppercase tracking-[0.2em] text-outline ml-1">Título de la Narrativa</label>
+        <div class="p-10 space-y-8 bg-white paper-texture">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-2">
+              <label class="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 ml-1">Título de la Narrativa</label>
               <input [(ngModel)]="title" placeholder="Nombra tu creación..." 
-                     class="w-full text-4xl font-headline font-black bg-transparent border-0 border-b-4 border-outline-variant/20 focus:border-secondary transition-all outline-none pb-4 placeholder:opacity-20 text-primary">
+                     class="w-full text-2xl font-serif font-bold bg-transparent border-0 border-b border-outline-variant/50 focus:border-primary transition-all outline-none pb-2 placeholder:text-on-surface-variant/20 text-primary">
             </div>
-            <div class="space-y-3">
-              <label class="text-[10px] font-black uppercase tracking-[0.2em] text-outline ml-1">Inspiración Regional</label>
-              <select [(ngModel)]="region" class="w-full p-6 rounded-2xl bg-[#F8F5F1] border-2 border-outline-variant/20 font-black text-on-surface-variant outline-none focus:border-primary transition-all cursor-pointer appearance-none shadow-sm">
+            <div class="space-y-2">
+              <label class="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 ml-1">Inspiración Regional</label>
+              <select [(ngModel)]="region" class="w-full p-4 rounded-xl bg-secondary/10 border border-outline-variant/50 font-bold text-sm text-on-surface-variant outline-none focus:border-primary transition-all cursor-pointer appearance-none shadow-sm">
                 <option value="andina">Tradición Andina</option>
                 <option value="amazónica">Misterio Amazónico</option>
                 <option value="afroperuana">Ritmo Afroperuano</option>
@@ -118,10 +118,9 @@ import { Narrative } from '../../core/domain/models/narrative.model';
             </div>
           </div>
 
-          <div class="relative pt-8">
-            <div class="absolute -left-6 top-8 w-1 h-full bg-secondary/10 rounded-full"></div>
+          <div class="relative pt-6">
             <textarea [(ngModel)]="content" placeholder="Había una vez, entre las sombras de los cerros..."
-                      class="w-full min-h-[600px] text-2xl leading-relaxed font-medium bg-transparent border-0 focus:ring-0 outline-none placeholder:opacity-20 text-on-surface-variant resize-none"
+                      class="w-full min-h-[500px] text-lg leading-relaxed font-medium bg-transparent border-0 focus:ring-0 outline-none placeholder:text-on-surface-variant/20 text-on-surface-variant resize-none"
                       (ngModelChange)="onContentChange()"></textarea>
           </div>
         </div>
@@ -140,24 +139,24 @@ import { Narrative } from '../../core/domain/models/narrative.model';
     </div>
 
     <!-- Author's Resource Sidebar -->
-    <div class="lg:col-span-4 space-y-12 animate-slide-up" style="animation-delay: 0.2s">
-      <div class="premium-card p-10 space-y-12 border-t-8 border-t-primary shadow-2xl">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center text-primary border-2 border-primary/10">
-            <span class="material-symbols-outlined text-3xl font-black">inventory_2</span>
+    <div class="lg:col-span-4 space-y-10 animate-slide-up" style="animation-delay: 0.2s">
+      <div class="premium-card p-8 space-y-10 border-t-4 border-t-primary shadow-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
+            <span class="material-symbols-outlined text-2xl font-bold">inventory_2</span>
           </div>
-          <h3 class="text-3xl font-headline font-black text-primary tracking-tight">Baúl del Autor</h3>
+          <h3 class="text-xl font-serif font-bold text-primary tracking-tight">Baúl del Autor</h3>
         </div>
 
         <!-- Metrics -->
-        <div class="grid grid-cols-2 gap-8">
-          <div class="bg-[#F8F5F1] p-8 rounded-3xl border-2 border-outline-variant/20 shadow-inner group hover:border-secondary transition-all">
-            <span class="block text-[10px] font-black uppercase tracking-[0.2em] text-outline mb-4 group-hover:text-secondary transition-colors">Palabras</span>
-            <span class="text-5xl font-headline font-black text-primary">{{ content.trim() ? content.trim().split(/\s+/).length : 0 }}</span>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="bg-secondary/10 p-6 rounded-2xl border border-outline-variant/30 shadow-inner group hover:border-primary transition-all">
+            <span class="block text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2 group-hover:text-primary transition-colors">Palabras</span>
+            <span class="text-3xl font-serif font-bold text-primary">{{ content.trim() ? content.trim().split(/\s+/).length : 0 }}</span>
           </div>
-          <div class="bg-[#F8F5F1] p-8 rounded-3xl border-2 border-outline-variant/20 shadow-inner group hover:border-secondary transition-all">
-            <span class="block text-[10px] font-black uppercase tracking-[0.2em] text-outline mb-4 group-hover:text-secondary transition-colors">Lectura</span>
-            <span class="text-5xl font-headline font-black text-primary">~{{ content.trim() ? Math.ceil(content.trim().split(/\s+/).length / 200) : 0 }} <span class="text-xs uppercase tracking-widest">min</span></span>
+          <div class="bg-secondary/10 p-6 rounded-2xl border border-outline-variant/30 shadow-inner group hover:border-primary transition-all">
+            <span class="block text-[9px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2 group-hover:text-primary transition-colors">Lectura</span>
+            <span class="text-3xl font-serif font-bold text-primary">~{{ content.trim() ? Math.ceil(content.trim().split(/\s+/).length / 200) : 0 }} <span class="text-[10px] uppercase tracking-widest">min</span></span>
           </div>
         </div>
 
@@ -191,17 +190,17 @@ import { Narrative } from '../../core/domain/models/narrative.model';
       </div>
 
       <!-- Action Card -->
-      <div class="bg-[#1A120B] p-12 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group border-2 border-white/5">
-        <div class="absolute -right-20 -bottom-20 opacity-5 group-hover:scale-125 group-hover:-rotate-12 transition-transform duration-1000">
-          <span class="material-symbols-outlined text-[300px] font-black">rocket_launch</span>
+      <div class="bg-primary p-10 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+        <div class="absolute -right-16 -bottom-16 opacity-10 group-hover:scale-125 transition-transform duration-1000">
+          <span class="material-symbols-outlined text-[200px] font-bold">rocket_launch</span>
         </div>
-        <div class="relative z-10 space-y-8">
-          <h4 class="font-headline font-black text-4xl leading-tight">¿Tu obra está <br/> <span class="text-secondary italic">lista</span>?</h4>
-          <p class="text-lg opacity-60 leading-relaxed font-medium">Una vez enviada, tu docente podrá leerla y ayudarte a pulir los detalles finales de tu legado.</p>
+        <div class="relative z-10 space-y-6">
+          <h4 class="font-serif font-bold text-2xl leading-tight">¿Tu obra está <span class="italic text-secondary">lista</span>?</h4>
+          <p class="text-sm opacity-80 leading-relaxed font-medium">Una vez enviada, tu docente podrá leerla y ayudarte a pulir los detalles finales de tu legado.</p>
           <button (click)="submitToTeacher()" [disabled]="isSaving || !currentId || !content.trim()" 
-                  class="w-full py-6 bg-secondary text-[#1A120B] rounded-2xl font-black text-xl flex items-center justify-center gap-4 hover:bg-white hover:text-primary transition-all shadow-2xl active:scale-95 disabled:opacity-50">
+                  class="w-full py-4 bg-secondary text-primary rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-white transition-all shadow-lg active:scale-95 disabled:opacity-50">
             <span>Enviar a Revisión</span>
-            <span class="material-symbols-outlined text-3xl font-black">send</span>
+            <span class="material-symbols-outlined text-2xl">send</span>
           </button>
         </div>
       </div>
