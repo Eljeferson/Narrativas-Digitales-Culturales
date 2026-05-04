@@ -78,7 +78,7 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 <!-- Main Content Canvas -->
 <main class="md:ml-64 relative min-h-screen bg-background z-10">
   <!-- Sticky Top Header -->
-  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-10 py-8 flex justify-between items-start">
+  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-10 py-4 flex justify-between items-start">
     <div class="flex flex-col gap-1">
       <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-4xl font-serif italic font-bold tracking-tight animate-slide-up">
         ¡Hola, <span class="text-primary not-italic">{{ userName }}!</span>
@@ -99,15 +99,15 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
     </div>
   </header>
 
-  <div class="px-12 py-12">
+  <div class="px-10 py-4">
     <!-- Bento Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
       <!-- Left Column: Actions & Wisdom -->
-      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-12">
+      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-6">
         
         <!-- Create New Story Hero Card -->
-        <button (click)="createNew()" class="w-full group relative overflow-hidden aspect-[1.5/1] rounded-xl flex flex-col items-center justify-center transition-all duration-500 hover:shadow-xl active:scale-[0.98] border-0 shadow-md bg-primary">
+        <button (click)="createNew()" class="w-full group relative overflow-hidden py-6 rounded-xl flex flex-col items-center justify-center transition-all duration-500 hover:shadow-xl active:scale-[0.98] border-0 shadow-md bg-primary">
           <div class="relative z-10 bg-white/10 p-4 rounded-xl border border-white/20 shadow-inner mb-4 group-hover:scale-105 transition-transform">
             <span class="material-symbols-outlined text-2xl text-white font-bold">add</span>
           </div>
@@ -130,24 +130,55 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
         </div>
 
         <!-- Vocational Card -->
-        <div *ngIf="vocationPrediction" class="premium-card p-10 border-l-8 border-l-accent animate-slide-up" style="animation-delay: 0.3s">
-          <div class="flex items-center justify-between mb-8">
-            <h3 class="text-primary font-headline font-black text-2xl flex items-center gap-3">
+        <div *ngIf="vocationPrediction" class="premium-card p-6 border-l-8 border-l-accent animate-slide-up" style="animation-delay: 0.3s">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-primary font-headline font-black text-xl flex items-center gap-3">
               <span class="material-symbols-outlined text-accent text-3xl font-black">psychology</span>
               Tu Pasión
             </h3>
             <span class="bg-accent/10 text-accent text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest">AI Prediction</span>
           </div>
           
-          <div class="space-y-6">
-            <div class="text-4xl font-headline font-black text-secondary-dark leading-tight">{{ vocationPrediction.passion }}</div>
-            <p class="text-base text-on-surface-variant leading-relaxed font-medium opacity-70">{{ vocationPrediction.description }}</p>
+          <div class="space-y-4">
+            <div class="text-2xl font-headline font-black text-secondary-dark leading-tight">{{ vocationPrediction.passion }}</div>
             
-            <div class="pt-6 border-t border-outline-variant/30">
-              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-outline mb-4">Caminos sugeridos</p>
-              <div class="flex flex-wrap gap-3">
-                <span *ngFor="let career of vocationPrediction.suggested_careers" 
-                      class="px-5 py-3 bg-primary/5 text-xs font-black rounded-2xl border border-primary/10 text-primary hover:bg-primary hover:text-white transition-all cursor-default shadow-sm">
+            <!-- Posible Profesión Block -->
+            <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10 shadow-sm">
+              <p class="text-[9px] font-black uppercase tracking-widest text-primary mb-1">Posible Profesión</p>
+              <p class="text-lg font-black text-secondary-dark leading-tight">{{ getTopCareer() }}</p>
+              <div class="mt-3 pt-3 border-t border-primary/10">
+                <p class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/50 mb-1">¿Por qué?</p>
+                <p class="text-sm text-on-surface-variant leading-relaxed font-medium italic opacity-80">{{ vocationPrediction.description }}</p>
+              </div>
+            </div>
+
+            <!-- Accuracy Metrics -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="bg-secondary/10 p-4 rounded-xl border border-secondary/20">
+                <p class="text-[9px] font-black uppercase tracking-[0.2em] text-secondary-dark/60 mb-2">Exactitud</p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-secondary/20 rounded-full overflow-hidden">
+                    <div class="h-full bg-accent transition-all duration-1000" [style.width.%]="vocationPrediction.accuracy"></div>
+                  </div>
+                  <span class="text-xs font-black text-accent">{{ vocationPrediction.accuracy }}%</span>
+                </div>
+              </div>
+              <div class="bg-primary/5 p-4 rounded-xl border border-primary/10">
+                <p class="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60 mb-2">Confianza</p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-primary/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-primary transition-all duration-1000" [style.width.%]="vocationPrediction.precision"></div>
+                  </div>
+                  <span class="text-xs font-black text-primary">{{ vocationPrediction.precision }}%</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="pt-4 border-t border-outline-variant/30">
+              <p class="text-[9px] font-black uppercase tracking-[0.2em] text-outline mb-3">Caminos sugeridos</p>
+              <div class="flex flex-wrap gap-2">
+                <span *ngFor="let career of getAllCareers()" 
+                      class="px-4 py-2 bg-white text-[11px] font-bold rounded-xl border border-outline-variant/50 text-on-surface-variant hover:border-primary hover:text-primary transition-all cursor-default shadow-sm">
                   {{ career }}
                 </span>
               </div>
@@ -157,9 +188,9 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
       </div>
 
       <!-- Right Column: Stories List -->
-      <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-10">
-        <div class="flex justify-between items-center border-b border-outline-variant/30 pb-4">
-            <h3 class="text-xl font-serif font-bold text-on-surface tracking-tight">Mis historias recientes</h3>
+      <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-6">
+        <div class="flex justify-between items-center border-b border-outline-variant/30 pb-2">
+            <h3 class="text-lg font-serif font-bold text-on-surface tracking-tight">Mis historias recientes</h3>
             <div class="flex gap-4 text-[11px] font-bold text-on-surface-variant/50">
                 <span class="text-primary border-b-2 border-primary pb-1">Todas</span>
                 <span class="hover:text-primary transition-colors cursor-pointer">Borradores</span>
@@ -168,57 +199,54 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
         </div>
 
         <!-- Cards Container -->
-        <div *ngIf="!isLoading; else loadingTpl" class="space-y-8">
+        <div *ngIf="!isLoading; else loadingTpl" class="space-y-4">
           <div *ngFor="let nar of (activeTab === 'inicio' ? narratives.slice(0, 3) : narratives)" 
-               class="premium-card p-6 flex flex-col md:flex-row gap-8 items-center hover:border-primary/30 group border-l-[6px]"
+               class="premium-card p-4 flex flex-col md:flex-row gap-6 items-center hover:border-primary/30 group border-l-[6px]"
                [class.border-l-accent]="nar.status === 'published'"
                [class.border-l-primary/20]="nar.status !== 'published'">
             
             <!-- Thumbnail Placeholder -->
-            <div class="w-full md:w-48 h-32 rounded-lg bg-secondary/30 overflow-hidden relative">
+            <div class="w-full md:w-32 h-24 rounded-lg bg-secondary/30 overflow-hidden relative shrink-0">
                 <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Story cover">
                 <div class="absolute inset-0 bg-black/10"></div>
             </div>
 
-            <div class="flex-1 w-full">
-              <div class="flex justify-between items-start mb-2">
-                <h4 class="text-2xl font-serif font-bold text-primary tracking-tight">{{ nar.titulo }}</h4>
+            <div class="flex-1 w-full min-w-0">
+              <div class="flex justify-between items-start mb-1">
+                <h4 class="text-xl font-serif font-bold text-primary tracking-tight truncate">{{ nar.titulo }}</h4>
                 <span [class]="nar.status === 'published' ? 'bg-accent text-white' : 'bg-secondary text-on-surface-variant'" 
                       class="px-4 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
                   {{ getNarrativeStatusLabel(nar) }}
                 </span>
               </div>
               
-              <div class="flex gap-6 text-[11px] font-bold text-on-surface-variant/60 mb-6 uppercase tracking-widest">
-                <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-sm">location_on</span> {{ nar.regionCultural }}
+              <div class="flex gap-4 text-[10px] font-bold text-on-surface-variant/60 mb-3 uppercase tracking-widest">
+                <span class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">location_on</span> {{ nar.regionCultural }}
                 </span>
-                <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-sm">calendar_month</span> 12 Oct, 2023
+                <span class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">calendar_month</span> 12 Oct, 2023
                 </span>
               </div>
 
-              <div class="flex items-center justify-between pt-4 border-t border-outline-variant/30">
-                <div class="flex gap-4">
-                    <button class="flex items-center gap-2 text-xs font-bold bg-secondary/50 px-5 py-2 rounded-lg hover:bg-secondary transition-colors">
-                      <span class="material-symbols-outlined text-lg">visibility</span> Ver
+              <div class="flex items-center justify-between pt-2 border-t border-outline-variant/30">
+                <div class="flex gap-2">
+                    <button class="flex items-center gap-2 text-[10px] font-bold bg-secondary/50 px-3 py-1.5 rounded-lg hover:bg-secondary transition-colors">
+                      <span class="material-symbols-outlined text-base">visibility</span> Ver
                     </button>
-                    <button (click)="editNarrative(nar)" class="flex items-center gap-2 text-xs font-bold bg-primary text-white px-5 py-2 rounded-lg hover:brightness-110 transition-colors">
-                      <span class="material-symbols-outlined text-lg">edit</span> {{ nar.status === 'published' ? 'Editar' : 'Continuar' }}
+                    <button (click)="editNarrative(nar)" class="flex items-center gap-2 text-[10px] font-bold bg-primary text-white px-3 py-1.5 rounded-lg hover:brightness-110 transition-colors">
+                      <span class="material-symbols-outlined text-base">edit</span> {{ nar.status === 'published' ? 'Editar' : 'Continuar' }}
                     </button>
                 </div>
-                <button class="flex items-center gap-2 text-xs font-bold text-red-500 hover:text-red-700 transition-colors">
-                    <span class="material-symbols-outlined text-lg">delete</span> Eliminar
+                <button class="flex items-center gap-2 text-[10px] font-bold text-red-500 hover:text-red-700 transition-colors">
+                    <span class="material-symbols-outlined text-base">delete</span> Eliminar
                 </button>
               </div>
             </div>
           </div>
 
-          <div *ngIf="activeTab === 'inicio' && narratives.length > 3" class="flex justify-center pt-8">
-            <button (click)="setActiveTab('historias')" class="group px-12 py-5 border-4 border-primary text-primary rounded-[2rem] font-black text-xl hover:bg-primary hover:text-white transition-all flex items-center gap-4 shadow-2xl hover:shadow-primary/30">
-              <span>Ver todas mis historias</span>
-              <span class="material-symbols-outlined text-2xl group-hover:translate-x-2 transition-transform">arrow_forward</span>
-            </button>
+          <div *ngIf="activeTab === 'inicio' && narratives.length > 3" class="hidden">
+            <!-- Removed to save space in home tab -->
           </div>
 
           <!-- Empty State -->
@@ -370,6 +398,20 @@ export class StudentPanel implements OnInit {
     this.authPort.logout().subscribe(() => {
       this.router.navigate(['/']);
     });
+  }
+
+  getTopCareer(): string {
+    if (!this.vocationPrediction) return '';
+    const careers = this.vocationPrediction.suggested_careers;
+    if (Array.isArray(careers)) return careers[0] || '';
+    return careers.professional[0] || careers.technical[0] || careers.others[0] || '';
+  }
+
+  getAllCareers(): string[] {
+    if (!this.vocationPrediction) return [];
+    const careers = this.vocationPrediction.suggested_careers;
+    if (Array.isArray(careers)) return careers;
+    return [...careers.professional, ...careers.technical, ...careers.others];
   }
 }
 
