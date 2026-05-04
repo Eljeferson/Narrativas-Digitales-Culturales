@@ -117,50 +117,50 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 
         <!-- Removed Wisdom Card to save space for larger fonts -->
 
-        <!-- AI Prediction Box - Premium Gold Style -->
-        <div *ngIf="vocationPrediction" class="flex-1 bg-[#D4AF37] text-on-surface rounded-[2rem] shadow-2xl overflow-hidden animate-slide-up relative min-h-[550px] border border-white/20" style="animation-delay: 0.3s">
+        <!-- AI Prediction Box - Premium Gold Style (Compacted) -->
+        <div *ngIf="vocationPrediction" class="flex-1 bg-[#D4AF37] text-on-surface rounded-[1.5rem] shadow-xl overflow-hidden animate-slide-up relative min-h-[450px] border border-white/20" style="animation-delay: 0.3s">
           <!-- Decorative Pattern -->
           <div class="absolute inset-0 opacity-15 textile-pattern pointer-events-none"></div>
           
           <div class="relative z-10 h-full flex flex-col">
-            <div class="p-8 border-b border-black/10 flex items-center justify-between bg-black/5">
-              <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary text-3xl font-black">psychology</span>
-                <h3 class="font-headline font-black text-xl uppercase tracking-widest text-primary">Tu Pasión</h3>
+            <div class="p-6 border-b border-black/10 flex items-center justify-between bg-black/5">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-2xl font-black">psychology</span>
+                <h3 class="font-headline font-black text-lg uppercase tracking-widest text-primary">Tu Pasión</h3>
               </div>
-              <span class="bg-primary text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">AI INSIGHT</span>
+              <span class="bg-primary text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">AI INSIGHT</span>
             </div>
             
-            <div class="p-8 space-y-8 flex-1">
-              <div class="text-4xl font-headline font-black text-primary leading-tight drop-shadow-sm">{{ vocationPrediction.passion }}</div>
+            <div class="p-6 space-y-6 flex-1">
+              <div class="text-3xl font-headline font-black text-primary leading-tight drop-shadow-sm">{{ vocationPrediction.passion }}</div>
               
-              <div class="p-6 bg-white/60 backdrop-blur-md rounded-3xl border border-white/40 shadow-xl">
-                <div class="flex justify-between items-center mb-3">
-                  <p class="text-xs font-black uppercase tracking-[0.2em] text-primary/40">PROFESIÓN SUGERIDA</p>
-                  <p class="text-2xl font-black text-primary tracking-tight">{{ getTopCareer() }}</p>
+              <div class="p-4 bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-lg">
+                <div class="flex justify-between items-center mb-2">
+                  <p class="text-[10px] font-black uppercase tracking-widest text-primary/50">SUGERENCIA</p>
+                  <p class="text-xl font-black text-primary tracking-tight">{{ getTopCareer() }}</p>
                 </div>
-                <p class="text-lg text-on-surface-variant leading-relaxed font-medium italic border-t border-black/10 pt-4">{{ vocationPrediction.description }}</p>
+                <p class="text-base text-on-surface-variant leading-snug font-medium italic border-t border-black/10 pt-3">{{ vocationPrediction.description }}</p>
               </div>
 
-              <!-- Accuracy Metrics with High Contrast -->
-              <div class="space-y-5">
-                <div class="bg-black/10 p-5 rounded-2xl border border-black/5 shadow-inner">
-                  <div class="flex justify-between items-center mb-3">
-                    <p class="text-[11px] font-black uppercase tracking-widest text-primary">Exactitud del Modelo</p>
-                    <span class="text-sm font-black text-primary">{{ vocationPrediction.accuracy }}%</span>
+              <!-- Accuracy Metrics Compacted -->
+              <div class="grid grid-cols-1 gap-3">
+                <div class="bg-black/10 p-4 rounded-xl border border-black/5 shadow-inner">
+                  <div class="flex justify-between items-center mb-2">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-primary">Exactitud</p>
+                    <span class="text-xs font-black text-primary">{{ vocationPrediction.accuracy }}%</span>
                   </div>
-                  <div class="w-full h-3 bg-black/10 rounded-full overflow-hidden p-0.5">
-                    <div class="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(122,62,35,0.3)]" [style.width.%]="vocationPrediction.accuracy"></div>
+                  <div class="w-full h-2 bg-black/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-primary rounded-full" [style.width.%]="vocationPrediction.accuracy"></div>
                   </div>
                 </div>
                 
-                <div class="bg-black/10 p-5 rounded-2xl border border-black/5 shadow-inner">
-                  <div class="flex justify-between items-center mb-3">
-                    <p class="text-[11px] font-black uppercase tracking-widest text-accent">Confianza en Predicción</p>
-                    <span class="text-sm font-black text-accent">{{ vocationPrediction.precision }}%</span>
+                <div class="bg-black/10 p-4 rounded-xl border border-black/5 shadow-inner">
+                  <div class="flex justify-between items-center mb-2">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-accent">Confianza</p>
+                    <span class="text-xs font-black text-accent">{{ vocationPrediction.precision }}%</span>
                   </div>
-                  <div class="w-full h-3 bg-black/10 rounded-full overflow-hidden p-0.5">
-                    <div class="h-full bg-accent rounded-full shadow-[0_0_10px_rgba(20,107,107,0.3)]" [style.width.%]="vocationPrediction.precision"></div>
+                  <div class="w-full h-2 bg-black/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-accent rounded-full" [style.width.%]="vocationPrediction.precision"></div>
                   </div>
                 </div>
               </div>
