@@ -103,8 +103,8 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
     <!-- Bento Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
-      <!-- Left Column: Actions & Vocation -->
-      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-5 flex flex-col gap-6">
+      <!-- Left Column: Actions & Vocation (Narrower) -->
+      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 flex flex-col gap-6">
         
         <!-- Prominent Create New Story -->
         <button (click)="createNew()" class="w-full group relative overflow-hidden py-8 rounded-2xl flex flex-col items-center justify-center transition-all duration-500 hover:shadow-xl active:scale-[0.98] border-0 shadow-md bg-primary text-white">
@@ -117,58 +117,58 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 
         <!-- Removed Wisdom Card to save space for larger fonts -->
 
-        <!-- AI Prediction Box - Styled like Nueva Narrativa but Lighter -->
-        <div *ngIf="vocationPrediction" class="flex-1 bg-[#965D44] text-white rounded-3xl shadow-xl overflow-hidden animate-slide-up relative min-h-[500px]" style="animation-delay: 0.3s">
+        <!-- AI Prediction Box - Gold Style -->
+        <div *ngIf="vocationPrediction" class="flex-1 bg-[#C5A059] text-on-surface rounded-3xl shadow-xl overflow-hidden animate-slide-up relative min-h-[500px]" style="animation-delay: 0.3s">
           <!-- Decorative Pattern -->
-          <div class="absolute inset-0 opacity-10 textile-pattern pointer-events-none"></div>
+          <div class="absolute inset-0 opacity-20 textile-pattern pointer-events-none"></div>
           
-          <div class="relative z-10">
-            <div class="p-6 border-b border-white/10 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-white text-3xl font-black">psychology</span>
-                <h3 class="font-headline font-black text-xl uppercase tracking-tighter">Tu Pasión</h3>
+          <div class="relative z-10 h-full flex flex-col">
+            <div class="p-5 border-b border-black/10 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-2xl font-black">psychology</span>
+                <h3 class="font-headline font-black text-lg uppercase tracking-tight">Tu Pasión</h3>
               </div>
-              <span class="bg-white/20 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/20">AI Prediction</span>
+              <span class="bg-primary/10 text-primary text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-primary/20">AI Insight</span>
             </div>
             
-            <div class="p-8 space-y-6">
-              <div class="text-5xl font-headline font-black text-white leading-tight drop-shadow-sm">{{ vocationPrediction.passion }}</div>
+            <div class="p-6 space-y-4 flex-1">
+              <div class="text-3xl font-headline font-black text-primary leading-tight">{{ vocationPrediction.passion }}</div>
               
-              <div class="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-inner">
-                <div class="flex justify-between items-center mb-3">
-                  <p class="text-[10px] font-black uppercase tracking-widest text-white/70">Profesión Sugerida</p>
-                  <p class="text-2xl font-black text-white">{{ getTopCareer() }}</p>
+              <div class="p-4 bg-white/40 backdrop-blur-sm rounded-2xl border border-white/30 shadow-sm">
+                <div class="flex justify-between items-center mb-1">
+                  <p class="text-[9px] font-black uppercase tracking-widest text-primary/60">Sugerencia</p>
+                  <p class="text-lg font-black text-primary">{{ getTopCareer() }}</p>
                 </div>
-                <p class="text-base text-white/90 leading-relaxed font-medium italic border-t border-white/10 pt-3">{{ vocationPrediction.description }}</p>
+                <p class="text-sm text-on-surface-variant leading-tight font-medium italic border-t border-black/5 pt-2">{{ vocationPrediction.description }}</p>
               </div>
 
-              <!-- Accuracy Metrics in White -->
-              <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white/10 p-3 rounded-xl border border-white/5 shadow-sm">
-                  <p class="text-[9px] font-black uppercase tracking-widest text-white/60 mb-1">Exactitud</p>
+              <!-- Accuracy Metrics in Dark -->
+              <div class="space-y-3">
+                <div class="bg-black/5 p-3 rounded-xl border border-black/5">
+                  <p class="text-[8px] font-black uppercase tracking-widest text-primary/40 mb-1">Exactitud del Modelo</p>
                   <div class="flex items-center gap-3">
-                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div class="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]" [style.width.%]="vocationPrediction.accuracy"></div>
+                    <div class="flex-1 h-2 bg-black/5 rounded-full overflow-hidden">
+                      <div class="h-full bg-primary" [style.width.%]="vocationPrediction.accuracy"></div>
                     </div>
-                    <span class="text-[10px] font-black text-white">{{ vocationPrediction.accuracy }}%</span>
+                    <span class="text-[10px] font-black text-primary">{{ vocationPrediction.accuracy }}%</span>
                   </div>
                 </div>
-                <div class="bg-white/10 p-3 rounded-xl border border-white/5 shadow-sm">
-                  <p class="text-[9px] font-black uppercase tracking-widest text-white/60 mb-1">Confianza</p>
+                <div class="bg-black/5 p-3 rounded-xl border border-black/5">
+                  <p class="text-[8px] font-black uppercase tracking-widest text-primary/40 mb-1">Confianza en Predicción</p>
                   <div class="flex items-center gap-3">
-                    <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div class="h-full bg-white/80" [style.width.%]="vocationPrediction.precision"></div>
+                    <div class="flex-1 h-2 bg-black/5 rounded-full overflow-hidden">
+                      <div class="h-full bg-accent" [style.width.%]="vocationPrediction.precision"></div>
                     </div>
-                    <span class="text-[10px] font-black text-white">{{ vocationPrediction.precision }}%</span>
+                    <span class="text-[10px] font-black text-accent">{{ vocationPrediction.precision }}%</span>
                   </div>
                 </div>
               </div>
               
-              <div class="pt-4 border-t border-white/10">
-                <p class="text-[9px] font-black uppercase tracking-widest text-white/50 mb-3">Caminos sugeridos</p>
+              <div class="pt-4 border-t border-black/10">
+                <p class="text-[9px] font-black uppercase tracking-widest text-primary/40 mb-2">Otros caminos</p>
                 <div class="flex flex-wrap gap-2">
-                  <span *ngFor="let career of getAllCareers().slice(0, 6)" 
-                        class="px-3 py-1 bg-white/10 text-white text-[10px] font-bold rounded-lg border border-white/10 hover:bg-white/20 transition-all">
+                  <span *ngFor="let career of getAllCareers().slice(1, 4)" 
+                        class="px-3 py-1 bg-white/30 text-primary text-[9px] font-bold rounded-lg border border-white/20">
                     {{ career }}
                   </span>
                 </div>
@@ -178,8 +178,8 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
         </div>
       </div>
 
-      <!-- Right Column: Stories List -->
-      <div id="stories-section" [class.lg:col-span-7]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-6">
+      <!-- Right Column: Stories List (Wider) -->
+      <div id="stories-section" [class.lg:col-span-8]="activeTab === 'inicio'" [class.lg:col-span-12]="activeTab === 'historias'" class="space-y-6">
         <div class="flex justify-between items-center border-b border-outline-variant/30 pb-2">
             <h3 class="text-lg font-serif font-bold text-on-surface tracking-tight">Mis historias recientes</h3>
             <div class="flex gap-4 text-[11px] font-bold text-on-surface-variant/50">
