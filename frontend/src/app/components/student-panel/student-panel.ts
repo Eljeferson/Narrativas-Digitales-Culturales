@@ -204,6 +204,7 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
             <div class="flex-1 w-full min-w-0">
               <div class="flex justify-between items-start mb-0.5">
                 <h4 class="text-lg font-serif font-bold text-primary tracking-tight truncate">{{ nar.titulo }}</h4>
+              </div>
               
               <div class="flex gap-4 text-[9px] font-bold text-on-surface-variant/60 mb-2 uppercase tracking-widest">
                 <span class="flex items-center gap-1">
