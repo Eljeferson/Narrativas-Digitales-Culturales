@@ -117,54 +117,56 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 
         <!-- Removed Wisdom Card to save space for larger fonts -->
 
-        <!-- Large & Clear Vocational Card -->
-        <div *ngIf="vocationPrediction" class="premium-card p-8 border-l-8 border-l-accent animate-slide-up" style="animation-delay: 0.3s">
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-primary font-headline font-black text-2xl flex items-center gap-3">
-              <span class="material-symbols-outlined text-accent text-4xl font-black">psychology</span>
-              Tu Pasión
-            </h3>
-            <span class="bg-accent/10 text-accent text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest">AI Prediction</span>
+        <!-- Distinct Vocational Box -->
+        <div *ngIf="vocationPrediction" class="bg-white rounded-3xl border-2 border-primary/20 shadow-xl overflow-hidden animate-slide-up" style="animation-delay: 0.3s">
+          <div class="bg-primary/5 p-6 border-b border-primary/10">
+            <div class="flex items-center justify-between">
+              <h3 class="text-primary font-headline font-black text-2xl flex items-center gap-3">
+                <span class="material-symbols-outlined text-accent text-4xl font-black">psychology</span>
+                Tu Pasión
+              </h3>
+              <span class="bg-primary text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest">IA Prediction</span>
+            </div>
           </div>
           
-          <div class="space-y-6">
+          <div class="p-6 space-y-4">
             <div class="text-4xl font-headline font-black text-secondary-dark leading-tight">{{ vocationPrediction.passion }}</div>
             
-            <div class="p-6 bg-primary/5 rounded-2xl border border-primary/10 shadow-sm">
-              <div class="flex justify-between items-center mb-3">
-                <p class="text-xs font-black uppercase tracking-widest text-primary">Profesión Sugerida</p>
-                <p class="text-2xl font-black text-secondary-dark">{{ getTopCareer() }}</p>
+            <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10">
+              <div class="flex justify-between items-center mb-2">
+                <p class="text-[10px] font-black uppercase tracking-widest text-primary">Profesión Sugerida</p>
+                <p class="text-xl font-black text-secondary-dark">{{ getTopCareer() }}</p>
               </div>
-              <p class="text-base text-on-surface-variant leading-relaxed font-medium italic opacity-90 border-t border-primary/10 pt-3">{{ vocationPrediction.description }}</p>
+              <p class="text-sm text-on-surface-variant leading-tight font-medium italic opacity-80 border-t border-primary/10 pt-2">{{ vocationPrediction.description }}</p>
             </div>
 
             <!-- Accuracy Metrics -->
-            <div class="grid grid-cols-2 gap-6">
-              <div class="bg-secondary/10 p-4 rounded-xl border border-secondary/20">
-                <p class="text-[10px] font-black uppercase tracking-widest text-secondary-dark/60 mb-2">Exactitud</p>
-                <div class="flex items-center gap-4">
-                  <div class="flex-1 h-3 bg-secondary/20 rounded-full overflow-hidden">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-secondary/10 p-3 rounded-xl border border-secondary/20">
+                <p class="text-[9px] font-black uppercase tracking-widest text-secondary-dark/60 mb-1">Exactitud</p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-secondary/20 rounded-full overflow-hidden">
                     <div class="h-full bg-accent" [style.width.%]="vocationPrediction.accuracy"></div>
                   </div>
-                  <span class="text-sm font-black text-accent">{{ vocationPrediction.accuracy }}%</span>
+                  <span class="text-[10px] font-black text-accent">{{ vocationPrediction.accuracy }}%</span>
                 </div>
               </div>
-              <div class="bg-primary/5 p-4 rounded-xl border border-primary/10">
-                <p class="text-[10px] font-black uppercase tracking-widest text-primary/60 mb-2">Confianza</p>
-                <div class="flex items-center gap-4">
-                  <div class="flex-1 h-3 bg-primary/10 rounded-full overflow-hidden">
+              <div class="bg-primary/5 p-3 rounded-xl border border-primary/10">
+                <p class="text-[9px] font-black uppercase tracking-widest text-primary/60 mb-1">Confianza</p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-primary/10 rounded-full overflow-hidden">
                     <div class="h-full bg-primary" [style.width.%]="vocationPrediction.precision"></div>
                   </div>
-                  <span class="text-sm font-black text-primary">{{ vocationPrediction.precision }}%</span>
+                  <span class="text-[10px] font-black text-primary">{{ vocationPrediction.precision }}%</span>
                 </div>
               </div>
             </div>
             
-            <div class="pt-6 border-t border-outline-variant/30">
-              <p class="text-[10px] font-black uppercase tracking-widest text-outline mb-4">Caminos sugeridos</p>
-              <div class="flex flex-wrap gap-3">
-                <span *ngFor="let career of getAllCareers()" 
-                      class="px-4 py-2 bg-white text-xs font-bold rounded-xl border border-outline-variant/50 text-on-surface-variant hover:border-primary hover:text-primary transition-all shadow-sm">
+            <div class="pt-4 border-t border-outline-variant/30">
+              <p class="text-[10px] font-black uppercase tracking-widest text-outline mb-2">Caminos sugeridos</p>
+              <div class="flex flex-wrap gap-2">
+                <span *ngFor="let career of getAllCareers().slice(0, 6)" 
+                      class="px-3 py-1 bg-white text-[10px] font-bold rounded-lg border border-outline-variant/50 text-on-surface-variant">
                   {{ career }}
                 </span>
               </div>
@@ -184,48 +186,39 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
             </div>
         </div>
 
-        <!-- Cards Container -->
-        <div *ngIf="!isLoading; else loadingTpl" class="space-y-4">
-          <div *ngFor="let nar of (activeTab === 'inicio' ? narratives.slice(0, 3) : narratives)" 
-               class="premium-card p-4 flex flex-col md:flex-row gap-6 items-center hover:border-primary/30 group border-l-[6px]"
+        <!-- Compact Cards Container -->
+        <div *ngIf="!isLoading; else loadingTpl" class="space-y-3">
+          <div *ngFor="let nar of (activeTab === 'inicio' ? narratives.slice(0, 5) : narratives)" 
+               class="bg-white border border-outline-variant/30 p-3 flex flex-col md:flex-row gap-4 items-center rounded-xl hover:border-primary/30 transition-all border-l-4"
                [class.border-l-accent]="nar.status === 'published'"
                [class.border-l-primary/20]="nar.status !== 'published'">
             
-            <!-- Thumbnail Placeholder -->
-            <div class="w-full md:w-32 h-24 rounded-lg bg-secondary/30 overflow-hidden relative shrink-0">
+            <!-- Smaller Thumbnail -->
+            <div class="w-full md:w-24 h-16 rounded-lg bg-secondary/30 overflow-hidden relative shrink-0">
                 <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Story cover">
-                <div class="absolute inset-0 bg-black/10"></div>
             </div>
 
             <div class="flex-1 w-full min-w-0">
-              <div class="flex justify-between items-start mb-1">
-                <h4 class="text-xl font-serif font-bold text-primary tracking-tight truncate">{{ nar.titulo }}</h4>
-                <span [class]="nar.status === 'published' ? 'bg-accent text-white' : 'bg-secondary text-on-surface-variant'" 
-                      class="px-4 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                  {{ getNarrativeStatusLabel(nar) }}
-                </span>
-              </div>
+              <div class="flex justify-between items-start mb-0.5">
+                <h4 class="text-lg font-serif font-bold text-primary tracking-tight truncate">{{ nar.titulo }}</h4>
               
-              <div class="flex gap-4 text-[10px] font-bold text-on-surface-variant/60 mb-3 uppercase tracking-widest">
+              <div class="flex gap-4 text-[9px] font-bold text-on-surface-variant/60 mb-2 uppercase tracking-widest">
                 <span class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[14px]">location_on</span> {{ nar.regionCultural }}
-                </span>
-                <span class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[14px]">calendar_month</span> 12 Oct, 2023
+                  <span class="material-symbols-outlined text-[12px]">location_on</span> {{ nar.regionCultural }}
                 </span>
               </div>
 
-              <div class="flex items-center justify-between pt-2 border-t border-outline-variant/30">
+              <div class="flex items-center justify-between pt-1 border-t border-outline-variant/30">
                 <div class="flex gap-2">
-                    <button class="flex items-center gap-2 text-[10px] font-bold bg-secondary/50 px-3 py-1.5 rounded-lg hover:bg-secondary transition-colors">
-                      <span class="material-symbols-outlined text-base">visibility</span> Ver
+                    <button class="flex items-center gap-1 text-[9px] font-bold bg-secondary/50 px-2 py-1 rounded-lg hover:bg-secondary transition-colors">
+                      <span class="material-symbols-outlined text-sm">visibility</span> Ver
                     </button>
-                    <button (click)="editNarrative(nar)" class="flex items-center gap-2 text-[10px] font-bold bg-primary text-white px-3 py-1.5 rounded-lg hover:brightness-110 transition-colors">
-                      <span class="material-symbols-outlined text-base">edit</span> {{ nar.status === 'published' ? 'Editar' : 'Continuar' }}
+                    <button (click)="editNarrative(nar)" class="flex items-center gap-1 text-[9px] font-bold bg-primary text-white px-2 py-1 rounded-lg hover:brightness-110 transition-colors">
+                      <span class="material-symbols-outlined text-sm">edit</span> Editar
                     </button>
                 </div>
-                <button class="flex items-center gap-2 text-[10px] font-bold text-red-500 hover:text-red-700 transition-colors">
-                    <span class="material-symbols-outlined text-base">delete</span> Eliminar
+                <button class="flex items-center gap-1 text-[9px] font-bold text-red-500 hover:text-red-700 transition-colors">
+                    <span class="material-symbols-outlined text-sm">delete</span> Eliminar
                 </button>
               </div>
             </div>
