@@ -104,7 +104,7 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
       <!-- Left Column: Actions & Vocation -->
-      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-5 space-y-6">
+      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-5 flex flex-col gap-6">
         
         <!-- Prominent Create New Story -->
         <button (click)="createNew()" class="w-full group relative overflow-hidden py-8 rounded-2xl flex flex-col items-center justify-center transition-all duration-500 hover:shadow-xl active:scale-[0.98] border-0 shadow-md bg-primary text-white">
@@ -117,8 +117,8 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 
         <!-- Removed Wisdom Card to save space for larger fonts -->
 
-        <!-- AI Prediction Box - Styled like Nueva Narrativa -->
-        <div *ngIf="vocationPrediction" class="bg-primary text-white rounded-3xl shadow-xl overflow-hidden animate-slide-up relative" style="animation-delay: 0.3s">
+        <!-- AI Prediction Box - Styled like Nueva Narrativa but Lighter -->
+        <div *ngIf="vocationPrediction" class="flex-1 bg-[#965D44] text-white rounded-3xl shadow-xl overflow-hidden animate-slide-up relative min-h-[500px]" style="animation-delay: 0.3s">
           <!-- Decorative Pattern -->
           <div class="absolute inset-0 opacity-10 textile-pattern pointer-events-none"></div>
           
@@ -131,15 +131,15 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
               <span class="bg-white/20 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/20">AI Prediction</span>
             </div>
             
-            <div class="p-6 space-y-4">
-              <div class="text-4xl font-headline font-black text-white leading-tight drop-shadow-sm">{{ vocationPrediction.passion }}</div>
+            <div class="p-8 space-y-6">
+              <div class="text-5xl font-headline font-black text-white leading-tight drop-shadow-sm">{{ vocationPrediction.passion }}</div>
               
-              <div class="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-inner">
-                <div class="flex justify-between items-center mb-2">
-                  <p class="text-[9px] font-black uppercase tracking-widest text-white/70">Profesión Sugerida</p>
-                  <p class="text-xl font-black text-white">{{ getTopCareer() }}</p>
+              <div class="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-inner">
+                <div class="flex justify-between items-center mb-3">
+                  <p class="text-[10px] font-black uppercase tracking-widest text-white/70">Profesión Sugerida</p>
+                  <p class="text-2xl font-black text-white">{{ getTopCareer() }}</p>
                 </div>
-                <p class="text-sm text-white/90 leading-tight font-medium italic border-t border-white/10 pt-2">{{ vocationPrediction.description }}</p>
+                <p class="text-base text-white/90 leading-relaxed font-medium italic border-t border-white/10 pt-3">{{ vocationPrediction.description }}</p>
               </div>
 
               <!-- Accuracy Metrics in White -->
