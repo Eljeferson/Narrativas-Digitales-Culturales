@@ -78,7 +78,7 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 <!-- Main Content Canvas -->
 <main class="md:ml-64 relative min-h-screen bg-background z-10">
   <!-- Sticky Top Header -->
-  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-10 py-4 flex justify-between items-start">
+  <header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl px-10 py-2 flex justify-between items-center border-b border-outline-variant/10">
     <div class="flex flex-col gap-1">
       <h2 *ngIf="activeTab === 'inicio'" class="text-primary text-4xl font-serif italic font-bold tracking-tight animate-slide-up">
         ¡Hola, <span class="text-primary not-italic">{{ userName }}!</span>
@@ -99,86 +99,75 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
     </div>
   </header>
 
-  <div class="px-10 py-4">
+  <div class="px-8 py-3">
     <!-- Bento Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
       <!-- Left Column: Actions & Wisdom -->
-      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-6">
+      <div *ngIf="activeTab === 'inicio'" class="lg:col-span-4 space-y-4">
         
-        <!-- Create New Story Hero Card -->
-        <button (click)="createNew()" class="w-full group relative overflow-hidden py-6 rounded-xl flex flex-col items-center justify-center transition-all duration-500 hover:shadow-xl active:scale-[0.98] border-0 shadow-md bg-primary">
-          <div class="relative z-10 bg-white/10 p-4 rounded-xl border border-white/20 shadow-inner mb-4 group-hover:scale-105 transition-transform">
-            <span class="material-symbols-outlined text-2xl text-white font-bold">add</span>
-          </div>
-          <h3 class="relative z-10 text-xl font-serif font-bold text-white tracking-tight">Crear Nueva Narrativa</h3>
+        <!-- Compact Create New Story -->
+        <button (click)="createNew()" class="w-full btn-premium !py-3 !text-sm shadow-md">
+            <span class="material-symbols-outlined text-xl">add_circle</span>
+            <span>Nueva Narrativa</span>
         </button>
 
-        <!-- Wisdom Card -->
-        <div class="bg-secondary/30 p-6 rounded-xl relative overflow-hidden group border border-outline-variant/30">
-          <div class="flex items-center justify-between mb-3">
-             <h3 class="text-accent font-serif font-bold text-lg">Sabiduría del Río</h3>
-             <span class="material-symbols-outlined text-accent/20 text-3xl">water_drop</span>
-          </div>
-          <p class="text-sm text-on-surface-variant italic font-medium leading-relaxed opacity-90">
-            "El río no solo lleva agua, lleva los susurros de los abuelos que cuidaron la selva antes que nosotros."
-          </p>
-          <button class="mt-4 flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-[10px] hover:underline transition-all">
-            <span class="material-symbols-outlined text-base">local_library</span>
-            Explorar Biblioteca
-          </button>
+        <!-- Minimal Wisdom Card -->
+        <div class="bg-secondary/20 p-4 rounded-xl border border-outline-variant/30 flex items-center gap-4">
+           <span class="material-symbols-outlined text-accent text-2xl">water_drop</span>
+           <p class="text-[11px] text-on-surface-variant italic font-medium leading-tight opacity-90">
+             "El río no solo lleva agua, lleva los susurros de los abuelos."
+           </p>
         </div>
 
-        <!-- Vocational Card -->
-        <div *ngIf="vocationPrediction" class="premium-card p-6 border-l-8 border-l-accent animate-slide-up" style="animation-delay: 0.3s">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-primary font-headline font-black text-xl flex items-center gap-3">
-              <span class="material-symbols-outlined text-accent text-3xl font-black">psychology</span>
-              Tu Pasión
-            </h3>
-            <span class="bg-accent/10 text-accent text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest">AI Prediction</span>
+        <!-- Super Compact Vocational Card -->
+        <div *ngIf="vocationPrediction" class="premium-card p-5 border-l-4 border-l-accent animate-slide-up" style="animation-delay: 0.3s">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-accent text-xl font-black">psychology</span>
+              <h3 class="text-primary font-headline font-black text-lg">Tu Pasión</h3>
+            </div>
+            <span class="text-[9px] font-black text-accent border border-accent/20 px-2 py-0.5 rounded uppercase">IA</span>
           </div>
           
-          <div class="space-y-4">
-            <div class="text-2xl font-headline font-black text-secondary-dark leading-tight">{{ vocationPrediction.passion }}</div>
+          <div class="space-y-3">
+            <div class="text-xl font-headline font-black text-secondary-dark leading-tight">{{ vocationPrediction.passion }}</div>
             
-            <!-- Posible Profesión Block -->
-            <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10 shadow-sm">
-              <p class="text-[9px] font-black uppercase tracking-widest text-primary mb-1">Posible Profesión</p>
-              <p class="text-lg font-black text-secondary-dark leading-tight">{{ getTopCareer() }}</p>
-              <div class="mt-3 pt-3 border-t border-primary/10">
-                <p class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/50 mb-1">¿Por qué?</p>
-                <p class="text-sm text-on-surface-variant leading-relaxed font-medium italic opacity-80">{{ vocationPrediction.description }}</p>
+            <div class="p-3 bg-primary/5 rounded-xl border border-primary/10 shadow-sm">
+              <div class="flex justify-between items-baseline mb-1">
+                <p class="text-[8px] font-black uppercase tracking-widest text-primary">Profesión Sugerida</p>
+                <p class="text-sm font-black text-secondary-dark">{{ getTopCareer() }}</p>
               </div>
+              <p class="text-[10px] text-on-surface-variant leading-tight font-medium italic opacity-80">{{ vocationPrediction.description }}</p>
             </div>
 
-            <!-- Accuracy Metrics -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="bg-secondary/10 p-4 rounded-xl border border-secondary/20">
-                <p class="text-[9px] font-black uppercase tracking-[0.2em] text-secondary-dark/60 mb-2">Exactitud</p>
-                <div class="flex items-center gap-3">
-                  <div class="flex-1 h-2 bg-secondary/20 rounded-full overflow-hidden">
-                    <div class="h-full bg-accent transition-all duration-1000" [style.width.%]="vocationPrediction.accuracy"></div>
+            <!-- Accuracy Metrics Compact -->
+            <div class="flex gap-3">
+              <div class="flex-1 bg-secondary/10 p-2 rounded-lg border border-secondary/20">
+                <p class="text-[8px] font-black uppercase text-secondary-dark/60 mb-1">Exactitud</p>
+                <div class="flex items-center gap-2">
+                  <div class="flex-1 h-1.5 bg-secondary/20 rounded-full overflow-hidden">
+                    <div class="h-full bg-accent" [style.width.%]="vocationPrediction.accuracy"></div>
                   </div>
-                  <span class="text-xs font-black text-accent">{{ vocationPrediction.accuracy }}%</span>
+                  <span class="text-[9px] font-black text-accent">{{ vocationPrediction.accuracy }}%</span>
                 </div>
               </div>
-              <div class="bg-primary/5 p-4 rounded-xl border border-primary/10">
-                <p class="text-[9px] font-black uppercase tracking-[0.2em] text-primary/60 mb-2">Confianza</p>
-                <div class="flex items-center gap-3">
-                  <div class="flex-1 h-2 bg-primary/10 rounded-full overflow-hidden">
-                    <div class="h-full bg-primary transition-all duration-1000" [style.width.%]="vocationPrediction.precision"></div>
+              <div class="flex-1 bg-primary/5 p-2 rounded-lg border border-primary/10">
+                <p class="text-[8px] font-black uppercase text-primary/60 mb-1">Confianza</p>
+                <div class="flex items-center gap-2">
+                  <div class="flex-1 h-1.5 bg-primary/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-primary" [style.width.%]="vocationPrediction.precision"></div>
                   </div>
-                  <span class="text-xs font-black text-primary">{{ vocationPrediction.precision }}%</span>
+                  <span class="text-[9px] font-black text-primary">{{ vocationPrediction.precision }}%</span>
                 </div>
               </div>
             </div>
             
-            <div class="pt-4 border-t border-outline-variant/30">
-              <p class="text-[9px] font-black uppercase tracking-[0.2em] text-outline mb-3">Caminos sugeridos</p>
-              <div class="flex flex-wrap gap-2">
+            <div class="pt-3 border-t border-outline-variant/30">
+              <p class="text-[8px] font-black uppercase tracking-widest text-outline mb-2">Caminos sugeridos</p>
+              <div class="flex flex-wrap gap-1.5">
                 <span *ngFor="let career of getAllCareers()" 
-                      class="px-4 py-2 bg-white text-[11px] font-bold rounded-xl border border-outline-variant/50 text-on-surface-variant hover:border-primary hover:text-primary transition-all cursor-default shadow-sm">
+                      class="px-2 py-1 bg-white text-[9px] font-bold rounded-lg border border-outline-variant/50 text-on-surface-variant">
                   {{ career }}
                 </span>
               </div>
