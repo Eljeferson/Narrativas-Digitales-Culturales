@@ -1,1 +1,23 @@
-<p>vista-detalle-de-narrativa-publica works!</p>
+<main class="min-h-screen bg-background px-4 py-6 text-on-surface md:px-10">
+  <article class="mx-auto max-w-4xl rounded-lg border border-outline-variant bg-surface-container-lowest p-6 shadow-sm md:p-10">
+    <p class="text-xs font-bold uppercase tracking-widest text-tertiary">HU-17 - Narrativa publica accesible</p>
+    <h1 class="mt-2 font-headline text-5xl font-bold text-primary">{{ title }}</h1>
+    <p class="mt-2 text-on-surface-variant">Mateo Huaman - Cultura andina - {{ reads }} lecturas</p>
+
+    <img class="mt-6 aspect-[16/8] w-full rounded-lg object-cover" alt="Paisaje andino de portada" src="https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1200&q=80">
+
+    <section class="mt-6 rounded-lg bg-surface-container p-5">
+      <label class="mb-2 block text-sm font-bold text-primary" for="publicNarration">Reproductor de audio narrado</label>
+      <audio id="publicNarration" class="w-full" [src]="audioUrl" controls preload="metadata" aria-label="Reproductor accesible de audio narrado de la historia"></audio>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <button type="button" (click)="playNarration()" aria-label="Reproducir audio narrado con voz sintetizada" class="flex items-center gap-2 rounded-lg bg-primary px-5 py-3 font-bold text-on-primary">
+          <span class="material-symbols-outlined">play_arrow</span>
+          Reproducir narracion TTS
+        </button>
+        <span class="text-sm font-bold text-tertiary">Carga de audio: {{ audioReadyMs }} ms (menor o igual a 3 s)</span>
+      </div>
+    </section>
+
+    <p class="mt-6 text-xl leading-relaxed">{{ text }}</p>
+  </article>
+</main>

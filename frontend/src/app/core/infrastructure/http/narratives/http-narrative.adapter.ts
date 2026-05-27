@@ -50,6 +50,7 @@ export class HttpNarrativeAdapter implements NarrativePort {
       titulo: item?.titulo ?? '',
       contenido: item?.contenido ?? '',
       regionCultural: item?.regionCultural ?? '',
+      tipoRelato: item?.tipoRelato ?? 'otro',
       autor: { id: item?.autor?.id ?? '' },
       estado: item?.estado,
       status: this.mapStatusFromBackend(item?.estado ?? item?.status),
@@ -63,6 +64,7 @@ export class HttpNarrativeAdapter implements NarrativePort {
       titulo: narrative.titulo,
       contenido: narrative.contenido,
       regionCultural: narrative.regionCultural,
+      tipoRelato: narrative.tipoRelato || 'otro',
       autor: narrative.autor
     };
 
@@ -111,5 +113,15 @@ export class HttpNarrativeAdapter implements NarrativePort {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  improveNarrative(title: string, culture: string, content: string): Observable<string> {
+    return this.http.post<any>(`${this.apiUrl}/mejorar-narrativa`, {
+      titulo: title,
+      cultura: culture,
+      contenido: content
+    }).pipe(
+      map(response => response.respuesta)
+    );
   }
 }

@@ -40,6 +40,10 @@ import { HttpAnalyticsAdapter } from './core/infrastructure/http/analytics/http-
 import { INSTITUTION_PORT } from './core/application/institutions/institution.use-cases';
 import { HttpInstitutionAdapter } from './core/infrastructure/http/institutions/http-institution.adapter';
 
+// Vocation IA
+import { VOCATION_PORT } from './core/domain/ports/vocation.port';
+import { HttpVocationAdapter } from './core/infrastructure/http/vocation/http-vocation.adapter';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -53,7 +57,8 @@ export const appConfig: ApplicationConfig = {
     { provide: REVIEW_PORT,       useClass: HttpReviewAdapter },
     { provide: LIBRARY_PORT,      useClass: HttpLibraryAdapter },
     { provide: ANALYTICS_PORT,    useClass: HttpAnalyticsAdapter },
-    { provide: INSTITUTION_PORT,   useClass: HttpInstitutionAdapter }
+    { provide: INSTITUTION_PORT,   useClass: HttpInstitutionAdapter },
+    { provide: VOCATION_PORT,      useClass: HttpVocationAdapter }
   ]
 };
 

@@ -82,6 +82,14 @@ import { Component } from '@angular/core';
 <p class="text-xs uppercase tracking-wider text-on-surface-variant font-bold">Oralidad</p>
 </div>
 </div>
+<div class="mt-6 flex flex-wrap gap-3">
+<button class="bg-primary text-white py-3 px-5 rounded-xl font-bold hover:opacity-90 active:scale-[0.98] transition-transform">
+            Publicar narrativa aprobada
+        </button>
+<span class="flex items-center gap-2 px-4 py-3 bg-tertiary/10 text-tertiary rounded-xl text-sm font-bold">
+<span class="material-symbols-outlined">workspace_premium</span> Autor Publicado · 129 lecturas
+                        </span>
+</div>
 </div>
 </div>
 </section>
