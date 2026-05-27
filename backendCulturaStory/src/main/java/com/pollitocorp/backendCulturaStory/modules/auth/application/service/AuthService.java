@@ -1,25 +1,15 @@
 package com.pollitocorp.backendCulturaStory.modules.auth.application.service;
 
-<<<<<<< HEAD:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/application/service/AuthService.java
-import com.pollitocorp.backendCulturaStory.domain.model.AutorEstudiante;
-import com.pollitocorp.backendCulturaStory.domain.model.Usuario;
-import com.pollitocorp.backendCulturaStory.domain.port.out.AutorRepositoryPort;
-import com.pollitocorp.backendCulturaStory.domain.port.out.UsuarioRepositoryPort;
-import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.AuthProfileResponse;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.BulkRegistrationResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
-=======
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.AuthResult;
-import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.model.AutorEstudiante;
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.Usuario;
-import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.port.out.AutorRepositoryPort;
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.port.out.UsuarioRepositoryPort;
+import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.model.AutorEstudiante;
+import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.port.out.AutorRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
->>>>>>> 6d63ed78a72715c54b5e73de36f6393b2ef7e3d6:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/modules/auth/application/service/AuthService.java
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -35,19 +25,12 @@ public class AuthService {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final AutorRepositoryPort autorRepository;
-<<<<<<< HEAD:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/application/service/AuthService.java
-
-    @Transactional
-    public AuthProfileResponse registrarUsuario(Usuario usuario, String nombreCompleto, String grado, String regionCultural,
-                                                String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl,
-                                                String password, String rolSolicitado) {
-=======
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public AuthResult registrarUsuario(Usuario usuario, String nombreCompleto, String grado, String regionCultural,
                                        String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl,
                                        String password, String rolSolicitado) {
->>>>>>> 6d63ed78a72715c54b5e73de36f6393b2ef7e3d6:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/modules/auth/application/service/AuthService.java
         if (password == null || password.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contrasena es obligatoria.");
         }
@@ -81,7 +64,6 @@ public class AuthService {
                 .build();
     }
 
-<<<<<<< HEAD:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/application/service/AuthService.java
     @Transactional
     public BulkRegistrationResponse registrarUsuariosMasivos(List<RegistroMasivo> registros) {
         if (registros == null || registros.isEmpty()) {
@@ -133,7 +115,7 @@ public class AuthService {
                     .lenguaMaterna(registro.lenguaMaterna())
                     .bio(registro.bio())
                     .fotoPerfilUrl(registro.fotoPerfilUrl())
-                    .password(registro.password())
+                    .password(passwordEncoder.encode(registro.password()))
                     .narrativasPublicadas(0)
                     .createdAt(createdAt)
                     .build());
@@ -170,11 +152,7 @@ public class AuthService {
         }
     }
 
-    public Optional<AuthProfileResponse> sincronizarSesion(String email) {
-        // HU-07: Sincronización con Supabase Auth
-=======
     public Optional<AuthResult> sincronizarSesion(String email) {
->>>>>>> 6d63ed78a72715c54b5e73de36f6393b2ef7e3d6:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/modules/auth/application/service/AuthService.java
         return usuarioRepository.findByEmail(email)
                 .map(usuario -> AuthResult.builder()
                         .usuario(usuario)
@@ -222,7 +200,6 @@ public class AuthService {
                 .autor(autor)
                 .build();
     }
-<<<<<<< HEAD:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/application/service/AuthService.java
 
     public record RegistroMasivo(
             String email,
@@ -238,6 +215,3 @@ public class AuthService {
     ) {
     }
 }
-=======
-}
->>>>>>> 6d63ed78a72715c54b5e73de36f6393b2ef7e3d6:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/modules/auth/application/service/AuthService.java

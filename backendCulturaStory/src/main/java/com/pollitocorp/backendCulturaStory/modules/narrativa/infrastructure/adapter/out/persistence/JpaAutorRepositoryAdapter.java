@@ -1,18 +1,11 @@
 package com.pollitocorp.backendCulturaStory.modules.narrativa.infrastructure.adapter.out.persistence;
 
-<<<<<<< HEAD:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/infrastructure/adapter/out/persistence/JpaAutorRepositoryAdapter.java
-import com.pollitocorp.backendCulturaStory.domain.model.AutorEstudiante;
-import com.pollitocorp.backendCulturaStory.domain.port.out.AutorRepositoryPort;
-import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.entity.AutorEntity;
-import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.mapper.AutorMapper;
-import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.repository.AutorRepository;
-import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.repository.UsuarioRepository;
-=======
+import com.pollitocorp.backendCulturaStory.modules.auth.infrastructure.adapter.out.persistence.repository.UsuarioRepository;
 import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.model.AutorEstudiante;
 import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.port.out.AutorRepositoryPort;
+import com.pollitocorp.backendCulturaStory.modules.narrativa.infrastructure.adapter.out.persistence.entity.AutorEntity;
 import com.pollitocorp.backendCulturaStory.modules.narrativa.infrastructure.adapter.out.persistence.mapper.AutorMapper;
 import com.pollitocorp.backendCulturaStory.modules.narrativa.infrastructure.adapter.out.persistence.repository.AutorRepository;
->>>>>>> 6d63ed78a72715c54b5e73de36f6393b2ef7e3d6:backendCulturaStory/src/main/java/com/pollitocorp/backendCulturaStory/modules/narrativa/infrastructure/adapter/out/persistence/JpaAutorRepositoryAdapter.java
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
