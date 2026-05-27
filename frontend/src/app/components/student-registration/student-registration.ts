@@ -22,11 +22,7 @@ import { User } from '../../core/domain/models/user.model';
     </div>
     <div class="space-y-4">
       <h1 class="text-primary font-headline text-3xl md:text-5xl font-bold leading-tight">
-<<<<<<< HEAD
         Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guía de Historias' : 'Tejedor de Historias' }}</span>
-=======
-        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guia de Historias' : 'Creador de Historias' }}</span>
->>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
       </h1>
       <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
         Cada gran narrativa comienza con un autor. Cuéntanos un poco sobre ti para personalizar tu experiencia.
@@ -146,13 +142,6 @@ import { User } from '../../core/domain/models/user.model';
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-<<<<<<< HEAD
-              <div class="group">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">Contraseña</label>
-                <input [(ngModel)]="password" name="password" 
-                  [class.border-secondary]="showErrors && !isPasswordStrong()"
-                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="password" placeholder="Mínimo 8 caracteres" type="password" required/>
-=======
               <div class="group relative">
                 <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">Contraseña</label>
                 <div class="relative w-full">
@@ -163,7 +152,6 @@ import { User } from '../../core/domain/models/user.model';
                     <span class="material-symbols-outlined text-[20px]">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
                   </button>
                 </div>
->>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
                 @if (showErrors && !password.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
@@ -177,13 +165,6 @@ import { User } from '../../core/domain/models/user.model';
                 }
               </div>
 
-<<<<<<< HEAD
-              <div class="group">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar Contraseña</label>
-                <input [(ngModel)]="confirmPassword" name="confirmPassword" 
-                  [class.border-secondary]="showErrors && !passwordsMatch()"
-                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="confirmPassword" placeholder="Repite tu contraseña" type="password" required/>
-=======
               <div class="group relative">
                 <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar Contraseña</label>
                 <div class="relative w-full">
@@ -194,7 +175,6 @@ import { User } from '../../core/domain/models/user.model';
                     <span class="material-symbols-outlined text-[20px]">{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
                   </button>
                 </div>
->>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
                 @if (showErrors && !confirmPassword.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
