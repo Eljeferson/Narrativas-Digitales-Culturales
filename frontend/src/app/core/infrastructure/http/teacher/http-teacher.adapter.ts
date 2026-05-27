@@ -38,6 +38,7 @@ export class HttpTeacherAdapter implements TeacherPort {
       titulo: item?.titulo ?? '',
       contenido: item?.contenido ?? '',
       regionCultural: item?.regionCultural ?? '',
+      tipoRelato: item?.tipoRelato ?? 'otro',
       autor: { id: item?.autor?.id ?? '' },
       estado,
       status: estado?.toLowerCase() === 'en_revision'

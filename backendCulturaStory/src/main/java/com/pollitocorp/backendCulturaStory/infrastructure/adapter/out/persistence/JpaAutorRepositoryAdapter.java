@@ -31,7 +31,7 @@ public class JpaAutorRepositoryAdapter implements AutorRepositoryPort {
 
     @Override
     public Optional<AutorEstudiante> findByUserId(UUID userId) {
-        return repository.findByUserId(userId).map(mapper::toDomain);
+        return repository.findByUser_Id(userId).map(mapper::toDomain);
     }
 
     @Override

@@ -12,11 +12,11 @@ export class HttpReviewAdapter implements ReviewPort {
 
   approve(narrativeId: string, feedback?: string): Observable<Narrative> {
     console.log('[HttpReviewAdapter] Aprobando narrativa:', narrativeId, feedback);
-    return of({ id: narrativeId, titulo: '', contenido: '', regionCultural: '', autor: { id: '' }, status: 'published' });
+    return of({ id: narrativeId, titulo: '', contenido: '', regionCultural: '', tipoRelato: 'otro', autor: { id: '' }, status: 'published' });
   }
 
   reject(narrativeId: string, feedback: string): Observable<Narrative> {
     console.log('[HttpReviewAdapter] Rechazando narrativa:', narrativeId, feedback);
-    return of({ id: narrativeId, titulo: '', contenido: '', regionCultural: '', autor: { id: '' }, status: 'draft' });
+    return of({ id: narrativeId, titulo: '', contenido: '', regionCultural: '', tipoRelato: 'otro', autor: { id: '' }, status: 'draft' });
   }
 }

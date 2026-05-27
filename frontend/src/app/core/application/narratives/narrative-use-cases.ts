@@ -59,3 +59,14 @@ export class ListNarrativesUseCase {
     return this.narrativePort.getAllByAuthor(authorId);
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ImproveNarrativeUseCase {
+  constructor(@Inject(NARRATIVE_PORT) private narrativePort: NarrativePort) {}
+
+  execute(title: string, culture: string, content: string): Observable<string> {
+    return this.narrativePort.improveNarrative(title, culture, content);
+  }
+}

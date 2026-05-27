@@ -12,4 +12,5 @@ public interface NarrativaUseCase {
     Optional<NarrativaCultural> obtenerPorId(UUID id);
     List<NarrativaCultural> obtenerPorAutor(UUID autorId);
     String generarEsquema(String cultura);
+    String mejorarNarrativa(String titulo, String cultura, String contenido);
 }

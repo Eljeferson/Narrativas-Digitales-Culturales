@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/instituciones")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class InstitucionController {
 
     private final InstitucionUseCase institucionUseCase;
