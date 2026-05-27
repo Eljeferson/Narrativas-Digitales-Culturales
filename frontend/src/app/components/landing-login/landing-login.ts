@@ -66,7 +66,11 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 </div>
 <div class="w-full max-w-md bg-surface-container-lowest p-10 rounded-xl shadow-[0_32px_64px_-15px_rgba(30,27,19,0.05)] border-b-4 border-secondary/20 relative">
 <div class="space-y-2 mb-10 text-center">
+<<<<<<< HEAD
+<h2 class="text-3xl font-headline font-bold text-on-surface">Bienvenido al telar</h2>
+=======
 <h2 class="text-3xl font-headline font-bold text-on-surface">Bienvenido a CulturaStory</h2>
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
 <p class="text-on-surface-variant">Ingresa para continuar tu historia</p>
 </div>
 <form (ngSubmit)="onSubmit()" class="space-y-6">
@@ -103,14 +107,23 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 </div>
 <button class="w-full group relative overflow-hidden bg-primary text-on-primary py-4 rounded-md font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-[0.98]" type="submit">
 <span class="relative z-10 flex items-center justify-center gap-2">
+<<<<<<< HEAD
+                            Entrar al telar cultural
+=======
                             Entrar a CulturaStory Hub
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
                             <span class="material-symbols-outlined text-xl">arrow_right_alt</span>
 </span>
 <div class="absolute bottom-0 left-0 w-full h-[4px] bg-[repeating-linear-gradient(45deg,#795900,#795900_10px,#823b18_10px,#823b18_20px)] opacity-50"></div>
 </button>
 <p class="text-center text-sm text-on-surface-variant">
-                        ¿Nuevo en CulturaStory?
+<<<<<<< HEAD
+                        ¿Nuevo en el telar?
                         <a (click)="goToRegistration()" class="text-primary font-bold hover:underline ml-1 cursor-pointer">Regístrate como {{ selectedRole === 'teacher' ? 'Docente' : 'Estudiante' }}</a>
+=======
+                        Nuevo en CulturaStory?
+                        <a (click)="goToRegistration()" class="text-primary font-bold hover:underline ml-1 cursor-pointer">Registrate como {{ selectedRole === 'teacher' ? 'Docente' : 'Estudiante' }}</a>
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
 </p>
 </form>
 
@@ -152,11 +165,19 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 <span class="material-symbols-outlined text-sm">fingerprint</span>
 <span class="text-xs font-label uppercase tracking-tighter">Autenticación segura</span>
 </div>
-<p class="text-xs text-on-surface-variant">© 2024 CulturaStory. Creando identidades digitales.</p>
+<<<<<<< HEAD
+<p class="text-xs text-on-surface-variant">© 2024 Historia Cultural. Tejiendo identidades digitales.</p>
 </div>
 <div class="flex gap-6">
 <a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Privacidad</a>
-<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Términos de Uso</a>
+<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Términos del gremio</a>
+=======
+<p class="text-xs text-on-surface-variant">© 2024 CulturaStory AI. Creando identidades digitales.</p>
+</div>
+<div class="flex gap-6">
+<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Privacidad</a>
+<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Terminos de Uso</a>
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
 <a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Soporte</a>
 </div>
 </footer>
@@ -200,7 +221,11 @@ export class LandingLogin {
 
   onSubmit() {
     if (!this.email.trim() || !this.password.trim()) {
-      this.showNotification('Ingresa tu correo y contraseña.', 'error');
+<<<<<<< HEAD
+      alert('Ingresa tu correo y contraseña.');
+=======
+      this.showNotification('Ingresa tu correo y contrasena.', 'error');
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
       return;
     }
 
@@ -220,8 +245,13 @@ export class LandingLogin {
           }, 800);
         },
         error: (err) => {
+<<<<<<< HEAD
           console.error('Error de inicio de sesión:', err);
+          alert(this.getLoginErrorMessage(err));
+=======
+          console.error('Error de login:', err);
           this.showNotification(this.getLoginErrorMessage(err), 'error');
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
         }
       });
   }

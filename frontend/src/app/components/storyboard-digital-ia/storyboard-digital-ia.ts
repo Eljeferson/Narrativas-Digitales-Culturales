@@ -63,6 +63,7 @@ interface StoryboardPanel {
     </section>
   </section>
 </main>
+<<<<<<< HEAD
 <!-- Floating Action Button -->
 <button class="fixed bottom-28 right-8 w-16 h-16 rounded-2xl bg-primary text-on-primary shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 transition-transform z-40 group">
 <span class="material-symbols-outlined text-3xl">add</span>
@@ -92,6 +93,8 @@ interface StoryboardPanel {
 <!-- Side Decoration (The Chronicler Theme) -->
 <div class="fixed top-0 left-0 h-full w-2 bg-gradient-to-b from-primary/10 via-tertiary/10 to-primary/10 pointer-events-none hidden lg:block"></div>
 <div class="fixed top-0 right-0 h-full w-2 bg-gradient-to-b from-primary/10 via-tertiary/10 to-primary/10 pointer-events-none hidden lg:block"></div>
+=======
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
   `,
   styles: `:host { display: block; }`
 })

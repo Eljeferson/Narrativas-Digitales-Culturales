@@ -20,7 +20,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/registro")
-    public ResponseEntity<AuthResult> registrar(@RequestBody Map<String, Object> request) {
+<<<<<<< HEAD
+    public ResponseEntity<AuthProfileResponse> registrar(@RequestBody Map<String, Object> request) {
         // HU-06: Estudiante puede registrarse y crear su perfil.
         String email = getString(request, "email");
         String password = getString(request, "password", "contrasena", "clave");
@@ -29,6 +30,10 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El correo es obligatorio.");
         }
 
+=======
+    public ResponseEntity<AuthResult> registrar(@RequestBody Map<String, Object> request) {
+        // HU-06: Estudiante puede registrarse y crear su perfil
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
         Usuario usuario = Usuario.builder()
                 .id(UUID.randomUUID())
                 .email(email)

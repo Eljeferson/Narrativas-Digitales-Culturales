@@ -29,7 +29,11 @@ public class AuthService {
         }
 
         String rol = "docente".equalsIgnoreCase(rolSolicitado) ? "docente" : "estudiante";
+
+<<<<<<< HEAD
         // PMV1: registro público solo para estudiante/docente. Admin queda fijo.
+=======
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
         usuario.setRol(rol);
         usuario.setActivo(true);
         usuario.setCreatedAt(LocalDateTime.now());

@@ -75,6 +75,7 @@ import { FormsModule } from '@angular/forms';
     </div>
   </section>
 </main>
+<<<<<<< HEAD
 <!-- BottomNavBar -->
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-6 pb-4 bg-[#fff9ed]/80 dark:bg-[#1a1614]/80 backdrop-blur-lg border-t border-[#99411c]/10 shadow-[0_-10px_40px_rgba(153,65,28,0.05)] rounded-t-2xl">
 <button class="flex flex-col items-center justify-center text-[#6b5b4e] dark:text-[#eae2cd] px-4 py-1 hover:text-[#99411c]">
@@ -94,6 +95,8 @@ import { FormsModule } from '@angular/forms';
 <span class="text-[10px] font-sans font-semibold">AI Assistant</span>
 </button>
 </nav>
+=======
+>>>>>>> bdbb79b3b6ba57399152a8591bc0115dfecb99fb
   `,
   styles: `:host { display: block; }`
 })
