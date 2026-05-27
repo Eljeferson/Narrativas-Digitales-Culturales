@@ -2,7 +2,7 @@ package com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest;
 
 import com.pollitocorp.backendCulturaStory.application.service.AuthService;
 import com.pollitocorp.backendCulturaStory.domain.model.Usuario;
-import com.pollitocorp.backendCulturaStory.domain.model.AuthResult;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.AuthProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,19 +13,20 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/registro")
-    public ResponseEntity<AuthResult> registrar(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<AuthProfileResponse> registrar(@RequestBody Map<String, Object> request) {
         // HU-06: Estudiante puede registrarse y crear su perfil
         Usuario usuario = Usuario.builder()
                 .id(UUID.randomUUID())
                 .email((String) request.get("email"))
                 .build();
 
-        AuthResult result = authService.registrarUsuario(
+        AuthProfileResponse result = authService.registrarUsuario(
                 usuario,
                 (String) request.get("nombreCompleto"),
                 (String) request.get("grado"),
@@ -42,7 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResult> login(@RequestBody Map<String, String> request) {
+    public ResponseEntity<AuthProfileResponse> login(@RequestBody Map<String, String> request) {
         return ResponseEntity.ok(authService.iniciarSesion(
                 request.get("email"),
                 request.get("password"),
@@ -51,7 +52,7 @@ public class AuthController {
     }
 
     @GetMapping("/perfil/{email}")
-    public ResponseEntity<AuthResult> obtenerPerfil(@PathVariable String email) {
+    public ResponseEntity<AuthProfileResponse> obtenerPerfil(@PathVariable String email) {
         // HU-07: Iniciar sesión y acceder a datos
         return authService.sincronizarSesion(email)
                 .map(ResponseEntity::ok)

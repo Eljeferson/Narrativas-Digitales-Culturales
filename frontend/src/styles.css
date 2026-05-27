@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 @theme {
   --color-inverse-surface: #343026;
   --color-secondary: #795900;

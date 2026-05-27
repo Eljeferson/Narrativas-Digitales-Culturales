@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface AutorRepository extends JpaRepository<AutorEntity, UUID> {
-    Optional<AutorEntity> findByUser_Id(UUID userId);
+    Optional<AutorEntity> findByUserId(UUID userId);
     List<AutorEntity> findByGrado(String grado);
 }

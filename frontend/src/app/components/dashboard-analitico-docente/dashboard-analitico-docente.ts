@@ -103,6 +103,60 @@ import { User } from '../../core/domain/models/user.model';
 <p class="text-4xl font-headline font-bold text-on-surface mt-1">{{ analytics?.totalAudiosGenerated || 0 }}</p>
 </div>
 </section>
+<!-- Section Media: Gráficos (Bento Style) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+<!-- Actividad Semanal -->
+<div class="lg:col-span-7 bg-surface-container p-8 rounded-2xl relative overflow-hidden group">
+<h3 class="text-xl font-headline font-bold text-primary mb-6">Actividad Semanal de Escritura</h3>
+<div class="flex items-end justify-between h-48 gap-4">
+<div class="w-full bg-primary-container h-[40%] rounded-t-lg relative group-hover:h-[45%] transition-all duration-500"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Lun</span></div>
+<div class="w-full bg-primary h-[70%] rounded-t-lg relative group-hover:h-[75%] transition-all duration-500"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Mar</span></div>
+<div class="w-full bg-tertiary h-[90%] rounded-t-lg relative group-hover:h-[95%] transition-all duration-500"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Mié</span></div>
+<div class="w-full bg-secondary h-[55%] rounded-t-lg relative group-hover:h-[60%] transition-all duration-500"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Jue</span></div>
+<div class="w-full bg-primary h-[82%] rounded-t-lg relative group-hover:h-[87%] transition-all duration-500"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Vie</span></div>
+<div class="w-full bg-tertiary-container h-[25%] rounded-t-lg relative group-hover:h-[30%] transition-all duration-500"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Sáb</span></div>
+<div class="w-full bg-outline-variant h-[15%] rounded-t-lg relative group-hover:h-[20%] transition-all duration-500"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold">Dom</span></div>
+</div>
+</div>
+<!-- Tipos de Relato (Dona) -->
+<div class="lg:col-span-5 bg-surface-container-high p-8 rounded-2xl flex flex-col items-center justify-center">
+<h3 class="text-xl font-headline font-bold text-primary mb-6 self-start">Tipos de Relato</h3>
+<div class="relative w-48 h-48 rounded-full border-[20px] border-tertiary flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-[20px] border-primary border-r-transparent border-b-transparent -rotate-45"></div>
+<div class="absolute inset-0 rounded-full border-[20px] border-secondary border-l-transparent border-t-transparent rotate-12"></div>
+<div class="text-center">
+<span class="text-3xl font-headline font-bold text-on-surface">324</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter opacity-60">Activos</p>
+</div>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4">
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-primary"></div><span class="text-xs font-medium">Histórico</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-tertiary"></div><span class="text-xs font-medium">Mito/Leyenda</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-secondary"></div><span class="text-xs font-medium">Contemporáneo</span></div>
+</div>
+</div>
+<!-- Heatmap de Accesos -->
+<div class="lg:col-span-12 bg-surface-container-lowest p-8 rounded-2xl">
+<h3 class="text-xl font-headline font-bold text-primary mb-6">Mapa de Calor: Intensidad de Uso</h3>
+<div class="grid grid-cols-12 gap-2 h-32">
+<!-- Placeholder Heatmap Tiles -->
+<div class="bg-tertiary/10 rounded-md"></div><div class="bg-tertiary/30 rounded-md"></div><div class="bg-tertiary/60 rounded-md"></div><div class="bg-tertiary/80 rounded-md"></div>
+<div class="bg-tertiary/20 rounded-md"></div><div class="bg-tertiary/50 rounded-md"></div><div class="bg-tertiary/90 rounded-md"></div><div class="bg-tertiary/40 rounded-md"></div>
+<div class="bg-tertiary/10 rounded-md"></div><div class="bg-tertiary/20 rounded-md"></div><div class="bg-tertiary/30 rounded-md"></div><div class="bg-tertiary/10 rounded-md"></div>
+<!-- Repeat Row for visual -->
+<div class="bg-tertiary/40 rounded-md"></div><div class="bg-tertiary/80 rounded-md"></div><div class="bg-primary/90 rounded-md"></div><div class="bg-primary/70 rounded-md"></div>
+<div class="bg-primary/40 rounded-md"></div><div class="bg-primary/20 rounded-md"></div><div class="bg-tertiary/60 rounded-md"></div><div class="bg-tertiary/10 rounded-md"></div>
+<div class="bg-tertiary/20 rounded-md"></div><div class="bg-tertiary/50 rounded-md"></div><div class="bg-tertiary/30 rounded-md"></div><div class="bg-tertiary/05 rounded-md"></div>
+<!-- Row 3 -->
+<div class="bg-secondary/10 rounded-md"></div><div class="bg-secondary/30 rounded-md"></div><div class="bg-secondary/60 rounded-md"></div><div class="bg-primary/80 rounded-md"></div>
+<div class="bg-primary/20 rounded-md"></div><div class="bg-primary/50 rounded-md"></div><div class="bg-primary/90 rounded-md"></div><div class="bg-primary/40 rounded-md"></div>
+<div class="bg-tertiary/10 rounded-md"></div><div class="bg-tertiary/20 rounded-md"></div><div class="bg-tertiary/30 rounded-md"></div><div class="bg-tertiary/10 rounded-md"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold uppercase text-on-surface-variant">
+<span>Madrugada</span><span>Mañana</span><span>Tarde</span><span>Noche</span>
+</div>
+</div>
+</section>
 <!-- Section Inferior: Tabla Detallada -->
 <section class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(153,65,28,0.06)]">
 <div class="p-8 border-b border-outline-variant/15 flex justify-between items-center bg-surface-bright">
@@ -176,7 +230,6 @@ export class DashboardAnaliticoDocente implements OnInit {
       next: (data) => { this.analytics = data; console.log('Dashboard cargado:', data); },
       error: (err) => console.error('Error cargando dashboard:', err)
     });
-
     const teacherGrade = localStorage.getItem('currentUserGrade') || '5to de Secundaria'; // Defaulting for MVP
     this.listStudentsUseCase.execute(teacherGrade).subscribe({
       next: (data) => { this.students = data; console.log('Estudiantes cargados:', data); },

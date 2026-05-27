@@ -1,7 +1,8 @@
-import { Component, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, catchError, debounceTime, distinctUntilChanged, of, switchMap, takeUntil } from 'rxjs';
 import { RegisterStudentUseCase } from '../../core/application/auth/auth-use-cases';
 import { SearchInstitutionsUseCase } from '../../core/application/institutions/institution.use-cases';
 import { Institution } from '../../core/domain/models/institution.model';
@@ -22,7 +23,7 @@ import { User } from '../../core/domain/models/user.model';
     </div>
     <div class="space-y-4">
       <h1 class="text-primary font-headline text-3xl md:text-5xl font-bold leading-tight">
-        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guia de Historias' : 'Creador de Historias' }}</span>
+        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guia de Historias' : 'Tejedor de Historias' }}</span>
       </h1>
       <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
         Cada gran narrativa comienza con un autor. Cuéntanos un poco sobre ti para personalizar tu experiencia.
@@ -142,16 +143,11 @@ import { User } from '../../core/domain/models/user.model';
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div class="group relative">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">Contraseña</label>
-                <div class="relative w-full">
-                  <input [(ngModel)]="password" name="password" 
-                    [class.border-secondary]="showErrors && !isPasswordStrong()"
-                    class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium pr-10" id="password" placeholder="Mínimo 8 caracteres" [type]="showPassword ? 'text' : 'password'" required/>
-                  <button type="button" (click)="showPassword = !showPassword" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/60 hover:text-primary transition-colors focus:outline-none">
-                    <span class="material-symbols-outlined text-[20px]">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
-                  </button>
-                </div>
+              <div class="group">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">ContraseÃ±a</label>
+                <input [(ngModel)]="password" name="password" 
+                  [class.border-secondary]="showErrors && !isPasswordStrong()"
+                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="password" placeholder="MÃ­nimo 8 caracteres" type="password" required/>
                 @if (showErrors && !password.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
@@ -160,30 +156,25 @@ import { User } from '../../core/domain/models/user.model';
                 } @else if (showErrors && !isPasswordStrong()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">shield_lock</span>
-                    Usa letras, números y un carácter especial
+                    Usa letras, nÃºmeros y un carÃ¡cter especial
                   </p>
                 }
               </div>
 
-              <div class="group relative">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar Contraseña</label>
-                <div class="relative w-full">
-                  <input [(ngModel)]="confirmPassword" name="confirmPassword" 
-                    [class.border-secondary]="showErrors && !passwordsMatch()"
-                    class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium pr-10" id="confirmPassword" placeholder="Repite tu contraseña" [type]="showConfirmPassword ? 'text' : 'password'" required/>
-                  <button type="button" (click)="showConfirmPassword = !showConfirmPassword" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant/60 hover:text-primary transition-colors focus:outline-none">
-                    <span class="material-symbols-outlined text-[20px]">{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
-                  </button>
-                </div>
+              <div class="group">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar ContraseÃ±a</label>
+                <input [(ngModel)]="confirmPassword" name="confirmPassword" 
+                  [class.border-secondary]="showErrors && !passwordsMatch()"
+                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="confirmPassword" placeholder="Repite tu contraseÃ±a" type="password" required/>
                 @if (showErrors && !confirmPassword.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
-                    Confirma tu contraseña
+                    Confirma tu contraseÃ±a
                   </p>
                 } @else if (showErrors && !passwordsMatch()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">lock_reset</span>
-                    Las contraseñas no coinciden
+                    Las contraseÃ±as no coinciden
                   </p>
                 }
               </div>
@@ -203,7 +194,7 @@ import { User } from '../../core/domain/models/user.model';
               <div class="group relative">
                 <label class="block text-[10px] font-bold uppercase tracking-widest text-[#B59449] mb-1">Nivel Educativo</label>
                 <div class="relative">
-                  <div (click)="isLevelDropdownOpen = !isLevelDropdownOpen; $event.stopPropagation()" 
+                  <div (click)="toggleLevelDropdown($event)" 
                     [class.border-secondary]="showErrors && !educationLevel"
                     class="w-full bg-white border-[1.5px] border-black rounded-[4px] px-4 py-2.5 cursor-pointer flex justify-between items-center transition-all h-[46px]">
                     <span class="font-medium" [class.text-on-surface-variant/40]="!educationLevel" [class.text-black]="educationLevel">
@@ -238,7 +229,7 @@ import { User } from '../../core/domain/models/user.model';
               <div class="group relative">
                 <label class="block text-[10px] font-bold uppercase tracking-widest text-[#B59449] mb-1">Grado / Año</label>
                 <div class="relative">
-                  <div (click)="educationLevel && (isGradeDropdownOpen = !isGradeDropdownOpen); $event.stopPropagation()" 
+                  <div (click)="toggleGradeDropdown($event)" 
                     [class.opacity-30]="!educationLevel"
                     [class.border-secondary]="showErrors && !grade"
                     class="w-full bg-white border-[1.5px] border-black rounded-[4px] px-4 py-2.5 cursor-pointer flex justify-between items-center transition-all h-[46px]">
@@ -369,8 +360,8 @@ import { User } from '../../core/domain/models/user.model';
                 <div class="relative">
                   <div class="flex items-center w-full bg-white border-[1.5px] border-black rounded-[4px] h-[46px] overflow-hidden">
                     <input [(ngModel)]="motherTongue" 
-                      (focus)="isLanguageDropdownOpen = true"
-                      (input)="isLanguageDropdownOpen = true"
+                      (focus)="onLanguageFocus($event)"
+                      (input)="onLanguageFocus($event)"
                       (click)="$event.stopPropagation()"
                       name="motherTongue" 
                       autocomplete="off"
@@ -414,7 +405,7 @@ import { User } from '../../core/domain/models/user.model';
               <div class="group relative">
                 <label class="block text-[10px] font-bold uppercase tracking-widest text-[#B59449] mb-1">Región Cultural</label>
                 <div class="relative">
-                  <div (click)="isRegionDropdownOpen = !isRegionDropdownOpen; $event.stopPropagation()" 
+                  <div (click)="toggleRegionDropdown($event)" 
                     [class.border-secondary]="showErrors && !region"
                     class="w-full bg-white border-[1.5px] border-black rounded-[4px] px-4 py-2.5 cursor-pointer flex justify-between items-center transition-all h-[46px]">
                     <span class="font-medium" [class.text-on-surface-variant/40]="!region" [class.text-black]="region">
@@ -502,27 +493,6 @@ import { User } from '../../core/domain/models/user.model';
         Paso {{currentStep}} de 3
       </p>
     </form>
-
-    <!-- Premium Notification Toast -->
-    @if (notification) {
-      <div class="fixed top-8 right-8 z-[100] animate-slide-up">
-        <div class="flex items-center gap-4 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/20" 
-             [class.bg-green-500/90]="notification.type === 'success'"
-             [class.bg-red-500/90]="notification.type === 'error'"
-             [class.text-white]="true">
-          <span class="material-symbols-outlined text-2xl">
-            {{ notification.type === 'success' ? 'check_circle' : 'error' }}
-          </span>
-          <div class="flex flex-col">
-            <span class="font-bold text-sm uppercase tracking-wider">{{ notification.type === 'success' ? 'Completado' : 'Aviso' }}</span>
-            <span class="text-sm opacity-90">{{ notification.message }}</span>
-          </div>
-          <button (click)="notification = null" class="ml-4 hover:rotate-90 transition-transform">
-            <span class="material-symbols-outlined text-sm">close</span>
-          </button>
-        </div>
-      </div>
-    }
   </div>
 </main>
 <div class="fixed bottom-0 left-0 w-full h-32 pointer-events-none overflow-hidden opacity-20 -z-10">
@@ -536,7 +506,7 @@ import { User } from '../../core/domain/models/user.model';
   `,
   styles: `:host { display: block; }`
 })
-export class StudentRegistration {
+export class StudentRegistration implements OnDestroy {
   @ViewChild('formContainer') formContainer!: ElementRef;
   @ViewChild('avatarScrollContainer') avatarScrollContainer!: ElementRef;
   private registerUseCase = inject(RegisterStudentUseCase);
@@ -547,9 +517,6 @@ export class StudentRegistration {
   currentStep = 1;
   showErrors = false;
   registrationRole: 'student' | 'teacher' = 'student';
-  showPassword = false;
-  showConfirmPassword = false;
-  notification: { message: string, type: 'success' | 'error' } | null = null;
 
   // Lista de Avatares de Supabase
   avatars = [
@@ -590,10 +557,31 @@ export class StudentRegistration {
   languages = ['Castellano', 'Quechua', 'Aimara'];
   institutionSuggestions: Institution[] = [];
   private readonly passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+  private readonly destroy$ = new Subject<void>();
+  private readonly institutionSearch$ = new Subject<{ term: string; level: string }>();
 
   constructor() {
     const requestedRole = this.route.snapshot.queryParamMap.get('role');
     this.registrationRole = requestedRole === 'teacher' ? 'teacher' : 'student';
+
+    this.institutionSearch$.pipe(
+      debounceTime(350),
+      distinctUntilChanged((previous, current) =>
+        previous.term === current.term && previous.level === current.level
+      ),
+      switchMap(({ term, level }) =>
+        this.searchInstitutionsUseCase.execute(term, level).pipe(
+          catchError((err) => {
+            console.error('Error buscando instituciones:', err);
+            return of([]);
+          })
+        )
+      ),
+      takeUntil(this.destroy$)
+    ).subscribe((suggestions) => {
+      this.institutionSuggestions = suggestions;
+      this.isInstitutionDropdownOpen = suggestions.length > 0;
+    });
   }
 
   // Opciones de grados según el nivel
@@ -610,7 +598,7 @@ export class StudentRegistration {
   // Lógica del dropdown de lenguas
   getFilteredLanguages() {
     if (!this.motherTongue.trim()) return this.languages;
-    return this.languages.filter(l =>
+    return this.languages.filter(l => 
       l.toLowerCase().includes(this.motherTongue.toLowerCase())
     );
   }
@@ -620,6 +608,7 @@ export class StudentRegistration {
     this.educationLevel = level;
     this.grade = '';
     this.isLevelDropdownOpen = false;
+    this.searchInstitutions();
   }
 
   selectGrade(grade: string) {
@@ -640,6 +629,48 @@ export class StudentRegistration {
   toggleLanguageDropdown(event: Event) {
     event.stopPropagation();
     this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
+    this.isLevelDropdownOpen = false;
+    this.isGradeDropdownOpen = false;
+    this.isRegionDropdownOpen = false;
+    this.isInstitutionDropdownOpen = false;
+  }
+
+  toggleLevelDropdown(event: Event) {
+    event.stopPropagation();
+    this.isLevelDropdownOpen = !this.isLevelDropdownOpen;
+    this.isGradeDropdownOpen = false;
+    this.isRegionDropdownOpen = false;
+    this.isLanguageDropdownOpen = false;
+    this.isInstitutionDropdownOpen = false;
+  }
+
+  toggleGradeDropdown(event: Event) {
+    event.stopPropagation();
+    if (this.educationLevel) {
+      this.isGradeDropdownOpen = !this.isGradeDropdownOpen;
+      this.isLevelDropdownOpen = false;
+      this.isRegionDropdownOpen = false;
+      this.isLanguageDropdownOpen = false;
+      this.isInstitutionDropdownOpen = false;
+    }
+  }
+
+  toggleRegionDropdown(event: Event) {
+    event.stopPropagation();
+    this.isRegionDropdownOpen = !this.isRegionDropdownOpen;
+    this.isLevelDropdownOpen = false;
+    this.isGradeDropdownOpen = false;
+    this.isLanguageDropdownOpen = false;
+    this.isInstitutionDropdownOpen = false;
+  }
+
+  onLanguageFocus(event: Event) {
+    event.stopPropagation();
+    this.isLanguageDropdownOpen = true;
+    this.isLevelDropdownOpen = false;
+    this.isGradeDropdownOpen = false;
+    this.isRegionDropdownOpen = false;
+    this.isInstitutionDropdownOpen = false;
   }
 
   @HostListener('document:click')
@@ -653,22 +684,15 @@ export class StudentRegistration {
 
   // Lógica de búsqueda de instituciones
   searchInstitutions() {
-    if (this.institution.trim().length < 1) {
+    const term = this.institution.trim();
+
+    if (term.length < 2) {
       this.institutionSuggestions = [];
       this.isInstitutionDropdownOpen = false;
       return;
     }
 
-    this.searchInstitutionsUseCase.execute(this.institution, this.educationLevel).subscribe({
-      next: (suggestions) => {
-        this.institutionSuggestions = suggestions;
-        this.isInstitutionDropdownOpen = suggestions.length > 0;
-      },
-      error: (err) => {
-        console.error('Error buscando instituciones:', err);
-        this.isInstitutionDropdownOpen = false;
-      }
-    });
+    this.institutionSearch$.next({ term, level: this.educationLevel });
   }
 
   selectInstitution(inst: Institution) {
@@ -710,13 +734,13 @@ export class StudentRegistration {
 
   isStepValid(): boolean {
     const lettersOnly = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-
+    
     if (this.currentStep === 1) {
       return !!this.firstName.trim() && lettersOnly.test(this.firstName) &&
-        !!this.lastName.trim() && lettersOnly.test(this.lastName) &&
-        !!this.email.trim() && this.email.includes('@') &&
-        this.isPasswordStrong() &&
-        this.passwordsMatch();
+             !!this.lastName.trim() && lettersOnly.test(this.lastName) &&
+             !!this.email.trim() && this.email.includes('@') &&
+             this.isPasswordStrong() &&
+             this.passwordsMatch();
     }
     if (this.currentStep === 2) {
       return !!this.educationLevel && !!this.grade && !!this.institution.trim();
@@ -753,16 +777,16 @@ export class StudentRegistration {
       const container = this.avatarScrollContainer.nativeElement;
       const scrollAmount = container.clientWidth * 0.8;
       const maxScroll = container.scrollWidth - container.clientWidth;
-
+      
       let newScroll = container.scrollLeft + (direction * scrollAmount);
-
+      
       // Lógica de Bucle: Si llegamos al final, volvemos al inicio y viceversa
       if (direction > 0 && container.scrollLeft >= maxScroll - 5) {
         newScroll = 0;
       } else if (direction < 0 && container.scrollLeft <= 5) {
         newScroll = maxScroll;
       }
-
+      
       container.scrollTo({ left: newScroll, behavior: 'smooth' });
     }
   }
@@ -781,11 +805,6 @@ export class StudentRegistration {
     }
 
     return 'Hubo un error al registrar el perfil. Por favor intenta de nuevo.';
-  }
-
-  private showNotification(message: string, type: 'success' | 'error') {
-    this.notification = { message, type };
-    setTimeout(() => this.notification = null, 5000);
   }
 
   onSubmit() {
@@ -815,15 +834,18 @@ export class StudentRegistration {
     this.registerUseCase.execute(user).subscribe({
       next: (saved) => {
         console.log('Usuario registrado con éxito:', saved);
-        this.showNotification('¡Registro exitoso! Redirigiendo al login...', 'success');
-        setTimeout(() => {
-          this.router.navigate(['/'], { queryParams: { role: this.registrationRole } });
-        }, 2000);
+        alert('Registro exitoso. Ahora puedes iniciar sesión.');
+        this.router.navigate(['/'], { queryParams: { role: this.registrationRole } });
       },
       error: (err) => {
         console.error('Error al registrar:', err);
-        this.showNotification(this.getRegistrationErrorMessage(err), 'error');
+        alert(this.getRegistrationErrorMessage(err));
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
