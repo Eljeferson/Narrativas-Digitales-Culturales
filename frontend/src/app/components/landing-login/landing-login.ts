@@ -12,13 +12,13 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 <!-- Top Navigation Anchor -->
 <nav class="sticky top-0 z-50 flex justify-between items-center px-8 py-4 w-full bg-[#FFF8EF]/80 dark:bg-[#1E1B13]/80 backdrop-blur-md">
 <div class="flex items-center gap-3">
-  <img src="logo-cultura.png" alt="CulturaStory AI Logo" class="h-12 w-auto object-contain">
+  <img src="logo-cultura.png" alt="Logo de Historia Cultural" class="h-12 w-auto object-contain">
   <span class="text-2xl font-headline italic font-bold tracking-tight text-[#B59449]">Historia Cultural</span>
 </div>
 <div class="hidden md:flex items-center gap-8">
   <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 border-b-2 border-[#B59449] pb-1 font-bold" href="#">Narrativas</a>
   <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:border-b-2 hover:border-[#B59449]/50 pb-1 transition-all" href="#">Regiones</a>
-  <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:border-b-2 hover:border-[#B59449]/50 pb-1 transition-all" href="#">Library</a>
+  <a class="text-[#1E1B13]/70 dark:text-[#FFF8EF]/70 hover:border-b-2 hover:border-[#B59449]/50 pb-1 transition-all" href="#">Biblioteca</a>
 </div>
 <div class="flex items-center gap-4">
 <button class="p-2 hover:bg-[#823B18]/5 rounded-full transition-colors">
@@ -40,7 +40,7 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
                     Tejiendo el futuro del aprendizaje cultural
                 </div>
 <h1 class="text-6xl md:text-7xl font-headline font-bold text-primary leading-tight">
-                    Preserva la Memoria, <span class="italic text-secondary">Crea</span> el Manana.
+                    Preserva la memoria, <span class="italic text-secondary">crea</span> el mañana.
                 </h1>
 <p class="text-lg text-on-surface-variant leading-relaxed max-w-lg">
                     Descubre una plataforma educativa donde la inteligencia artificial se encuentra con la herencia ancestral para tejer narrativas culturales inolvidables.
@@ -48,16 +48,16 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 <div class="grid grid-cols-2 gap-8 pt-8">
 <div class="space-y-2">
 <span class="text-4xl font-headline text-tertiary">500+</span>
-<p class="text-sm font-medium text-on-surface-variant">Historias Ancestrales Digitalizadas</p>
+<p class="text-sm font-medium text-on-surface-variant">Historias ancestrales digitalizadas</p>
 </div>
 <div class="space-y-2">
 <span class="text-4xl font-headline text-secondary">12</span>
-<p class="text-sm font-medium text-on-surface-variant">Regiones Culturales Activas</p>
+<p class="text-sm font-medium text-on-surface-variant">Regiones culturales activas</p>
 </div>
 </div>
 </div>
 <div class="mt-16 relative w-full h-64 rounded-xl overflow-hidden shadow-2xl md:hidden">
-<img alt="stylized andean textile texture" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyQZAD72R1NlwzEBq8PmUVaJ8eFOIUCWkhR6YqFNWVdMV_Bj2pDHuMpSW6VAD9wHvKt2ixvNh10D6xksapwRly3WP-3nZ5ikmykxmmg-lJ4tst9MYhT7H6gdUxJbcsDUEY-MlEI3zC5nSHcdVlFRKZBPwoxIbI2CEAS6_IJ_w0mKyhGZHD70LPqItlzEYumac6xRcZd9sAyl4hJXzGoRnsXcnMJg935N2n-8Pm0i7QLMoXZMNOE_Xgv1EUnS1VfTBbOQ-0Z9gS"/>
+<img alt="Textil andino estilizado" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyQZAD72R1NlwzEBq8PmUVaJ8eFOIUCWkhR6YqFNWVdMV_Bj2pDHuMpSW6VAD9wHvKt2ixvNh10D6xksapwRly3WP-3nZ5ikmykxmmg-lJ4tst9MYhT7H6gdUxJbcsDUEY-MlEI3zC5nSHcdVlFRKZBPwoxIbI2CEAS6_IJ_w0mKyhGZHD70LPqItlzEYumac6xRcZd9sAyl4hJXzGoRnsXcnMJg935N2n-8Pm0i7QLMoXZMNOE_Xgv1EUnS1VfTBbOQ-0Z9gS"/>
 </div>
 </section>
 <section class="flex-1 flex items-center justify-center p-8 bg-surface-container-low relative">
@@ -66,12 +66,12 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 </div>
 <div class="w-full max-w-md bg-surface-container-lowest p-10 rounded-xl shadow-[0_32px_64px_-15px_rgba(30,27,19,0.05)] border-b-4 border-secondary/20 relative">
 <div class="space-y-2 mb-10 text-center">
-<h2 class="text-3xl font-headline font-bold text-on-surface">Bienvenido al Telar</h2>
+<h2 class="text-3xl font-headline font-bold text-on-surface">Bienvenido al telar</h2>
 <p class="text-on-surface-variant">Ingresa para continuar tu historia</p>
 </div>
 <form (ngSubmit)="onSubmit()" class="space-y-6">
 <div class="space-y-3">
-<label class="text-sm font-label font-semibold text-on-surface-variant">Tipo de Perfil</label>
+<label class="text-sm font-label font-semibold text-on-surface-variant">Tipo de perfil</label>
 <div class="grid grid-cols-2 gap-2">
 <button (click)="setRole('student')" [class.bg-primary]="selectedRole === 'student'" [class.text-on-primary]="selectedRole === 'student'" class="flex flex-col items-center justify-center p-3 rounded-lg border-b-2 border-outline-variant bg-surface-variant hover:bg-secondary-fixed/30 transition-all group" type="button">
 <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" [class.text-on-primary]="selectedRole === 'student'">school</span>
@@ -84,37 +84,37 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 </div>
 </div>
 <div class="space-y-1">
-<label class="text-sm font-label font-semibold text-on-surface-variant" for="email">Correo Institucional</label>
+<label class="text-sm font-label font-semibold text-on-surface-variant" for="email">Correo institucional</label>
 <div class="relative">
 <span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">mail</span>
 <input [(ngModel)]="email" name="email" class="w-full pl-8 pr-4 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="email" placeholder="usuario@cultura.edu" type="email"/>
 </div>
 </div>
 <div class="space-y-1">
-<label class="text-sm font-label font-semibold text-on-surface-variant" for="password">Contrasena</label>
+<label class="text-sm font-label font-semibold text-on-surface-variant" for="password">Contraseña</label>
 <div class="relative">
 <span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">lock</span>
 <input [(ngModel)]="password" name="password" class="w-full pl-8 pr-4 py-3 bg-transparent border-t-0 border-x-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 transition-colors placeholder:text-outline-variant" id="password" placeholder="••••••••" type="password"/>
 </div>
-<a class="text-xs text-tertiary hover:underline block pt-2" href="#">Olvidaste tu clave?</a>
+<a class="text-xs text-tertiary hover:underline block pt-2" href="#">¿Olvidaste tu clave?</a>
 </div>
 <button class="w-full group relative overflow-hidden bg-primary text-on-primary py-4 rounded-md font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-[0.98]" type="submit">
 <span class="relative z-10 flex items-center justify-center gap-2">
-                            Entrar al Weaver's Hub
+                            Entrar al telar cultural
                             <span class="material-symbols-outlined text-xl">arrow_right_alt</span>
 </span>
 <div class="absolute bottom-0 left-0 w-full h-[4px] bg-[repeating-linear-gradient(45deg,#795900,#795900_10px,#823b18_10px,#823b18_20px)] opacity-50"></div>
 </button>
 <p class="text-center text-sm text-on-surface-variant">
-                        Nuevo en el telar?
-                        <a (click)="goToRegistration()" class="text-primary font-bold hover:underline ml-1 cursor-pointer">Registrate como {{ selectedRole === 'teacher' ? 'Docente' : 'Estudiante' }}</a>
+                        ¿Nuevo en el telar?
+                        <a (click)="goToRegistration()" class="text-primary font-bold hover:underline ml-1 cursor-pointer">Regístrate como {{ selectedRole === 'teacher' ? 'Docente' : 'Estudiante' }}</a>
 </p>
 </form>
 <div class="mt-8 pt-8 border-t border-surface-variant space-y-4">
-<p class="text-[10px] uppercase tracking-widest text-center text-outline font-bold">O accede via</p>
+<p class="text-[10px] uppercase tracking-widest text-center text-outline font-bold">O accede vía</p>
 <div class="flex gap-4 justify-center">
 <button class="p-3 border border-outline-variant rounded-lg hover:bg-surface-variant transition-colors">
-<img alt="Google Logo" class="w-5 h-5 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGe1KA1qCkKAh61WBaKGUnX_9EkKEkHQxBYwcu9bYdWSPpRXqurlonVYrYMYu6afoXwIgsLuklv-rAmepDWAqr9Wa9T4kI64JrBMytIA3ZXYsqpvbVk_oURQrUghLGldp-YTlzN2D_6-7gXRJkUn-LoOahM0AdWBwBe0dgHMqN9nYWagRAtqmzLrz22E33QELmrUONuOqkue-3rKY8T8rsue9XRMksidXmjLhfVT5s5Ol63MwWjLuWV3ctEdmEi1Nl3xN9bsrl"/>
+<img alt="Logo de Google" class="w-5 h-5 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGe1KA1qCkKAh61WBaKGUnX_9EkKEkHQxBYwcu9bYdWSPpRXqurlonVYrYMYu6afoXwIgsLuklv-rAmepDWAqr9Wa9T4kI64JrBMytIA3ZXYsqpvbVk_oURQrUghLGldp-YTlzN2D_6-7gXRJkUn-LoOahM0AdWBwBe0dgHMqN9nYWagRAtqmzLrz22E33QELmrUONuOqkue-3rKY8T8rsue9XRMksidXmjLhfVT5s5Ol63MwWjLuWV3ctEdmEi1Nl3xN9bsrl"/>
 </button>
 </div>
 </div>
@@ -125,13 +125,13 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 <div class="flex flex-col gap-2">
 <div class="flex items-center gap-2 opacity-60">
 <span class="material-symbols-outlined text-sm">fingerprint</span>
-<span class="text-xs font-label uppercase tracking-tighter">Autenticacion Segura</span>
+<span class="text-xs font-label uppercase tracking-tighter">Autenticación segura</span>
 </div>
-<p class="text-xs text-on-surface-variant">© 2024 CulturaStory AI. Tejiendo identidades digitales.</p>
+<p class="text-xs text-on-surface-variant">© 2024 Historia Cultural. Tejiendo identidades digitales.</p>
 </div>
 <div class="flex gap-6">
 <a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Privacidad</a>
-<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Terminos del Gremio</a>
+<a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Términos del gremio</a>
 <a class="text-xs font-bold text-tertiary hover:opacity-70" href="#">Soporte</a>
 </div>
 </footer>
@@ -163,12 +163,12 @@ export class LandingLogin {
       }
     }
 
-    return 'No se pudo iniciar sesion. Verifica tus credenciales.';
+    return 'No se pudo iniciar sesión. Verifica tus credenciales.';
   }
 
   onSubmit() {
     if (!this.email.trim() || !this.password.trim()) {
-      alert('Ingresa tu correo y contrasena.');
+      alert('Ingresa tu correo y contraseña.');
       return;
     }
 
@@ -185,7 +185,7 @@ export class LandingLogin {
           }
         },
         error: (err) => {
-          console.error('Error de login:', err);
+          console.error('Error de inicio de sesión:', err);
           alert(this.getLoginErrorMessage(err));
         }
       });

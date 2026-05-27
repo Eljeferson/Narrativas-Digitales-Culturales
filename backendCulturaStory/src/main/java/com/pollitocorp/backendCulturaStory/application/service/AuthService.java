@@ -22,12 +22,12 @@ public class AuthService {
                                                 String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl,
                                                 String password, String rolSolicitado) {
         if (password == null || password.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contrasena es obligatoria.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña es obligatoria.");
         }
 
         String rol = "docente".equalsIgnoreCase(rolSolicitado) ? "docente" : "estudiante";
 
-        // PMV1: registro publico solo para estudiante/docente. Admin queda fijo.
+        // PMV1: registro público solo para estudiante/docente. Admin queda fijo.
         usuario.setRol(rol);
         usuario.setActivo(true);
         usuario.setCreatedAt(LocalDateTime.now());

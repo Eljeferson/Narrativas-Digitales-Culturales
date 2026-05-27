@@ -171,7 +171,7 @@ import { Component } from '@angular/core';
 </button>
 <button class="flex flex-col items-center justify-center text-[#6b5b4e] dark:text-[#eae2cd] px-4 py-1 hover:text-primary transition-colors">
 <span class="material-symbols-outlined">menu_book</span>
-<span class="text-[10px] font-sans font-semibold">Library</span>
+        <span class="text-[10px] font-sans font-semibold">Biblioteca</span>
 </button>
 </nav>
 <!-- Side Decoration (The Chronicler Theme) -->
