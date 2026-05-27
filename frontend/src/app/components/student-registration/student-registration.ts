@@ -1,7 +1,8 @@
-import { Component, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, catchError, debounceTime, distinctUntilChanged, of, switchMap, takeUntil } from 'rxjs';
 import { RegisterStudentUseCase } from '../../core/application/auth/auth-use-cases';
 import { SearchInstitutionsUseCase } from '../../core/application/institutions/institution.use-cases';
 import { Institution } from '../../core/domain/models/institution.model';
@@ -505,7 +506,7 @@ import { User } from '../../core/domain/models/user.model';
   `,
   styles: `:host { display: block; }`
 })
-export class StudentRegistration {
+export class StudentRegistration implements OnDestroy {
   @ViewChild('formContainer') formContainer!: ElementRef;
   @ViewChild('avatarScrollContainer') avatarScrollContainer!: ElementRef;
   private registerUseCase = inject(RegisterStudentUseCase);
@@ -556,10 +557,31 @@ export class StudentRegistration {
   languages = ['Castellano', 'Quechua', 'Aimara'];
   institutionSuggestions: Institution[] = [];
   private readonly passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+  private readonly destroy$ = new Subject<void>();
+  private readonly institutionSearch$ = new Subject<{ term: string; level: string }>();
 
   constructor() {
     const requestedRole = this.route.snapshot.queryParamMap.get('role');
     this.registrationRole = requestedRole === 'teacher' ? 'teacher' : 'student';
+
+    this.institutionSearch$.pipe(
+      debounceTime(350),
+      distinctUntilChanged((previous, current) =>
+        previous.term === current.term && previous.level === current.level
+      ),
+      switchMap(({ term, level }) =>
+        this.searchInstitutionsUseCase.execute(term, level).pipe(
+          catchError((err) => {
+            console.error('Error buscando instituciones:', err);
+            return of([]);
+          })
+        )
+      ),
+      takeUntil(this.destroy$)
+    ).subscribe((suggestions) => {
+      this.institutionSuggestions = suggestions;
+      this.isInstitutionDropdownOpen = suggestions.length > 0;
+    });
   }
 
   // Opciones de grados según el nivel
@@ -586,6 +608,7 @@ export class StudentRegistration {
     this.educationLevel = level;
     this.grade = '';
     this.isLevelDropdownOpen = false;
+    this.searchInstitutions();
   }
 
   selectGrade(grade: string) {
@@ -619,22 +642,15 @@ export class StudentRegistration {
 
   // Lógica de búsqueda de instituciones
   searchInstitutions() {
-    if (this.institution.trim().length < 1) {
+    const term = this.institution.trim();
+
+    if (term.length < 2) {
       this.institutionSuggestions = [];
       this.isInstitutionDropdownOpen = false;
       return;
     }
 
-    this.searchInstitutionsUseCase.execute(this.institution, this.educationLevel).subscribe({
-      next: (suggestions) => {
-        this.institutionSuggestions = suggestions;
-        this.isInstitutionDropdownOpen = suggestions.length > 0;
-      },
-      error: (err) => {
-        console.error('Error buscando instituciones:', err);
-        this.isInstitutionDropdownOpen = false;
-      }
-    });
+    this.institutionSearch$.next({ term, level: this.educationLevel });
   }
 
   selectInstitution(inst: Institution) {
@@ -784,5 +800,10 @@ export class StudentRegistration {
         alert(this.getRegistrationErrorMessage(err));
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
