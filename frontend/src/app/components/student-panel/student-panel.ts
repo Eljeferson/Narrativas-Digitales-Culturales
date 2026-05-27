@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ListNarrativesUseCase } from '../../core/application/narratives/narrative-use-cases';
-import { AUTH_PORT } from '../../core/application/auth/auth-use-cases';
+import { GetCurrentUserUseCase, LogoutUseCase } from '../../core/application/auth/auth-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 import { AnalyzeVocationUseCase } from '../../core/application/vocation/analyze-vocation.use-case';
 import { VocationPrediction } from '../../core/domain/models/vocation.model';
@@ -367,7 +367,8 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 })
 export class StudentPanel implements OnInit {
   private listNarrativesUseCase = inject(ListNarrativesUseCase);
-  private authPort = inject(AUTH_PORT);
+  private getCurrentUserUseCase = inject(GetCurrentUserUseCase);
+  private logoutUseCase = inject(LogoutUseCase);
   private router = inject(Router);
   private analyzeVocationUseCase = inject(AnalyzeVocationUseCase);
 
@@ -375,6 +376,7 @@ export class StudentPanel implements OnInit {
   isLoading = true;
   userName = 'Creador';
   userAvatar = '';
+  currentAuthorId = 'aaaaaaaa-0000-0000-0000-000000000001';
   activeTab: 'inicio' | 'historias' = 'inicio';
   vocationPrediction: VocationPrediction | null = null;
   isAnalyzing = false;
@@ -388,25 +390,20 @@ export class StudentPanel implements OnInit {
   }
 
   loadUserData() {
-    const userStr = localStorage.getItem('culturastory.currentUser');
-    if (userStr) {
-      try {
-         const user = JSON.parse(userStr);
-         // Capitalizamos la primera letra del nombre
-         const rawName = user.nombreCompleto || user.nombre || 'Creador';
-         this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
-         this.userAvatar = user.fotoPerfilUrl || '';
-      } catch(e) {
-         console.error('Error parseando usuario local', e);
+    this.getCurrentUserUseCase.execute().subscribe((user) => {
+      if (user) {
+        const rawName = user.nombreCompleto || 'Creador';
+        this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
+        this.userAvatar = user.fotoPerfilUrl || '';
+        this.currentAuthorId = user.authorId || this.currentAuthorId;
       }
-    }
+    });
   }
 
   loadNarratives() {
     this.isLoading = true;
-    const authorId = localStorage.getItem('currentAuthorId') || 'aaaaaaaa-0000-0000-0000-000000000001';
     
-    this.listNarrativesUseCase.execute(authorId).subscribe({
+    this.listNarrativesUseCase.execute(this.currentAuthorId).subscribe({
       next: (data) => {
         this.narratives = data;
         this.isLoading = false;
@@ -503,7 +500,7 @@ export class StudentPanel implements OnInit {
   }
 
   logout() {
-    this.authPort.logout().subscribe(() => {
+    this.logoutUseCase.execute().subscribe(() => {
       this.router.navigate(['/']);
     });
   }

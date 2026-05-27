@@ -10,6 +10,7 @@ import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.port.out.AIP
 import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.port.out.AutorRepositoryPort;
 import com.pollitocorp.backendCulturaStory.modules.institucion.domain.port.out.InstitucionRepositoryPort;
 import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.port.out.NarrativaRepositoryPort;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.port.out.PasswordHasherPort;
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.port.out.RolChangeLogRepositoryPort;
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.port.out.UsuarioRepositoryPort;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +37,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public AuthService authService(UsuarioRepositoryPort usuarioRepository, AutorRepositoryPort autorRepository, PasswordEncoder passwordEncoder) {
-        return new AuthService(usuarioRepository, autorRepository, passwordEncoder);
+    public AuthService authService(UsuarioRepositoryPort usuarioRepository, AutorRepositoryPort autorRepository, PasswordHasherPort passwordHasher) {
+        return new AuthService(usuarioRepository, autorRepository, passwordHasher);
     }
 
     @Bean

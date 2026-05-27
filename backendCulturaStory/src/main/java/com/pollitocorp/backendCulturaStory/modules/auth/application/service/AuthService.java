@@ -1,16 +1,18 @@
 package com.pollitocorp.backendCulturaStory.modules.auth.application.service;
 
-import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.BulkRegistrationResponse;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.AuthErrorType;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.AuthException;
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.AuthResult;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.BulkRegistrationRecord;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.BulkRegistrationResult;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.RegistrationRequest;
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.Usuario;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.port.in.AuthUseCase;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.port.out.PasswordHasherPort;
 import com.pollitocorp.backendCulturaStory.modules.auth.domain.port.out.UsuarioRepositoryPort;
 import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.model.AutorEstudiante;
 import com.pollitocorp.backendCulturaStory.modules.narrativa.domain.port.out.AutorRepositoryPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,21 +23,27 @@ import java.util.Set;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements AuthUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final AutorRepositoryPort autorRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordHasherPort passwordHasher;
 
-    @Transactional
-    public AuthResult registrarUsuario(Usuario usuario, String nombreCompleto, String grado, String regionCultural,
-                                       String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl,
-                                       String password, String rolSolicitado) {
-        if (password == null || password.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contrasena es obligatoria.");
+    @Override
+    public AuthResult registrarUsuario(RegistrationRequest request) {
+        if (request == null) {
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "Los datos de registro son obligatorios.");
+        }
+        if (request.password() == null || request.password().isBlank()) {
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "La contrasena es obligatoria.");
         }
 
-        String rol = "docente".equalsIgnoreCase(rolSolicitado) ? "docente" : "estudiante";
+        String rol = "docente".equalsIgnoreCase(request.rol()) ? "docente" : "estudiante";
+
+        Usuario usuario = Usuario.builder()
+                .id(UUID.randomUUID())
+                .email(request.email())
+                .build();
 
         usuario.setRol(rol);
         usuario.setActivo(true);
@@ -45,14 +53,14 @@ public class AuthService {
         AutorEstudiante autor = AutorEstudiante.builder()
                 .id(UUID.randomUUID())
                 .userId(savedUser.getId())
-                .nombreCompleto(nombreCompleto)
-                .grado(grado)
-                .institucion(institucion)
-                .regionCultural(regionCultural)
-                .lenguaMaterna(lenguaMaterna)
-                .bio(bio)
-                .fotoPerfilUrl(fotoPerfilUrl)
-                .password(passwordEncoder.encode(password))
+                .nombreCompleto(request.nombreCompleto())
+                .grado(request.grado())
+                .institucion(request.institucion())
+                .regionCultural(request.regionCultural())
+                .lenguaMaterna(request.lenguaMaterna())
+                .bio(request.bio())
+                .fotoPerfilUrl(request.fotoPerfilUrl())
+                .password(passwordHasher.hash(request.password()))
                 .narrativasPublicadas(0)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -64,36 +72,36 @@ public class AuthService {
                 .build();
     }
 
-    @Transactional
-    public BulkRegistrationResponse registrarUsuariosMasivos(List<RegistroMasivo> registros) {
+    @Override
+    public BulkRegistrationResult registrarUsuariosMasivos(List<BulkRegistrationRecord> registros) {
         if (registros == null || registros.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La lista de registros es obligatoria.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "La lista de registros es obligatoria.");
         }
 
         if (registros.size() > 1000) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La carga masiva permite hasta 1000 registros por ejecucion.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "La carga masiva permite hasta 1000 registros por ejecucion.");
         }
 
         registros.forEach(this::validarRegistroMasivo);
 
         List<String> emails = registros.stream()
-                .map(RegistroMasivo::email)
+                .map(BulkRegistrationRecord::email)
                 .toList();
         Set<String> uniqueEmails = new HashSet<>(emails);
         if (uniqueEmails.size() != emails.size()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "La carga contiene emails duplicados.");
+            throw new AuthException(AuthErrorType.CONFLICT, "La carga contiene emails duplicados.");
         }
 
         List<String> existingEmails = usuarioRepository.findExistingEmails(emails);
         if (!existingEmails.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existen emails registrados: " + existingEmails);
+            throw new AuthException(AuthErrorType.CONFLICT, "Ya existen emails registrados: " + existingEmails);
         }
 
         LocalDateTime createdAt = LocalDateTime.now();
         List<Usuario> usuarios = new ArrayList<>();
         List<AutorEstudiante> autores = new ArrayList<>();
 
-        for (RegistroMasivo registro : registros) {
+        for (BulkRegistrationRecord registro : registros) {
             String rol = "docente".equalsIgnoreCase(registro.rol()) ? "docente" : "estudiante";
             UUID userId = UUID.randomUUID();
 
@@ -115,7 +123,7 @@ public class AuthService {
                     .lenguaMaterna(registro.lenguaMaterna())
                     .bio(registro.bio())
                     .fotoPerfilUrl(registro.fotoPerfilUrl())
-                    .password(passwordEncoder.encode(registro.password()))
+                    .password(passwordHasher.hash(registro.password()))
                     .narrativasPublicadas(0)
                     .createdAt(createdAt)
                     .build());
@@ -124,34 +132,35 @@ public class AuthService {
         usuarioRepository.saveAll(usuarios);
         autorRepository.saveAll(autores);
 
-        return BulkRegistrationResponse.builder()
+        return BulkRegistrationResult.builder()
                 .total(registros.size())
                 .registrados(registros.size())
                 .emails(emails)
                 .build();
     }
 
-    private void validarRegistroMasivo(RegistroMasivo registro) {
+    private void validarRegistroMasivo(BulkRegistrationRecord registro) {
         if (registro == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cada registro debe tener datos validos.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "Cada registro debe tener datos validos.");
         }
         if (registro.email() == null || registro.email().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email es obligatorio.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "El email es obligatorio.");
         }
         if (registro.password() == null || registro.password().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contrasena es obligatoria.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "La contrasena es obligatoria.");
         }
         if (registro.nombreCompleto() == null || registro.nombreCompleto().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre completo es obligatorio.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "El nombre completo es obligatorio.");
         }
         if (registro.grado() == null || registro.grado().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El grado es obligatorio.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "El grado es obligatorio.");
         }
         if (registro.regionCultural() == null || registro.regionCultural().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La region cultural es obligatoria.");
+            throw new AuthException(AuthErrorType.BAD_REQUEST, "La region cultural es obligatoria.");
         }
     }
 
+    @Override
     public Optional<AuthResult> sincronizarSesion(String email) {
         return usuarioRepository.findByEmail(email)
                 .map(usuario -> AuthResult.builder()
@@ -160,6 +169,7 @@ public class AuthService {
                         .build());
     }
 
+    @Override
     public AuthResult iniciarSesion(String email, String password, String rolEsperado) {
         if ("admin".equalsIgnoreCase(email) && "admin123".equals(password)) {
             Usuario admin = Usuario.builder()
@@ -177,41 +187,27 @@ public class AuthService {
         }
 
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas."));
+                .orElseThrow(() -> new AuthException(AuthErrorType.UNAUTHORIZED, "Credenciales incorrectas."));
 
         AutorEstudiante autor = autorRepository.findByUserId(usuario.getId()).orElse(null);
 
         String storedPassword = autor != null ? autor.getPassword() : null;
-        boolean matches = storedPassword != null && passwordEncoder.matches(password, storedPassword);
+        boolean matches = storedPassword != null && passwordHasher.matches(password, storedPassword);
 
         if (!matches) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas.");
+            throw new AuthException(AuthErrorType.UNAUTHORIZED, "Credenciales incorrectas.");
         }
 
         if (rolEsperado != null
                 && !rolEsperado.isBlank()
                 && !"admin".equalsIgnoreCase(rolEsperado)
                 && !usuario.getRol().equalsIgnoreCase(rolEsperado)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El tipo de perfil seleccionado no coincide con la cuenta.");
+            throw new AuthException(AuthErrorType.UNAUTHORIZED, "El tipo de perfil seleccionado no coincide con la cuenta.");
         }
 
         return AuthResult.builder()
                 .usuario(usuario)
                 .autor(autor)
                 .build();
-    }
-
-    public record RegistroMasivo(
-            String email,
-            String password,
-            String rol,
-            String nombreCompleto,
-            String grado,
-            String institucion,
-            String lenguaMaterna,
-            String regionCultural,
-            String bio,
-            String fotoPerfilUrl
-    ) {
     }
 }

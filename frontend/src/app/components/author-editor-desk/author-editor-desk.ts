@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { GenerateOutlineUseCase, CreateNarrativeUseCase, SaveNarrativeUseCase, GetNarrativeByIdUseCase, ImproveNarrativeUseCase } from '../../core/application/narratives/narrative-use-cases';
+import { GetCurrentUserUseCase } from '../../core/application/auth/auth-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 
 @Component({
@@ -222,6 +223,7 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
   private createUseCase = inject(CreateNarrativeUseCase);
   private saveUseCase = inject(SaveNarrativeUseCase);
   private getByIdUseCase = inject(GetNarrativeByIdUseCase);
+  private getCurrentUserUseCase = inject(GetCurrentUserUseCase);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -237,6 +239,7 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
   currentId: string | undefined = undefined;
   userName = 'Creador';
   userAvatar = '';
+  currentAuthorId = 'aaaaaaaa-0000-0000-0000-000000000001';
   Math = Math;
 
   private destroy$ = new Subject<void>();
@@ -294,16 +297,19 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
   }
 
   loadUserData() {
-    const userStr = localStorage.getItem('culturastory.currentUser');
-    if (userStr) {
-      try {
-         const user = JSON.parse(userStr);
-         this.userName = user.nombreCompleto || user.nombre || 'Creador';
-         this.userAvatar = user.fotoPerfilUrl || '';
-      } catch(e) {
-         console.error('Error parseando usuario local', e);
-      }
-    }
+    this.getCurrentUserUseCase.execute()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        if (user) {
+          this.userName = user.nombreCompleto || 'Creador';
+          this.userAvatar = user.fotoPerfilUrl || '';
+          this.currentAuthorId = user.authorId || this.currentAuthorId;
+        }
+      });
+  }
+
+  private getAuthorId(): string {
+    return this.currentAuthorId;
   }
 
   goTo(path: string) {
@@ -330,14 +336,13 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
   }
 
   private buildNarrative(): Narrative {
-    const authorId = localStorage.getItem('currentAuthorId') || 'aaaaaaaa-0000-0000-0000-000000000001';
     return {
       id: this.currentId,
       titulo: this.title,
       contenido: this.content,
       regionCultural: this.region,
       tipoRelato: this.tipoRelato,
-      autor: { id: authorId },
+      autor: { id: this.getAuthorId() },
       status: this.status
     };
   }
