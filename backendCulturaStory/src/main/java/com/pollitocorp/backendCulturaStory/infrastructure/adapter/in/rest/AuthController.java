@@ -3,10 +3,12 @@ package com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest;
 import com.pollitocorp.backendCulturaStory.application.service.AuthService;
 import com.pollitocorp.backendCulturaStory.domain.model.Usuario;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.AuthProfileResponse;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.BulkRegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,6 +42,11 @@ public class AuthController {
         );
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/registros-masivos")
+    public ResponseEntity<BulkRegistrationResponse> registrarMasivo(@RequestBody List<AuthService.RegistroMasivo> request) {
+        return ResponseEntity.ok(authService.registrarUsuariosMasivos(request));
     }
 
     @PostMapping("/login")

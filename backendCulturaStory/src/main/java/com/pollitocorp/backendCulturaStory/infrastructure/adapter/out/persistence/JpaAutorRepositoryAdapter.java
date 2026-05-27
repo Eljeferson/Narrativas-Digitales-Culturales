@@ -2,8 +2,10 @@ package com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persisten
 
 import com.pollitocorp.backendCulturaStory.domain.model.AutorEstudiante;
 import com.pollitocorp.backendCulturaStory.domain.port.out.AutorRepositoryPort;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.entity.AutorEntity;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.mapper.AutorMapper;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.repository.AutorRepository;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.out.persistence.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +19,30 @@ import java.util.stream.Collectors;
 public class JpaAutorRepositoryAdapter implements AutorRepositoryPort {
 
     private final AutorRepository repository;
+    private final UsuarioRepository usuarioRepository;
     private final AutorMapper mapper;
 
     @Override
     public AutorEstudiante save(AutorEstudiante autor) {
-        return mapper.toDomain(repository.save(mapper.toEntity(autor)));
+        return mapper.toDomain(repository.save(toEntityWithUserReference(autor)));
+    }
+
+    @Override
+    public List<AutorEstudiante> saveAll(List<AutorEstudiante> autores) {
+        return repository.saveAll(autores.stream()
+                        .map(this::toEntityWithUserReference)
+                        .collect(Collectors.toList()))
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    private AutorEntity toEntityWithUserReference(AutorEstudiante autor) {
+        AutorEntity entity = mapper.toEntity(autor);
+        if (autor.getUserId() != null) {
+            entity.setUser(usuarioRepository.getReferenceById(autor.getUserId()));
+        }
+        return entity;
     }
 
     @Override

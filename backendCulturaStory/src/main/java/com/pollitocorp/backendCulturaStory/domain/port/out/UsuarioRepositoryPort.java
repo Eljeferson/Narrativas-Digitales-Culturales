@@ -8,7 +8,9 @@ import java.util.UUID;
 
 public interface UsuarioRepositoryPort {
     Usuario save(Usuario usuario);
+    List<Usuario> saveAll(List<Usuario> usuarios);
     Optional<Usuario> findById(UUID id);
     Optional<Usuario> findByEmail(String email);
+    List<String> findExistingEmails(List<String> emails);
     List<Usuario> findAll();
 }

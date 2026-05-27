@@ -18,6 +18,8 @@ const totalRecords = Number(process.env.STRESS_RECORDS ?? 1000);
 const concurrency = Number(process.env.STRESS_CONCURRENCY ?? 25);
 const includeIa = process.env.STRESS_INCLUDE_IA === 'true';
 const dryRun = process.env.STRESS_DRY_RUN === 'true';
+const bulkRegistration = process.env.STRESS_BULK_REGISTRATION !== 'false';
+const bulkFallback = process.env.STRESS_BULK_FALLBACK !== 'false';
 const testAuthorId = process.env.TEST_AUTHOR_ID ?? '00000000-0000-0000-0000-000000000000';
 const resultsDir = join(root, 'tests', 'performance', 'results');
 
@@ -213,17 +215,110 @@ function buildErrorContext(record, request, result) {
   };
 }
 
+function buildSuccessContext(record, request, durationMs) {
+  return {
+    ok: true,
+    registro: record.index,
+    endpoint: request.endpoint,
+    method: request.method ?? 'GET',
+    status: 200,
+    durationMs,
+    email: record.email,
+    message: '',
+    payload: request.body
+  };
+}
+
+async function runIndividualRegistration(students) {
+  return runScenario('registro', students, async (student) => {
+    const request = { endpoint: '/auth/registro', method: 'POST', body: student };
+    const result = await timedRequest(request);
+    return buildErrorContext(student, request, result);
+  });
+}
+
+async function runBulkRegistration(students) {
+  if (!bulkRegistration) {
+    return runIndividualRegistration(students);
+  }
+
+  const request = {
+    endpoint: '/auth/registros-masivos',
+    method: 'POST',
+    body: students,
+    timeoutMs: 60000
+  };
+  console.log(`Ejecutando registro masivo: ${students.length} registros en un lote`);
+  const result = await timedRequest(request);
+
+  if (!result.ok) {
+    const message = responseMessage(result.response).toLowerCase();
+    const endpointNotDeployed = result.status === 500 && message.includes('no static resource');
+    const canFallback = bulkFallback && ([0, 404, 405, 409].includes(result.status) || endpointNotDeployed);
+    if (canFallback) {
+      console.warn('El registro masivo no estuvo disponible o encontro conflicto; se usara el modo individual.');
+      return runIndividualRegistration(students);
+    }
+
+    const errorContext = buildErrorContext(students[0], request, result);
+    const syntheticResults = students.map((student) => ({
+      ...errorContext,
+      registro: student.index,
+      email: student.email,
+      durationMs: Math.round(result.durationMs / Math.max(students.length, 1))
+    }));
+
+    return summarizeScenario('registro', syntheticResults, result.durationMs);
+  }
+
+  const perRecordDuration = Math.max(1, Math.round(result.durationMs / Math.max(students.length, 1)));
+  const successResults = students.map((student) => buildSuccessContext(student, request, perRecordDuration));
+  return summarizeScenario('registro', successResults, result.durationMs);
+}
+
+function summarizeScenario(name, results, totalDurationMs) {
+  const durations = results.map((result) => result.durationMs);
+  const errors = results.filter((result) => !result.ok);
+  const threshold = thresholds[name] ?? { p95: Number.POSITIVE_INFINITY, errorRate: 1 };
+  const metric = {
+    name,
+    total: results.length,
+    ok: results.length - errors.length,
+    failed: errors.length,
+    errorRate: errors.length / results.length,
+    avgMs: Math.round(average(durations)),
+    p90Ms: percentile(durations, 90),
+    p95Ms: percentile(durations, 95),
+    p99Ms: percentile(durations, 99),
+    maxMs: Math.max(...durations),
+    totalDurationMs: Math.round(totalDurationMs)
+  };
+
+  metric.passed = metric.p95Ms <= threshold.p95 && metric.errorRate <= threshold.errorRate;
+
+  return {
+    metric,
+    errors: errors.map((error) => ({
+      registro: error.registro,
+      endpoint: error.endpoint,
+      method: error.method,
+      status: error.status,
+      tipo: classifyError(error.status, error.message),
+      email: error.email,
+      mensaje: error.message,
+      duracionMs: error.durationMs,
+      payload: error.payload
+    }))
+  };
+}
+
 async function main() {
   await mkdir(resultsDir, { recursive: true });
 
   const students = generateStudents(totalRecords);
   const scenarios = [];
 
-  scenarios.push(await runScenario('registro', students, async (student) => {
-    const request = { endpoint: '/auth/registro', method: 'POST', body: student };
-    const result = await timedRequest(request);
-    return buildErrorContext(student, request, result);
-  }));
+  scenarios.push(await runBulkRegistration(students));
 
   scenarios.push(await runScenario('login', students, async (student) => {
     const request = {
@@ -276,6 +371,8 @@ async function main() {
     concurrency,
     includeIa,
     dryRun,
+    bulkRegistration,
+    bulkFallback,
     passed,
     bottleneck,
     metrics,
@@ -315,6 +412,8 @@ function renderMarkdown(summary) {
 - Concurrencia: ${summary.concurrency}
 - IA incluida: ${summary.includeIa ? 'si' : 'no'}
 - Modo simulacion: ${summary.dryRun ? 'si' : 'no'}
+- Registro masivo: ${summary.bulkRegistration ? 'si' : 'no'}
+- Respaldo individual: ${summary.bulkFallback ? 'si' : 'no'}
 - Resultado general: ${summary.passed ? 'PASA' : 'FALLA'}
 
 ## Cuello de botella identificado

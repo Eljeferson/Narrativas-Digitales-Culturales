@@ -5,12 +5,18 @@ import com.pollitocorp.backendCulturaStory.domain.model.Usuario;
 import com.pollitocorp.backendCulturaStory.domain.port.out.AutorRepositoryPort;
 import com.pollitocorp.backendCulturaStory.domain.port.out.UsuarioRepositoryPort;
 import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.AuthProfileResponse;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.BulkRegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -18,6 +24,8 @@ public class AuthService {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final AutorRepositoryPort autorRepository;
+
+    @Transactional
     public AuthProfileResponse registrarUsuario(Usuario usuario, String nombreCompleto, String grado, String regionCultural,
                                                 String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl,
                                                 String password, String rolSolicitado) {
@@ -53,6 +61,94 @@ public class AuthService {
                 .usuario(savedUser)
                 .autor(savedAuthor)
                 .build();
+    }
+
+    @Transactional
+    public BulkRegistrationResponse registrarUsuariosMasivos(List<RegistroMasivo> registros) {
+        if (registros == null || registros.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La lista de registros es obligatoria.");
+        }
+
+        if (registros.size() > 1000) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La carga masiva permite hasta 1000 registros por ejecucion.");
+        }
+
+        registros.forEach(this::validarRegistroMasivo);
+
+        List<String> emails = registros.stream()
+                .map(RegistroMasivo::email)
+                .toList();
+        Set<String> uniqueEmails = new HashSet<>(emails);
+        if (uniqueEmails.size() != emails.size()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "La carga contiene emails duplicados.");
+        }
+
+        List<String> existingEmails = usuarioRepository.findExistingEmails(emails);
+        if (!existingEmails.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existen emails registrados: " + existingEmails);
+        }
+
+        LocalDateTime createdAt = LocalDateTime.now();
+        List<Usuario> usuarios = new ArrayList<>();
+        List<AutorEstudiante> autores = new ArrayList<>();
+
+        for (RegistroMasivo registro : registros) {
+            String rol = "docente".equalsIgnoreCase(registro.rol()) ? "docente" : "estudiante";
+            UUID userId = UUID.randomUUID();
+
+            usuarios.add(Usuario.builder()
+                    .id(userId)
+                    .email(registro.email())
+                    .rol(rol)
+                    .activo(true)
+                    .createdAt(createdAt)
+                    .build());
+
+            autores.add(AutorEstudiante.builder()
+                    .id(UUID.randomUUID())
+                    .userId(userId)
+                    .nombreCompleto(registro.nombreCompleto())
+                    .grado(registro.grado())
+                    .institucion(registro.institucion())
+                    .regionCultural(registro.regionCultural())
+                    .lenguaMaterna(registro.lenguaMaterna())
+                    .bio(registro.bio())
+                    .fotoPerfilUrl(registro.fotoPerfilUrl())
+                    .password(registro.password())
+                    .narrativasPublicadas(0)
+                    .createdAt(createdAt)
+                    .build());
+        }
+
+        usuarioRepository.saveAll(usuarios);
+        autorRepository.saveAll(autores);
+
+        return BulkRegistrationResponse.builder()
+                .total(registros.size())
+                .registrados(registros.size())
+                .emails(emails)
+                .build();
+    }
+
+    private void validarRegistroMasivo(RegistroMasivo registro) {
+        if (registro == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cada registro debe tener datos validos.");
+        }
+        if (registro.email() == null || registro.email().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email es obligatorio.");
+        }
+        if (registro.password() == null || registro.password().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contrasena es obligatoria.");
+        }
+        if (registro.nombreCompleto() == null || registro.nombreCompleto().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre completo es obligatorio.");
+        }
+        if (registro.grado() == null || registro.grado().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El grado es obligatorio.");
+        }
+        if (registro.regionCultural() == null || registro.regionCultural().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La region cultural es obligatoria.");
+        }
     }
 
     public Optional<AuthProfileResponse> sincronizarSesion(String email) {
@@ -103,5 +199,19 @@ public class AuthService {
                 .usuario(usuario)
                 .autor(autor)
                 .build();
+    }
+
+    public record RegistroMasivo(
+            String email,
+            String password,
+            String rol,
+            String nombreCompleto,
+            String grado,
+            String institucion,
+            String lenguaMaterna,
+            String regionCultural,
+            String bio,
+            String fotoPerfilUrl
+    ) {
     }
 }
