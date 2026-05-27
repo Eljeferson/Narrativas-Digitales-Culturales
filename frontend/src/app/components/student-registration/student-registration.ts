@@ -2,7 +2,7 @@ import { Component, inject, ViewChild, ElementRef, HostListener } from '@angular
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RegisterStudentUseCase } from '../../core/application/auth/auth-use-cases';
+import { RegisterStudentUseCase, SyncSessionUseCase } from '../../core/application/auth/auth-use-cases';
 import { SearchInstitutionsUseCase } from '../../core/application/institutions/institution.use-cases';
 import { Institution } from '../../core/domain/models/institution.model';
 import { User } from '../../core/domain/models/user.model';
@@ -540,6 +540,7 @@ export class StudentRegistration {
   @ViewChild('formContainer') formContainer!: ElementRef;
   @ViewChild('avatarScrollContainer') avatarScrollContainer!: ElementRef;
   private registerUseCase = inject(RegisterStudentUseCase);
+  private syncSessionUseCase = inject(SyncSessionUseCase);
   private searchInstitutionsUseCase = inject(SearchInstitutionsUseCase);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -550,6 +551,7 @@ export class StudentRegistration {
   showPassword = false;
   showConfirmPassword = false;
   notification: { message: string, type: 'success' | 'error' } | null = null;
+  isSubmitting = false;
 
   // Lista de Avatares de Supabase
   avatars = [
@@ -769,10 +771,14 @@ export class StudentRegistration {
 
   private getRegistrationErrorMessage(error: unknown): string {
     if (error instanceof HttpErrorResponse) {
-      const backendMessage = error.error?.message;
+      const backendMessage = this.getBackendMessage(error);
 
       if (error.status === 409) {
         return backendMessage || 'Ese correo ya esta registrado. Inicia sesion o usa otro correo.';
+      }
+
+      if (error.status === 0) {
+        return 'No hay conexion con el servidor. Intenta nuevamente en unos segundos.';
       }
 
       if (typeof backendMessage === 'string' && backendMessage.toLowerCase().includes('correo ya esta registrado')) {
@@ -783,6 +789,14 @@ export class StudentRegistration {
     return 'Hubo un error al registrar el perfil. Por favor intenta de nuevo.';
   }
 
+  private getBackendMessage(error: HttpErrorResponse): string {
+    if (typeof error.error === 'string') {
+      return error.error;
+    }
+
+    return error.error?.message || error.error?.error || '';
+  }
+
   private showNotification(message: string, type: 'success' | 'error') {
     this.notification = { message, type };
     setTimeout(() => this.notification = null, 5000);
@@ -790,10 +804,9 @@ export class StudentRegistration {
 
   onSubmit() {
     this.showErrors = true;
-    if (!this.isStepValid()) return;
+    if (!this.isStepValid() || this.isSubmitting) return;
 
     const fullName = `${this.firstName} ${this.lastName}`.trim();
-    console.log(`[StudentRegistration] Registrando a ${fullName}`);
 
     // Construimos el payload exactamente como lo solicita el backend
     const user: Partial<User> = {
@@ -801,7 +814,7 @@ export class StudentRegistration {
       password: this.password,
       rol: this.registrationRole === 'teacher' ? 'docente' : 'estudiante',
       nombreCompleto: fullName,
-      grado: this.grade, // El grado ya incluye el nivel (ej: "1ro de Primaria")
+      grado: this.grade,
       institucion: this.institution,
       lenguaMaterna: this.motherTongue,
       regionCultural: this.region,
@@ -810,18 +823,43 @@ export class StudentRegistration {
       narrativasPublicadas: 0
     };
 
-    console.log('[StudentRegistration] Payload:', JSON.stringify(user, null, 2));
+    this.isSubmitting = true;
 
+    this.syncSessionUseCase.execute(this.email).subscribe({
+      next: (existingUser) => {
+        this.isSubmitting = false;
+        const existingRole = existingUser.rol === 'DOCENTE' ? 'teacher' : 'student';
+        this.showNotification('Ese correo ya esta registrado. Te llevamos al login para iniciar sesion.', 'error');
+        setTimeout(() => {
+          this.router.navigate(['/'], { queryParams: { role: existingRole, email: this.email } });
+        }, 1200);
+      },
+      error: (lookupError) => {
+        if (lookupError instanceof HttpErrorResponse && lookupError.status !== 404) {
+          this.isSubmitting = false;
+          console.warn('[StudentRegistration] No se pudo validar el correo:', this.getRegistrationErrorMessage(lookupError));
+          this.showNotification(this.getRegistrationErrorMessage(lookupError), 'error');
+          return;
+        }
+
+        this.createAccount(user);
+      }
+    });
+  }
+
+  private createAccount(user: Partial<User>) {
     this.registerUseCase.execute(user).subscribe({
       next: (saved) => {
-        console.log('Usuario registrado con éxito:', saved);
-        this.showNotification('¡Registro exitoso! Redirigiendo al login...', 'success');
+        this.isSubmitting = false;
+        console.info('[StudentRegistration] Usuario registrado:', saved.email);
+        this.showNotification('Registro exitoso. Redirigiendo al login...', 'success');
         setTimeout(() => {
-          this.router.navigate(['/'], { queryParams: { role: this.registrationRole } });
+          this.router.navigate(['/'], { queryParams: { role: this.registrationRole, email: this.email } });
         }, 2000);
       },
       error: (err) => {
-        console.error('Error al registrar:', err);
+        this.isSubmitting = false;
+        console.warn('[StudentRegistration] No se pudo registrar:', this.getRegistrationErrorMessage(err));
         this.showNotification(this.getRegistrationErrorMessage(err), 'error');
       }
     });

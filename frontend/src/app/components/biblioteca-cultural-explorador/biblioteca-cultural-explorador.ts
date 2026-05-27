@@ -10,6 +10,7 @@ interface LibraryNarrative {
   type: string;
   cover: string;
   reads: number;
+  approved: boolean;
 }
 
 @Component({
@@ -26,16 +27,18 @@ export class BibliotecaCulturalExplorador {
   type = '';
   responseMs = 0;
   narratives: LibraryNarrative[] = [
-    { title: 'El eco de los Apus', author: 'Mateo Huamán', region: 'Cusco', culture: 'Andina', type: 'Leyenda', cover: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80', reads: 128 },
-    { title: 'Río que canta', author: 'Lucía Chambi', region: 'Amazonas', culture: 'Amazónica', type: 'Mito', cover: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80', reads: 89 },
-    { title: 'La décima de mi abuela', author: 'Diego Campos', region: 'Ica', culture: 'Afroperuana', type: 'Tradición oral', cover: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80', reads: 74 },
-    { title: 'Guardianes de la totora', author: 'Ana Torres', region: 'La Libertad', culture: 'Costeña', type: 'Crónica', cover: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80', reads: 61 }
+    { title: 'El eco de los Apus', author: 'Mateo Huaman', region: 'Cusco', culture: 'Andina', type: 'Leyenda', cover: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80', reads: 128, approved: true },
+    { title: 'Rio que canta', author: 'Lucia Chambi', region: 'Amazonas', culture: 'Amazonica', type: 'Mito', cover: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80', reads: 89, approved: true },
+    { title: 'La decima de mi abuela', author: 'Diego Campos', region: 'Ica', culture: 'Afroperuana', type: 'Tradicion oral', cover: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80', reads: 74, approved: true },
+    { title: 'Guardianes de la totora', author: 'Ana Torres', region: 'La Libertad', culture: 'Costena', type: 'Cronica', cover: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80', reads: 61, approved: true },
+    { title: 'Borrador oculto', author: 'Autor en revision', region: 'Cusco', culture: 'Andina', type: 'Leyenda', cover: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80', reads: 0, approved: false }
   ];
 
   get filteredNarratives(): LibraryNarrative[] {
     const started = performance.now();
     const value = this.query.toLowerCase().trim();
     const result = this.narratives.filter((item) =>
+      item.approved &&
       (!this.region || item.region === this.region) &&
       (!this.culture || item.culture === this.culture) &&
       (!this.type || item.type === this.type) &&

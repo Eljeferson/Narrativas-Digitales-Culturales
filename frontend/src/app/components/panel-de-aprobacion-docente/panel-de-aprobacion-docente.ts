@@ -2,15 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+type ReviewStatus = 'En revision' | 'Aprobada' | 'Rechazada' | 'Solicita revision';
+
 interface ReviewItem {
   id: string;
   title: string;
   author: string;
   culture: string;
   fragment: string;
-  status: 'En revisión' | 'Aprobada' | 'Rechazada' | 'Solicita revisión';
+  status: ReviewStatus;
   reason: string;
   comments: string[];
+  notifications: string[];
 }
 
 @Component({
@@ -21,25 +24,54 @@ interface ReviewItem {
   styleUrl: './panel-de-aprobacion-docente.css',
 })
 export class PanelDeAprobacionDocente {
-  selected?: ReviewItem;
   feedback = '';
   newComment = '';
   teacherName = 'Rosa Quispe';
   items: ReviewItem[] = [
-    { id: 'n1', title: 'El eco de los Apus', author: 'Mateo Huamán', culture: 'Andina', fragment: 'Las montañas comenzaron a respirar cuando la abuela dejó sus hojas de coca sobre la piedra.', status: 'En revisión', reason: '', comments: [] },
-    { id: 'n2', title: 'Río que canta', author: 'Lucía Chambi', culture: 'Amazónica', fragment: 'El río guardaba nombres antiguos bajo los remolinos de la tarde.', status: 'En revisión', reason: '', comments: [] }
+    {
+      id: 'n1',
+      title: 'El eco de los Apus',
+      author: 'Mateo Huaman',
+      culture: 'Andina',
+      fragment: 'Las montanas comenzaron a respirar cuando la abuela dejo sus hojas de coca sobre la piedra.',
+      status: 'En revision',
+      reason: '',
+      comments: [],
+      notifications: []
+    },
+    {
+      id: 'n2',
+      title: 'Rio que canta',
+      author: 'Lucia Chambi',
+      culture: 'Amazonica',
+      fragment: 'El rio guardaba nombres antiguos bajo los remolinos de la tarde.',
+      status: 'En revision',
+      reason: '',
+      comments: [],
+      notifications: []
+    }
   ];
 
-  decide(item: ReviewItem, status: ReviewItem['status']): void {
+  decide(item: ReviewItem, status: ReviewStatus): void {
     item.status = status;
-    item.reason = this.feedback || 'Revisión pedagógica registrada.';
+    item.reason = this.feedback || 'Revision pedagogica registrada.';
+    item.notifications.unshift(`${new Date().toLocaleString('es-PE')}: resultado enviado a ${item.author} (${status}). Motivo: ${item.reason}`);
     this.feedback = '';
   }
 
   addComment(item: ReviewItem): void {
     const text = this.newComment.trim();
     if (!text) return;
-    item.comments.unshift(`${this.teacherName} · ${new Date().toLocaleString('es-PE')}: ${text}`);
+    item.comments.unshift(`${this.teacherName} - ${new Date().toLocaleString('es-PE')}: ${text}`);
+    item.notifications.unshift(`${new Date().toLocaleString('es-PE')}: ${item.author} recibio una notificacion de nuevo comentario.`);
     this.newComment = '';
+  }
+
+  isPublished(item: ReviewItem): boolean {
+    return item.status === 'Aprobada';
+  }
+
+  get approvedCount(): number {
+    return this.items.filter((item) => this.isPublished(item)).length;
   }
 }

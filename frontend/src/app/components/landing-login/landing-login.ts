@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginUseCase } from '../../core/application/auth/login.use-case';
 
 @Component({
@@ -170,12 +170,21 @@ import { LoginUseCase } from '../../core/application/auth/login.use-case';
 export class LandingLogin {
   private loginUseCase = inject(LoginUseCase);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   email = '';
   password = '';
   showPassword = false;
   selectedRole: 'student' | 'teacher' = 'student';
   notification: { message: string, type: 'success' | 'error' } | null = null;
+
+  constructor() {
+    const requestedRole = this.route.snapshot.queryParamMap.get('role');
+    const requestedEmail = this.route.snapshot.queryParamMap.get('email');
+
+    this.selectedRole = requestedRole === 'teacher' ? 'teacher' : 'student';
+    this.email = requestedEmail ?? '';
+  }
 
   setRole(role: 'student' | 'teacher') {
     this.selectedRole = role;
@@ -188,14 +197,26 @@ export class LandingLogin {
 
   private getLoginErrorMessage(error: unknown): string {
     if (error instanceof HttpErrorResponse) {
-      const backendMessage = error.error?.message;
+      const backendMessage = this.getBackendMessage(error);
 
       if (error.status === 401) {
-        return backendMessage || 'Las credenciales no son correctas.';
+        return backendMessage || 'Las credenciales no son correctas o el tipo de perfil seleccionado no coincide con la cuenta.';
+      }
+
+      if (error.status === 0) {
+        return 'No hay conexión con el servidor de autenticación. Intenta nuevamente en unos segundos.';
       }
     }
 
     return 'No se pudo iniciar sesion. Verifica tus credenciales.';
+  }
+
+  private getBackendMessage(error: HttpErrorResponse): string {
+    if (typeof error.error === 'string') {
+      return error.error;
+    }
+
+    return error.error?.message || error.error?.error || '';
   }
 
   onSubmit() {
@@ -220,7 +241,7 @@ export class LandingLogin {
           }, 800);
         },
         error: (err) => {
-          console.error('Error de login:', err);
+          console.warn('[Login] No se pudo iniciar sesion:', this.getLoginErrorMessage(err));
           this.showNotification(this.getLoginErrorMessage(err), 'error');
         }
       });
