@@ -49,30 +49,6 @@ public class NarrativaService implements NarrativaUseCase {
 
     @Override
     public NarrativaCultural guardarNarrativa(NarrativaCultural narrativa) {
-        if (narrativa.getId() == null) {
-            return crearNarrativa(narrativa);
-        }
-
-        NarrativaCultural existente = repositoryPort.findById(narrativa.getId())
-                .orElseThrow(() -> new RuntimeException("No se encontró la narrativa con ID: " + narrativa.getId()));
-
-        // Preservar campos que no deben cambiar o que son obligatorios
-        narrativa.setCreatedAt(existente.getCreatedAt());
-        if (narrativa.getAutor() == null) {
-            narrativa.setAutor(existente.getAutor());
-        } else if (narrativa.getAutor().getId() != null) {
-            // Validar y cargar el autor si solo viene el ID
-            AutorEstudiante autorCompleto = autorRepositoryPort.findById(narrativa.getAutor().getId())
-                    .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
-            narrativa.setAutor(autorCompleto);
-        }
-
-        // Asegurar campos por defecto si vienen nulos
-        if (narrativa.getTipoRelato() == null) narrativa.setTipoRelato(existente.getTipoRelato());
-        if (narrativa.getEstado() == null) narrativa.setEstado(existente.getEstado());
-        if (narrativa.getDestacada() == null) narrativa.setDestacada(existente.getDestacada());
-        if (narrativa.getVecesVista() == null) narrativa.setVecesVista(existente.getVecesVista());
-
         narrativa.setUpdatedAt(LocalDateTime.now());
         return repositoryPort.save(narrativa);
     }
@@ -91,28 +67,9 @@ public class NarrativaService implements NarrativaUseCase {
     public String generarEsquema(String cultura) {
         // HU-01: Generar esquema narrativo con IA
         String prompt = "Genera un esquema narrativo para una historia de la cultura " + cultura + 
-                         ". Incluye personajes, escenarios auténticos y una estructura de inicio, nudo y desenlace. " +
-                         "IMPORTANTE: RETORNA ÚNICAMENTE EL ESQUEMA EN FORMATO TEXTO, SIN INTRODUCCIONES, EXPLICACIONES NI COMENTARIOS ADICIONALES.";
+                         ". Incluye personajes, escenarios auténticos y una estructura de inicio, nudo y desenlace.";
         Map<String, Object> params = new HashMap<>();
         params.put("region", cultura);
-        return aiPort.generarTexto(prompt, params);
-    }
-
-    @Override
-    public String mejorarNarrativa(String titulo, String cultura, String contenido) {
-        System.out.println("Mejorando narrativa: " + titulo + " (Cultura: " + cultura + ")");
-        String prompt = String.format(
-            "Eres un experto en narrativa cultural peruana. Mejora la siguiente historia titulada '%s' de la región '%s'. " +
-            "El texto actual es: '%s'. " +
-            "Tu tarea es mejorar la redacción, ortografía y sobre todo la pertinencia cultural, " +
-            "agregando detalles auténticos sin perder la esencia del autor. " +
-            "IMPORTANTE: RETORNA ÚNICAMENTE EL CUENTO O HISTORIA MEJORADA. NO INCLUYAS NINGUNA INTRODUCCIÓN, EXPLICACIÓN, RESUMEN DE CAMBIOS NI COMENTARIOS AL FINAL. " +
-            "TU RESPUESTA DEBE SER EXCLUSIVAMENTE EL TEXTO DE LA HISTORIA.",
-            titulo, cultura, contenido
-        );
-        Map<String, Object> params = new HashMap<>();
-        params.put("region", cultura);
-        params.put("type", "improvement");
         return aiPort.generarTexto(prompt, params);
     }
 }

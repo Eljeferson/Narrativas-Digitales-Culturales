@@ -1,13 +1,12 @@
 package com.pollitocorp.backendCulturaStory.application.service;
 
-import com.pollitocorp.backendCulturaStory.domain.model.AuthResult;
 import com.pollitocorp.backendCulturaStory.domain.model.AutorEstudiante;
 import com.pollitocorp.backendCulturaStory.domain.model.Usuario;
 import com.pollitocorp.backendCulturaStory.domain.port.out.AutorRepositoryPort;
 import com.pollitocorp.backendCulturaStory.domain.port.out.UsuarioRepositoryPort;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.AuthProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -19,16 +18,15 @@ public class AuthService {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final AutorRepositoryPort autorRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public AuthResult registrarUsuario(Usuario usuario, String nombreCompleto, String grado, String regionCultural,
-                                       String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl,
-                                       String password, String rolSolicitado) {
+    public AuthProfileResponse registrarUsuario(Usuario usuario, String nombreCompleto, String grado, String regionCultural,
+                                                String institucion, String lenguaMaterna, String bio, String fotoPerfilUrl,
+                                                String password, String rolSolicitado) {
         if (password == null || password.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña es obligatoria.");
         }
 
         String rol = "docente".equalsIgnoreCase(rolSolicitado) ? "docente" : "estudiante";
+
         // PMV1: registro público solo para estudiante/docente. Admin queda fijo.
         usuario.setRol(rol);
         usuario.setActivo(true);
@@ -45,27 +43,28 @@ public class AuthService {
                 .lenguaMaterna(lenguaMaterna)
                 .bio(bio)
                 .fotoPerfilUrl(fotoPerfilUrl)
-                .password(passwordEncoder.encode(password))
+                .password(password)
                 .narrativasPublicadas(0)
                 .createdAt(LocalDateTime.now())
                 .build();
         AutorEstudiante savedAuthor = autorRepository.save(autor);
 
-        return AuthResult.builder()
+        return AuthProfileResponse.builder()
                 .usuario(savedUser)
                 .autor(savedAuthor)
                 .build();
     }
 
-    public Optional<AuthResult> sincronizarSesion(String email) {
+    public Optional<AuthProfileResponse> sincronizarSesion(String email) {
+        // HU-07: Sincronización con Supabase Auth
         return usuarioRepository.findByEmail(email)
-                .map(usuario -> AuthResult.builder()
+                .map(usuario -> AuthProfileResponse.builder()
                         .usuario(usuario)
                         .autor(autorRepository.findByUserId(usuario.getId()).orElse(null))
                         .build());
     }
 
-    public AuthResult iniciarSesion(String email, String password, String rolEsperado) {
+    public AuthProfileResponse iniciarSesion(String email, String password, String rolEsperado) {
         if ("admin".equalsIgnoreCase(email) && "admin123".equals(password)) {
             Usuario admin = Usuario.builder()
                     .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
@@ -75,7 +74,7 @@ public class AuthService {
                     .createdAt(LocalDateTime.now())
                     .build();
 
-            return AuthResult.builder()
+            return AuthProfileResponse.builder()
                     .usuario(admin)
                     .autor(null)
                     .build();
@@ -87,7 +86,7 @@ public class AuthService {
         AutorEstudiante autor = autorRepository.findByUserId(usuario.getId()).orElse(null);
 
         String storedPassword = autor != null ? autor.getPassword() : null;
-        boolean matches = storedPassword != null && passwordEncoder.matches(password, storedPassword);
+        boolean matches = storedPassword != null && password.equals(storedPassword);
 
         if (!matches) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas.");
@@ -100,7 +99,7 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El tipo de perfil seleccionado no coincide con la cuenta.");
         }
 
-        return AuthResult.builder()
+        return AuthProfileResponse.builder()
                 .usuario(usuario)
                 .autor(autor)
                 .build();

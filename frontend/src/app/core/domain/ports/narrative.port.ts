@@ -8,5 +8,4 @@ export interface NarrativePort {
   getById(id: string): Observable<Narrative | null>;
   getAllByAuthor(authorId: string): Observable<Narrative[]>;
   delete(id: string): Observable<void>;
-  improveNarrative(title: string, culture: string, content: string): Observable<string>;
 }

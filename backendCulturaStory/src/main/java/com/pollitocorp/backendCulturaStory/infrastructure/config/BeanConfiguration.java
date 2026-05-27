@@ -14,16 +14,9 @@ import com.pollitocorp.backendCulturaStory.domain.port.out.RolChangeLogRepositor
 import com.pollitocorp.backendCulturaStory.domain.port.out.UsuarioRepositoryPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class BeanConfiguration {
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public NarrativaService narrativaService(NarrativaRepositoryPort repositoryPort, AutorRepositoryPort autorRepositoryPort, AIPort aiPort) {
@@ -36,8 +29,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public AuthService authService(UsuarioRepositoryPort usuarioRepository, AutorRepositoryPort autorRepository, PasswordEncoder passwordEncoder) {
-        return new AuthService(usuarioRepository, autorRepository, passwordEncoder);
+    public AuthService authService(UsuarioRepositoryPort usuarioRepository, AutorRepositoryPort autorRepository) {
+        return new AuthService(usuarioRepository, autorRepository);
     }
 
     @Bean
