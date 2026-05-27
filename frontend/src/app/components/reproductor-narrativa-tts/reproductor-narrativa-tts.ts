@@ -49,6 +49,11 @@ import { FormsModule } from '@angular/forms';
           <button type="button" (click)="stop()" class="rounded-lg border border-outline-variant px-5 py-3 font-bold text-primary">Detener</button>
           <a *ngIf="downloadUrl" [href]="downloadUrl" download="narrativa-culturastory.wav" class="rounded-lg border border-outline-variant px-5 py-3 font-bold text-primary">Descargar WAV</a>
         </div>
+
+        <div class="mt-5 rounded-lg bg-surface-container p-4">
+          <label class="mb-2 block text-sm font-bold text-primary" for="ttsAudioPreview">Audio generado reproducible en navegador</label>
+          <audio id="ttsAudioPreview" class="w-full" [src]="downloadUrl" controls preload="metadata" aria-label="Reproductor del audio narrado generado"></audio>
+        </div>
       </section>
 
       <aside class="rounded-lg border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">

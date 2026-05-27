@@ -45,6 +45,22 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
       <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">auto_stories</span>
       <span class="font-bold text-sm">Mis Historias</span>
     </a>
+    <a (click)="goTo('/grabacion-voz-stt')" class="sidebar-link group !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">mic</span>
+      <span class="font-bold text-sm">Grabar relato</span>
+    </a>
+    <a (click)="goTo('/editor-mejorado-ia')" class="sidebar-link group !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">image</span>
+      <span class="font-bold text-sm">Ilustraciones IA</span>
+    </a>
+    <a (click)="goTo('/reproductor-narrativa-tts')" class="sidebar-link group !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">record_voice_over</span>
+      <span class="font-bold text-sm">Texto a audio</span>
+    </a>
+    <a (click)="goTo('/storyboard-digital-ia')" class="sidebar-link group !py-3 !px-4">
+      <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">view_carousel</span>
+      <span class="font-bold text-sm">Storyboard IA</span>
+    </a>
     <a class="sidebar-link group opacity-50 !py-3 !px-4">
       <span class="material-symbols-outlined text-xl">school</span>
       <span class="font-bold text-sm">Aula Virtual</span>
@@ -116,6 +132,43 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
         </button>
 
         <!-- Removed Wisdom Card to save space for larger fonts -->
+
+        <section class="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="material-symbols-outlined text-primary">auto_awesome</span>
+            <h3 class="font-serif text-xl font-bold text-primary">PM2 multimedia</h3>
+          </div>
+          <div class="grid grid-cols-1 gap-3">
+            <button (click)="goTo('/grabacion-voz-stt')" class="flex items-center justify-between rounded-xl border border-outline-variant/40 bg-surface px-4 py-3 text-left hover:border-primary transition-all">
+              <span>
+                <strong class="block text-sm text-primary">HU-02 Grabar y transcribir</strong>
+                <small class="text-on-surface-variant">Microfono, menor o igual a 10 s, minimo 80 %, texto editable</small>
+              </span>
+              <span class="material-symbols-outlined text-primary">mic</span>
+            </button>
+            <button (click)="goTo('/editor-mejorado-ia')" class="flex items-center justify-between rounded-xl border border-outline-variant/40 bg-surface px-4 py-3 text-left hover:border-primary transition-all">
+              <span>
+                <strong class="block text-sm text-primary">HU-03 Ilustraciones IA</strong>
+                <small class="text-on-surface-variant">2 imagenes culturales y regeneracion</small>
+              </span>
+              <span class="material-symbols-outlined text-primary">image</span>
+            </button>
+            <button (click)="goTo('/reproductor-narrativa-tts')" class="flex items-center justify-between rounded-xl border border-outline-variant/40 bg-surface px-4 py-3 text-left hover:border-primary transition-all">
+              <span>
+                <strong class="block text-sm text-primary">HU-04 Texto a audio</strong>
+                <small class="text-on-surface-variant">Menor o igual a 15 s, reproduccion, descarga y voz</small>
+              </span>
+              <span class="material-symbols-outlined text-primary">record_voice_over</span>
+            </button>
+            <button (click)="goTo('/storyboard-digital-ia')" class="flex items-center justify-between rounded-xl border border-outline-variant/40 bg-surface px-4 py-3 text-left hover:border-primary transition-all">
+              <span>
+                <strong class="block text-sm text-primary">HU-05 Storyboard</strong>
+                <small class="text-on-surface-variant">4 vinetas, texto editable y PDF</small>
+              </span>
+              <span class="material-symbols-outlined text-primary">view_carousel</span>
+            </button>
+          </div>
+        </section>
 
         <!-- AI Prediction Box - Premium Gold Style (Compacted) -->
         <div *ngIf="vocationPrediction" class="flex-1 bg-[#D4AF37] text-on-surface rounded-[1.5rem] shadow-xl overflow-hidden animate-slide-up relative min-h-[450px] border border-white/20" style="animation-delay: 0.3s">
@@ -354,6 +407,10 @@ export class StudentPanel implements OnInit {
 
   createNew() {
     this.router.navigate(['/escritorio-del-autor']);
+  }
+
+  goTo(path: string) {
+    this.router.navigate([path]);
   }
 
   editNarrative(narrative: Narrative) {
