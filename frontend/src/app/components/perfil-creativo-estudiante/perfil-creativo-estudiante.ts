@@ -35,7 +35,7 @@ import { Component } from '@angular/core';
 <span class="material-symbols-outlined">dashboard</span> General
             </a>
 <a class="text-[#56423c] dark:text-[#eae2cd] px-4 py-2 hover:bg-[#eae2cd]/50 transition-colors flex items-center gap-3 rounded-lg" href="#">
-                        <span class="material-symbols-outlined">analytics</span> Progreso del estudiante
+<span class="material-symbols-outlined">analytics</span> Student Progress
             </a>
 <a class="text-[#56423c] dark:text-[#eae2cd] px-4 py-2 hover:bg-[#eae2cd]/50 transition-colors flex items-center gap-3 rounded-lg" href="#">
 <span class="material-symbols-outlined">auto_awesome</span> IA Metrics
@@ -272,7 +272,7 @@ import { Component } from '@angular/core';
 </a>
 <a class="flex flex-col items-center justify-center bg-[#09685b] text-white rounded-xl px-4 py-1 scale-95 duration-200" href="#">
 <span class="material-symbols-outlined">menu_book</span>
-        <span class="text-[10px] font-sans font-semibold uppercase">Biblioteca</span>
+<span class="text-[10px] font-sans font-semibold uppercase">Library</span>
 </a>
 </nav>
   `,

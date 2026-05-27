@@ -52,7 +52,7 @@ import { AnalyticsData } from '../../core/domain/ports/analytics.port';
             </a>
 <a class="text-[#56423c] px-4 py-2 hover:bg-[#eae2cd]/50 flex items-center gap-3 rounded-lg font-sans text-sm font-medium transition-colors" href="#">
 <span class="material-symbols-outlined">analytics</span>
-                      Progreso del estudiante
+                Student Progress
             </a>
 <a class="bg-[#eae2cd] dark:bg-[#3d332d] text-[#99411c] dark:text-[#fbf3de] rounded-lg px-4 py-2 flex items-center gap-3 font-sans text-sm font-bold" href="#">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
@@ -200,7 +200,7 @@ import { AnalyticsData } from '../../core/domain/ports/analytics.port';
 <td class="px-8 py-5 text-right">
 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
 <button class="p-2 text-primary hover:bg-primary-fixed rounded-lg transition-colors" title="Ver Perfil"><span class="material-symbols-outlined">person</span></button>
-                    <button class="p-2 text-tertiary hover:bg-tertiary-fixed rounded-lg transition-colors" title="Retroalimentación"><span class="material-symbols-outlined">rate_review</span></button>
+<button class="p-2 text-tertiary hover:bg-tertiary-fixed rounded-lg transition-colors" title="Feedback"><span class="material-symbols-outlined">rate_review</span></button>
 </div>
 </td>
 </tr>
@@ -226,7 +226,7 @@ import { AnalyticsData } from '../../core/domain/ports/analytics.port';
 <td class="px-8 py-5 text-right">
 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
 <button class="p-2 text-primary hover:bg-primary-fixed rounded-lg transition-colors" title="Ver Perfil"><span class="material-symbols-outlined">person</span></button>
-                    <button class="p-2 text-tertiary hover:bg-tertiary-fixed rounded-lg transition-colors" title="Retroalimentación"><span class="material-symbols-outlined">rate_review</span></button>
+<button class="p-2 text-tertiary hover:bg-tertiary-fixed rounded-lg transition-colors" title="Feedback"><span class="material-symbols-outlined">rate_review</span></button>
 </div>
 </td>
 </tr>
@@ -252,7 +252,7 @@ import { AnalyticsData } from '../../core/domain/ports/analytics.port';
 <td class="px-8 py-5 text-right">
 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
 <button class="p-2 text-primary hover:bg-primary-fixed rounded-lg transition-colors" title="Ver Perfil"><span class="material-symbols-outlined">person</span></button>
-                    <button class="p-2 text-tertiary hover:bg-tertiary-fixed rounded-lg transition-colors" title="Retroalimentación"><span class="material-symbols-outlined">rate_review</span></button>
+<button class="p-2 text-tertiary hover:bg-tertiary-fixed rounded-lg transition-colors" title="Feedback"><span class="material-symbols-outlined">rate_review</span></button>
 </div>
 </td>
 </tr>

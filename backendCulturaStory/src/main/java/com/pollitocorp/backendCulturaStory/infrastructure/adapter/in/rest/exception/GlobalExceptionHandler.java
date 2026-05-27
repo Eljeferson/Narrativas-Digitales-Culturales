@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(ex.getStatusCode().value())
-                .error(ex.getReason() != null ? ex.getReason() : "Error de autenticación")
+                .error(ex.getReason() != null ? ex.getReason() : "Error de autenticacion")
                 .message(ex.getReason() != null ? ex.getReason() : "No se pudo procesar la solicitud.")
                 .path(request.getRequestURI())
                 .build();
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         String message = "No se pudo guardar el registro por conflicto de datos.";
 
         if (rootMessage != null && rootMessage.toLowerCase().contains("usuarios_email_key")) {
-            message = "El correo ya está registrado. Inicia sesión o usa otro correo.";
+            message = "El correo ya esta registrado. Inicia sesion o usa otro correo.";
         }
 
         ErrorResponse errorResponse = ErrorResponse.builder()

@@ -22,7 +22,7 @@ import { User } from '../../core/domain/models/user.model';
     </div>
     <div class="space-y-4">
       <h1 class="text-primary font-headline text-3xl md:text-5xl font-bold leading-tight">
-        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guía de Historias' : 'Tejedor de Historias' }}</span>
+        Inicia tu viaje como <span class="italic text-secondary">{{ registrationRole === 'teacher' ? 'Guia de Historias' : 'Tejedor de Historias' }}</span>
       </h1>
       <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
         Cada gran narrativa comienza con un autor. Cuéntanos un poco sobre ti para personalizar tu experiencia.
@@ -143,10 +143,10 @@ import { User } from '../../core/domain/models/user.model';
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="group">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">Contraseña</label>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="password">ContraseÃ±a</label>
                 <input [(ngModel)]="password" name="password" 
                   [class.border-secondary]="showErrors && !isPasswordStrong()"
-                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="password" placeholder="Mínimo 8 caracteres" type="password" required/>
+                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="password" placeholder="MÃ­nimo 8 caracteres" type="password" required/>
                 @if (showErrors && !password.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
@@ -155,25 +155,25 @@ import { User } from '../../core/domain/models/user.model';
                 } @else if (showErrors && !isPasswordStrong()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">shield_lock</span>
-                    Usa letras, números y un carácter especial
+                    Usa letras, nÃºmeros y un carÃ¡cter especial
                   </p>
                 }
               </div>
 
               <div class="group">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar Contraseña</label>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-1" for="confirmPassword">Confirmar ContraseÃ±a</label>
                 <input [(ngModel)]="confirmPassword" name="confirmPassword" 
                   [class.border-secondary]="showErrors && !passwordsMatch()"
-                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="confirmPassword" placeholder="Repite tu contraseña" type="password" required/>
+                  class="w-full bg-surface-variant/20 border-0 border-b-2 border-outline-variant focus:border-tertiary focus:ring-0 px-0 py-2.5 transition-all text-on-surface placeholder:text-on-surface-variant/40 font-medium" id="confirmPassword" placeholder="Repite tu contraseÃ±a" type="password" required/>
                 @if (showErrors && !confirmPassword.trim()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">priority_high</span>
-                    Confirma tu contraseña
+                    Confirma tu contraseÃ±a
                   </p>
                 } @else if (showErrors && !passwordsMatch()) {
                   <p class="text-[10px] text-secondary font-bold mt-1.5 flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
                     <span class="material-symbols-outlined text-sm">lock_reset</span>
-                    Las contraseñas no coinciden
+                    Las contraseÃ±as no coinciden
                   </p>
                 }
               </div>
@@ -299,29 +299,38 @@ import { User } from '../../core/domain/models/user.model';
           </div>
         }
 
-        <!-- STEP 3: Cultural Identity -->
+        <!-- STEP 3: Cultural/Identity Info -->
         @if (currentStep === 3) {
           <div class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 class="text-xl md:text-2xl font-bold text-primary mb-2 flex items-center gap-2">
-              <span class="material-symbols-outlined font-icon">public</span>
+            <h1 class="text-xl md:text-2xl font-bold text-primary mb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined font-icon">diversity_3</span>
               Cultura e Identidad
-            </h2>
+            </h1>
 
-            <!-- Avatar Selection -->
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70">Elige tu avatar</label>
-              </div>
-              <div class="relative">
-                <button type="button" (click)="scrollAvatars(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-surface-container-lowest/90 rounded-full shadow-md border border-outline-variant p-2 hover:bg-surface-container transition-all">
-                  <span class="material-symbols-outlined">chevron_left</span>
+            <!-- Avatar Selection Carousel -->
+            <div class="group/carousel bg-surface-variant/5 p-4 sm:p-6 rounded-3xl border border-outline-variant/10 shadow-inner overflow-hidden relative">
+              <label class="block text-[10px] font-bold uppercase tracking-widest text-secondary/70 mb-4 text-center">Escoge tu identidad de Autor</label>
+              
+              <div class="relative px-8">
+                <!-- Navigation Buttons (More Discreet) -->
+                <button type="button" (click)="scrollAvatars(-1)" class="absolute left-0 top-1/2 -translate-y-10 z-20 w-8 h-8 rounded-full bg-surface-container/40 text-secondary border border-outline-variant/20 flex items-center justify-center hover:bg-secondary hover:text-on-secondary transition-all opacity-40 group-hover/carousel:opacity-100">
+                  <span class="material-symbols-outlined text-base">arrow_back_ios_new</span>
                 </button>
-                <div #avatarScrollContainer class="flex gap-3 overflow-x-auto scroll-smooth px-10 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                
+                <button type="button" (click)="scrollAvatars(1)" class="absolute right-0 top-1/2 -translate-y-10 z-20 w-8 h-8 rounded-full bg-surface-container/40 text-secondary border border-outline-variant/20 flex items-center justify-center hover:bg-secondary hover:text-on-secondary transition-all opacity-40 group-hover/carousel:opacity-100">
+                  <span class="material-symbols-outlined text-base">arrow_forward_ios</span>
+                </button>
+
+                <!-- Carousel Container -->
+                <div #avatarScrollContainer class="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                   @for (avatar of avatars; track avatar) {
-                    <div class="flex-shrink-0">
-                      <button type="button" (click)="fotoPerfilUrl = avatar" class="relative w-24 h-24 rounded-2xl overflow-hidden border-2 transition-all duration-300 hover:scale-105"
+                    <div class="flex-none w-[42%] sm:w-[30%] snap-center text-center">
+                      <button type="button" (click)="fotoPerfilUrl = avatar" 
+                        class="relative aspect-square w-full rounded-2xl overflow-hidden border-2 transition-all hover:scale-105 active:scale-95 shadow-sm flex items-center justify-center bg-surface-container"
                         [class.border-tertiary]="fotoPerfilUrl === avatar"
-                        [class.border-transparent]="fotoPerfilUrl !== avatar">
+                        [class.border-transparent]="fotoPerfilUrl !== avatar"
+                        [class.ring-4]="fotoPerfilUrl === avatar"
+                        [class.ring-tertiary/10]="fotoPerfilUrl === avatar">
                         <img [src]="avatar" class="w-full h-full object-cover grayscale-[0.3] hover:grayscale-0 transition-all" alt="Avatar option">
                         @if (fotoPerfilUrl === avatar) {
                           <div class="absolute inset-0 bg-tertiary/20 flex items-center justify-center backdrop-blur-[1px]">
@@ -334,9 +343,6 @@ import { User } from '../../core/domain/models/user.model';
                     </div>
                   }
                 </div>
-                <button type="button" (click)="scrollAvatars(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-surface-container-lowest/90 rounded-full shadow-md border border-outline-variant p-2 hover:bg-surface-container transition-all">
-                  <span class="material-symbols-outlined">chevron_right</span>
-                </button>
               </div>
 
               @if (showErrors && !fotoPerfilUrl) {
@@ -682,7 +688,7 @@ export class StudentRegistration {
       return !!this.educationLevel && !!this.grade && !!this.institution.trim();
     }
     if (this.currentStep === 3) {
-      return !!this.motherTongue.trim() && !!this.region && !!this.bio.trim() && !!this.fotoPerfilUrl;
+      return !!this.motherTongue.trim() && !!this.region && !!this.bio.trim();
     }
     return true;
   }
@@ -732,14 +738,10 @@ export class StudentRegistration {
       const backendMessage = error.error?.message;
 
       if (error.status === 409) {
-        return backendMessage || 'Ese correo ya está registrado. Inicia sesión o usa otro correo.';
+        return backendMessage || 'Ese correo ya esta registrado. Inicia sesion o usa otro correo.';
       }
 
-      if (error.status === 400) {
-        return backendMessage || 'Revisa los datos del formulario e inténtalo nuevamente.';
-      }
-
-      if (typeof backendMessage === 'string' && backendMessage.trim()) {
+      if (typeof backendMessage === 'string' && backendMessage.toLowerCase().includes('correo ya esta registrado')) {
         return backendMessage;
       }
     }
@@ -754,16 +756,17 @@ export class StudentRegistration {
     const fullName = `${this.firstName} ${this.lastName}`.trim();
     console.log(`[StudentRegistration] Registrando a ${fullName}`);
 
+    // Construimos el payload exactamente como lo solicita el backend
     const user: Partial<User> = {
-      email: this.email.trim(),
+      email: this.email,
       password: this.password,
       rol: this.registrationRole === 'teacher' ? 'docente' : 'estudiante',
       nombreCompleto: fullName,
-      grado: this.grade,
-      institucion: this.institution.trim(),
-      lenguaMaterna: this.motherTongue.trim(),
+      grado: this.grade, // El grado ya incluye el nivel (ej: "1ro de Primaria")
+      institucion: this.institution,
+      lenguaMaterna: this.motherTongue,
       regionCultural: this.region,
-      bio: this.bio.trim(),
+      bio: this.bio,
       fotoPerfilUrl: this.fotoPerfilUrl,
       narrativasPublicadas: 0
     };

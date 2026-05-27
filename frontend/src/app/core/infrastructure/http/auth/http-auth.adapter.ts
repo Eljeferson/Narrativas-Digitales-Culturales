@@ -100,16 +100,7 @@ export class HttpAuthAdapter implements AuthPort {
   }
 
   register(user: Partial<User>): Observable<User> {
-    const payload = {
-      ...user,
-      password: user.password,
-      contrasena: user.password,
-      clave: user.password,
-      rol: user.rol,
-      role: user.rol
-    };
-
-    return this.http.post<any>(`${this.apiUrl}/registro`, payload).pipe(
+    return this.http.post<any>(`${this.apiUrl}/registro`, user).pipe(
       map((response) => this.mapResponseToUser(response)),
       tap((savedUser) => this.persistUser(savedUser))
     );
