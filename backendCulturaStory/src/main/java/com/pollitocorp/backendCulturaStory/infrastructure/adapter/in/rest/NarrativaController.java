@@ -2,6 +2,8 @@ package com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest;
 
 import com.pollitocorp.backendCulturaStory.domain.model.NarrativaCultural;
 import com.pollitocorp.backendCulturaStory.domain.port.in.NarrativaUseCase;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.MejoraNarrativaRequest;
+import com.pollitocorp.backendCulturaStory.infrastructure.adapter.in.rest.dto.MejoraNarrativaResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/narrativas")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class NarrativaController {
 
     private final NarrativaUseCase narrativaUseCase;
@@ -43,5 +44,15 @@ public class NarrativaController {
     public ResponseEntity<String> generarEsquema(@RequestParam String cultura) {
         // HU-01: La IA genera un esquema narrativo culturalmente pertinente
         return ResponseEntity.ok(narrativaUseCase.generarEsquema(cultura));
+    }
+
+    @PostMapping("/mejorar-narrativa")
+    public ResponseEntity<MejoraNarrativaResponse> mejorarNarrativa(@RequestBody MejoraNarrativaRequest request) {
+        String resultado = narrativaUseCase.mejorarNarrativa(
+            request.getTitulo(),
+            request.getCultura(),
+            request.getContenido()
+        );
+        return ResponseEntity.ok(new MejoraNarrativaResponse(resultado));
     }
 }
