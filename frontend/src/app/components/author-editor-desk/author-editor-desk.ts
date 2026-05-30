@@ -248,6 +248,11 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
     
     const narrativeId = this.route.snapshot.queryParamMap.get('id');
     if (!narrativeId) {
+      const transcribed = localStorage.getItem('pm2_transcribed_story');
+      if (transcribed) {
+        this.content = transcribed;
+        localStorage.removeItem('pm2_transcribed_story');
+      }
       return;
     }
 
@@ -263,6 +268,12 @@ export class AuthorEditorDesk implements OnInit, OnDestroy {
         this.region = narrative.regionCultural;
         this.tipoRelato = narrative.tipoRelato || 'cuento';
         this.status = narrative.status === 'ready_for_review' ? 'ready_for_review' : 'draft';
+
+        const transcribed = localStorage.getItem('pm2_transcribed_story');
+        if (transcribed) {
+          this.content = this.content ? this.content + '\n\n' + transcribed : transcribed;
+          localStorage.removeItem('pm2_transcribed_story');
+        }
       },
       error: (err) => console.error('Error loading narrative:', err)
     });

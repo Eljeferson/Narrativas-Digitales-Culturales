@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 declare global {
   interface Window {
@@ -96,6 +97,7 @@ export class GrabacionVozStt {
   audioUrl = '';
   supportMessage = 'Usa Chrome, Edge o un navegador compatible con Web Speech para STT en vivo.';
 
+  private router = inject(Router);
   private recognition?: any;
   private mediaRecorder?: MediaRecorder;
   private audioChunks: Blob[] = [];
@@ -176,6 +178,7 @@ export class GrabacionVozStt {
   insertIntoNarrative(): void {
     localStorage.setItem('pm2_transcribed_story', this.transcript);
     this.notice = 'Texto insertado en el borrador local de la narrativa.';
+    this.router.navigate(['/escritorio-del-autor']);
   }
 
   private startSpeechRecognition(): void {
