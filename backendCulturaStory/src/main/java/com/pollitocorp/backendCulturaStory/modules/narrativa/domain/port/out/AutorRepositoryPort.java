@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface AutorRepositoryPort {
     AutorEstudiante save(AutorEstudiante autor);
+    List<AutorEstudiante> saveAll(List<AutorEstudiante> autores);
     Optional<AutorEstudiante> findById(UUID id);
     Optional<AutorEstudiante> findByUserId(UUID userId);
     List<AutorEstudiante> findByGrado(String grado);

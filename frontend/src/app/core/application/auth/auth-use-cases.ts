@@ -26,3 +26,25 @@ export class SyncSessionUseCase {
     return this.authPort.syncSession(email);
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetCurrentUserUseCase {
+  constructor(@Inject(AUTH_PORT) private authPort: AuthPort) {}
+
+  execute(): Observable<User | null> {
+    return this.authPort.getCurrentUser();
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LogoutUseCase {
+  constructor(@Inject(AUTH_PORT) private authPort: AuthPort) {}
+
+  execute(): Observable<void> {
+    return this.authPort.logout();
+  }
+}

@@ -25,6 +25,16 @@ public class JpaUsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
+    public List<Usuario> saveAll(List<Usuario> usuarios) {
+        return repository.saveAll(usuarios.stream()
+                        .map(mapper::toEntity)
+                        .collect(Collectors.toList()))
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Usuario> findById(UUID id) {
         return repository.findById(id).map(mapper::toDomain);
     }
@@ -32,6 +42,13 @@ public class JpaUsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     @Override
     public Optional<Usuario> findByEmail(String email) {
         return repository.findByEmail(email).map(mapper::toDomain);
+    }
+
+    @Override
+    public List<String> findExistingEmails(List<String> emails) {
+        return repository.findByEmailIn(emails).stream()
+                .map(entity -> entity.getEmail())
+                .collect(Collectors.toList());
     }
 
     @Override

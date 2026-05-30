@@ -11,6 +11,7 @@
 node_modules/    # IMPORTANTE: Sin la / inicial para que ignore los del front y los del back
 npm-debug.log
 yarn-error.log
+**/.npm-cache/
 
 
 # IDEs and editors

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ListNarrativesUseCase } from '../../core/application/narratives/narrative-use-cases';
-import { AUTH_PORT } from '../../core/application/auth/auth-use-cases';
+import { GetCurrentUserUseCase, LogoutUseCase } from '../../core/application/auth/auth-use-cases';
 import { Narrative } from '../../core/domain/models/narrative.model';
 import { AnalyzeVocationUseCase } from '../../core/application/vocation/analyze-vocation.use-case';
 import { VocationPrediction } from '../../core/domain/models/vocation.model';
@@ -171,7 +171,7 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
         </section>
 
         <!-- AI Prediction Box - Premium Gold Style (Compacted) -->
-        <div *ngIf="vocationPrediction" class="flex-1 bg-[#D4AF37] text-on-surface rounded-[1.5rem] shadow-xl overflow-hidden animate-slide-up relative min-h-[450px] border border-white/20" style="animation-delay: 0.3s">
+        <div *ngIf="vocationPrediction || vocationError || narratives.length > 0" class="flex-1 bg-[#D4AF37] text-on-surface rounded-[1.5rem] shadow-xl overflow-hidden animate-slide-up relative min-h-[450px] border border-white/20" style="animation-delay: 0.3s">
           <!-- Decorative Pattern -->
           <div class="absolute inset-0 opacity-15 textile-pattern pointer-events-none"></div>
           
@@ -181,22 +181,55 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
                 <span class="material-symbols-outlined text-primary text-2xl font-black">psychology</span>
                 <h3 class="font-headline font-black text-lg uppercase tracking-widest text-primary">Tu Pasión</h3>
               </div>
-              <span class="bg-primary text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">AI INSIGHT</span>
+              <div class="flex items-center gap-2">
+                <span class="bg-primary text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">ML v2</span>
+                <button
+                  type="button"
+                  (click)="reanalyzeWithAI()"
+                  [disabled]="isAnalyzing || narratives.length === 0"
+                  class="flex items-center gap-1 rounded-full bg-white/70 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-primary shadow-sm border border-white/50 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                  <span class="material-symbols-outlined text-sm" [class.animate-spin]="isAnalyzing">sync</span>
+                  {{ isAnalyzing ? 'Analizando' : 'Reanalizar con IA' }}
+                </button>
+              </div>
             </div>
             
             <div class="p-6 space-y-6 flex-1">
-              <div class="text-3xl font-headline font-black text-primary leading-tight drop-shadow-sm">{{ vocationPrediction.passion }}</div>
+              <div class="rounded-2xl bg-white/35 border border-white/30 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-primary/70">
+                <span class="material-symbols-outlined text-sm align-middle">history_edu</span>
+                Base analizada: {{ analyzedNarrativeTitle || 'historia reciente' }}
+                <span *ngIf="lastAnalyzedAt">- {{ lastAnalyzedAt }}</span>
+              </div>
+
+              <div *ngIf="vocationError" class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-bold text-red-700">
+                {{ vocationError }}
+              </div>
+
+              <div class="text-3xl font-headline font-black text-primary leading-tight drop-shadow-sm">{{ vocationPrediction?.passion || 'Listo para analizar' }}</div>
               
               <div class="p-4 bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-lg">
                 <div class="flex justify-between items-center mb-2">
                   <p class="text-[10px] font-black uppercase tracking-widest text-primary/50">SUGERENCIA</p>
-                  <p class="text-xl font-black text-primary tracking-tight">{{ getTopCareer() }}</p>
+                  <p class="text-xl font-black text-primary tracking-tight">{{ getTopCareer() || 'Ejecuta IA' }}</p>
                 </div>
-                <p class="text-base text-on-surface-variant leading-snug font-medium italic border-t border-black/10 pt-3">{{ vocationPrediction.description }}</p>
+                <p class="text-base text-on-surface-variant leading-snug font-medium italic border-t border-black/10 pt-3">
+                  {{ vocationPrediction?.description || 'Presiona Reanalizar con IA para ejecutar la predicción vocacional en vivo durante la exposición.' }}
+                </p>
+              </div>
+
+              <div *ngIf="vocationPrediction?.explanation" class="rounded-2xl bg-white/40 border border-white/40 p-4 shadow-sm">
+                <p class="text-[10px] font-black uppercase tracking-widest text-primary/50 mb-2">Explicabilidad ML</p>
+                <p class="text-sm text-on-surface-variant leading-snug font-medium">{{ vocationPrediction?.explanation }}</p>
+                <div *ngIf="vocationPrediction?.matched_terms?.length" class="mt-3 flex flex-wrap gap-2">
+                  <span *ngFor="let term of vocationPrediction?.matched_terms?.slice(0, 6)"
+                        class="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-primary">
+                    {{ term }}
+                  </span>
+                </div>
               </div>
 
               <!-- Accuracy Metrics Compacted -->
-              <div class="grid grid-cols-1 gap-3">
+              <div *ngIf="vocationPrediction" class="grid grid-cols-1 gap-3">
                 <div class="bg-black/10 p-4 rounded-xl border border-black/5 shadow-inner">
                   <div class="flex justify-between items-center mb-2">
                     <p class="text-[10px] font-black uppercase tracking-widest text-primary">Exactitud</p>
@@ -217,8 +250,19 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
                   </div>
                 </div>
               </div>
+
+              <div *ngIf="vocationPrediction?.top_matches?.length" class="rounded-2xl bg-black/10 border border-black/5 p-4 shadow-inner">
+                <p class="text-[10px] font-black uppercase tracking-widest text-primary/60 mb-3">Ranking de perfiles ML</p>
+                <div class="space-y-2">
+                  <div *ngFor="let match of vocationPrediction?.top_matches?.slice(0, 3); let i = index"
+                       class="flex items-center justify-between rounded-xl bg-white/35 px-3 py-2">
+                    <span class="text-xs font-black text-primary">{{ i + 1 }}. {{ match.passion }}</span>
+                    <span class="text-[10px] font-black text-primary/70">{{ (match.score * 100) | number:'1.1-1' }}%</span>
+                  </div>
+                </div>
+              </div>
               
-              <div class="pt-6 border-t border-black/10">
+              <div *ngIf="vocationPrediction" class="pt-6 border-t border-black/10">
                 <p class="text-[11px] font-black uppercase tracking-widest text-primary/40 mb-4">Otros Caminos Vocacionales</p>
                 <div class="flex flex-wrap gap-3">
                   <span *ngFor="let career of getAllCareers().slice(1, 4)" 
@@ -323,7 +367,8 @@ import { VocationPrediction } from '../../core/domain/models/vocation.model';
 })
 export class StudentPanel implements OnInit {
   private listNarrativesUseCase = inject(ListNarrativesUseCase);
-  private authPort = inject(AUTH_PORT);
+  private getCurrentUserUseCase = inject(GetCurrentUserUseCase);
+  private logoutUseCase = inject(LogoutUseCase);
   private router = inject(Router);
   private analyzeVocationUseCase = inject(AnalyzeVocationUseCase);
 
@@ -331,9 +376,13 @@ export class StudentPanel implements OnInit {
   isLoading = true;
   userName = 'Creador';
   userAvatar = '';
+  currentAuthorId = 'aaaaaaaa-0000-0000-0000-000000000001';
   activeTab: 'inicio' | 'historias' = 'inicio';
   vocationPrediction: VocationPrediction | null = null;
   isAnalyzing = false;
+  vocationError = '';
+  analyzedNarrativeTitle = '';
+  lastAnalyzedAt = '';
 
   ngOnInit() {
     this.loadUserData();
@@ -341,25 +390,20 @@ export class StudentPanel implements OnInit {
   }
 
   loadUserData() {
-    const userStr = localStorage.getItem('culturastory.currentUser');
-    if (userStr) {
-      try {
-         const user = JSON.parse(userStr);
-         // Capitalizamos la primera letra del nombre
-         const rawName = user.nombreCompleto || user.nombre || 'Creador';
-         this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
-         this.userAvatar = user.fotoPerfilUrl || '';
-      } catch(e) {
-         console.error('Error parseando usuario local', e);
+    this.getCurrentUserUseCase.execute().subscribe((user) => {
+      if (user) {
+        const rawName = user.nombreCompleto || 'Creador';
+        this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
+        this.userAvatar = user.fotoPerfilUrl || '';
+        this.currentAuthorId = user.authorId || this.currentAuthorId;
       }
-    }
+    });
   }
 
   loadNarratives() {
     this.isLoading = true;
-    const authorId = localStorage.getItem('currentAuthorId') || 'aaaaaaaa-0000-0000-0000-000000000001';
     
-    this.listNarrativesUseCase.execute(authorId).subscribe({
+    this.listNarrativesUseCase.execute(this.currentAuthorId).subscribe({
       next: (data) => {
         this.narratives = data;
         this.isLoading = false;
@@ -378,17 +422,37 @@ export class StudentPanel implements OnInit {
   analyzeStudentVocation(narrative: Narrative) {
     if (this.isAnalyzing) return;
     this.isAnalyzing = true;
+    this.vocationError = '';
+    this.analyzedNarrativeTitle = narrative.titulo || 'Historia reciente';
     
-    this.analyzeVocationUseCase.execute(this.userName, narrative.contenido).subscribe({
+    this.analyzeVocationUseCase.execute(this.userName, narrative.contenido || '').subscribe({
       next: (response) => {
         this.vocationPrediction = response.prediction;
+        this.lastAnalyzedAt = new Date().toLocaleTimeString('es-PE', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        if (response.prediction.error) {
+          this.vocationError = response.prediction.error;
+        }
         this.isAnalyzing = false;
       },
       error: (err) => {
         console.error('Error al analizar vocación:', err);
+        this.vocationError = 'No se pudo conectar con el servicio de IA. Verifica que el microservicio ML esté activo.';
         this.isAnalyzing = false;
       }
     });
+  }
+
+  reanalyzeWithAI() {
+    const narrative = this.narratives.find((item) => item.titulo === this.analyzedNarrativeTitle) || this.narratives[0];
+    if (!narrative) {
+      this.vocationError = 'Crea una narrativa antes de ejecutar la predicción con IA.';
+      return;
+    }
+
+    this.analyzeStudentVocation(narrative);
   }
 
   getNarrativeStatusLabel(narrative: Narrative): string {
@@ -436,7 +500,7 @@ export class StudentPanel implements OnInit {
   }
 
   logout() {
-    this.authPort.logout().subscribe(() => {
+    this.logoutUseCase.execute().subscribe(() => {
       this.router.navigate(['/']);
     });
   }

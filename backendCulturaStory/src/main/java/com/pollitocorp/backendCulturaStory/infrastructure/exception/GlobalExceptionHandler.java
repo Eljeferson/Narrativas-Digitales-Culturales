@@ -1,5 +1,7 @@
 package com.pollitocorp.backendCulturaStory.infrastructure.exception;
 
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.AuthErrorType;
+import com.pollitocorp.backendCulturaStory.modules.auth.domain.model.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,20 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ErrorResponse> handleAuthException(AuthException ex, HttpServletRequest request) {
+        HttpStatus status = mapAuthStatus(ex.getType());
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(status.value())
+                .error(ex.getMessage())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(error, status);
+    }
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException ex, HttpServletRequest request) {
@@ -79,5 +95,13 @@ public class GlobalExceptionHandler {
                 .build();
         
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private HttpStatus mapAuthStatus(AuthErrorType type) {
+        return switch (type) {
+            case CONFLICT -> HttpStatus.CONFLICT;
+            case UNAUTHORIZED -> HttpStatus.UNAUTHORIZED;
+            case BAD_REQUEST -> HttpStatus.BAD_REQUEST;
+        };
     }
 }

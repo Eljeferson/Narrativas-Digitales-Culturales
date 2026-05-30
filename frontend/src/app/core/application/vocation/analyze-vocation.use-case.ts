@@ -1,7 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
-import { VOCATION_PORT, VocationPort } from '../../domain/ports/vocation.port';
+import { VocationPort } from '../../domain/ports/vocation.port';
 import { VocationResponse } from '../../domain/models/vocation.model';
+
+export const VOCATION_PORT = new InjectionToken<VocationPort>('VOCATION_PORT');
 
 @Injectable({
   providedIn: 'root'

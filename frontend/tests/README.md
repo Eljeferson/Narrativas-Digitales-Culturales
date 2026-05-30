@@ -39,7 +39,7 @@ Tambien acepta `TEST_STUDENT_EMAIL`, `TEST_STUDENT_PASSWORD` y `TEST_AUTHOR_ID`.
 
 El runner `scripts/stress-1000.mjs` crea 1000 registros sinteticos por ejecucion y prueba:
 
-- registro masivo
+- registro masivo por lote en `/auth/registros-masivos`
 - login masivo
 - busqueda de instituciones
 - consulta de narrativas/biblioteca por autor
@@ -72,9 +72,17 @@ Variables utiles:
 API_BASE_URL=http://localhost:8080/sistema/api/v1
 STRESS_RECORDS=1000
 STRESS_CONCURRENCY=25
+STRESS_BULK_REGISTRATION=true
+STRESS_BULK_FALLBACK=true
 STRESS_INCLUDE_IA=false
 STRESS_DRY_RUN=false
 TEST_AUTHOR_ID=00000000-0000-0000-0000-000000000000
+```
+
+Si el backend todavia no tiene activo `/auth/registros-masivos`, el runner usa automaticamente el registro individual anterior. Para forzar el modo anterior:
+
+```bash
+STRESS_BULK_REGISTRATION=false npm run stress:1000
 ```
 
 Para comparar antes y despues, ejecuta primero `stress:baseline`, aplica optimizaciones y luego `stress:optimized` con la misma configuracion.
