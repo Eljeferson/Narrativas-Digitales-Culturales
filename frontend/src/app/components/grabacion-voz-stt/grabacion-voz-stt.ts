@@ -16,6 +16,10 @@ declare global {
   imports: [CommonModule, FormsModule],
   template: `
 <main class="min-h-screen bg-background text-on-surface px-4 py-6 md:px-10">
+  <button (click)="goBack()" class="mb-6 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:gap-3 transition-all group cursor-pointer border-0 bg-transparent p-0">
+    <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+    Volver al panel
+  </button>
   <section class="mx-auto max-w-6xl">
     <header class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div>
@@ -179,6 +183,10 @@ export class GrabacionVozStt {
     localStorage.setItem('pm2_transcribed_story', this.transcript);
     this.notice = 'Texto insertado en el borrador local de la narrativa.';
     this.router.navigate(['/escritorio-del-autor']);
+  }
+
+  goBack(): void {
+    this.router.navigate(['/panel-del-estudiante']);
   }
 
   private startSpeechRecognition(): void {

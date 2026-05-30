@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reproductor-narrativa-tts',
@@ -8,6 +9,11 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
   template: `
 <main class="min-h-screen bg-background px-4 py-6 text-on-surface md:px-10">
+  <button (click)="goBack()" class="mb-6 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:gap-3 transition-all group cursor-pointer border-0 bg-transparent p-0">
+    <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+    Volver al panel
+  </button>
+
   <section class="mx-auto max-w-6xl">
     <header class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div>
@@ -84,6 +90,8 @@ import { FormsModule } from '@angular/forms';
   styles: `:host { display: block; }`
 })
 export class ReproductorNarrativaTts implements OnInit {
+  private router = inject(Router);
+
   text = 'Cuando el primer rayo de sol toca la cumbre del Ausangate, los pobladores dicen que las montañas comienzan a respirar. Las familias ofrecen hojas de coca a la tierra y cada niña escucha la historia que sus abuelos guardaron en la memoria.';
   voiceGender: 'female' | 'male' = 'female';
   rate = 1;
@@ -94,6 +102,10 @@ export class ReproductorNarrativaTts implements OnInit {
 
   ngOnInit(): void {
     this.prepareDownload();
+  }
+
+  goBack(): void {
+    this.router.navigate(['/panel-del-estudiante']);
   }
 
   generateAudio(): void {

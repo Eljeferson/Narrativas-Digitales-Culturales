@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface StoryboardPanel {
   title: string;
@@ -21,6 +22,10 @@ interface StoryboardPanel {
   </div>
 
   <section class="mx-auto max-w-7xl">
+    <button (click)="goBack()" class="print:hidden mb-6 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:gap-3 transition-all group cursor-pointer border-0 bg-transparent p-0">
+      <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      Volver al panel
+    </button>
     <header class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between print:hidden">
       <div>
         <p class="text-xs font-bold uppercase tracking-widest text-tertiary">HU-03 y HU-05 · IA creativa multimedia</p>
@@ -208,6 +213,8 @@ interface StoryboardPanel {
   `
 })
 export class StoryboardDigitalIa {
+  private router = inject(Router);
+
   culture: keyof typeof this.culturalElements = 'Andina';
   theme = 'el cóndor herido';
   panels: StoryboardPanel[] = [];
@@ -219,8 +226,43 @@ export class StoryboardDigitalIa {
     Costeña: ['caballito de totora', 'huaca', 'mar', 'redes de pesca', 'cerámica mochica']
   };
 
+  realImages: Record<string, string[]> = {
+    Andina: [
+      'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=800&q=80',
+      'https://images.unsplash.com/photo-1590736969955-71cc94801759?w=800&q=80',
+      'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80',
+      'https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=800&q=80',
+      'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80'
+    ],
+    Amazónica: [
+      'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?w=800&q=80',
+      'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
+      'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=800&q=80',
+      'https://images.unsplash.com/photo-1552410260-0fd9b577afa6?w=800&q=80',
+      'https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=800&q=80'
+    ],
+    Afroperuana: [
+      'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&q=80',
+      'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800&q=80',
+      'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80',
+      'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800&q=80',
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80'
+    ],
+    Costeña: [
+      'https://images.unsplash.com/photo-1601999109332-542b18dbec57?w=800&q=80',
+      'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=800&q=80',
+      'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80',
+      'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80',
+      'https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&q=80'
+    ]
+  };
+
   constructor() {
     this.generateStoryboard();
+  }
+
+  goBack(): void {
+    this.router.navigate(['/panel-del-estudiante']);
   }
 
   generateStoryboard(): void {
@@ -246,123 +288,8 @@ export class StoryboardDigitalIa {
   }
 
   private generateImage(index: number, seed = 1): string {
-    const element = this.culturalElements[this.culture][index % this.culturalElements[this.culture].length];
-    const beats = ['Llamado', 'Encuentro', 'Prueba', 'Celebración'];
-    const currentBeat = beats[index % beats.length];
-    
-    let drawingContent = '';
-    let bgDecoration = '';
-    
-    if (this.culture === 'Andina') {
-      bgDecoration = `
-        <path d="M 100 450 L 300 200 L 500 450 Z" fill="none" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="4,4"/>
-        <path d="M 400 450 L 550 280 L 700 450 Z" fill="none" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="4,4"/>
-      `;
-    } else if (this.culture === 'Amazónica') {
-      bgDecoration = `
-        <path d="M 50 380 Q 200 300, 400 380 T 750 380" fill="none" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="4,4"/>
-        <path d="M 50 410 Q 200 330, 400 410 T 750 410" fill="none" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="4,4"/>
-      `;
-    } else if (this.culture === 'Costeña') {
-      bgDecoration = `
-        <path d="M 50 420 L 150 320 L 250 320 L 350 220 L 450 220 L 550 320 L 650 320 L 750 420 Z" fill="none" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="4,4"/>
-      `;
-    } else if (this.culture === 'Afroperuana') {
-      bgDecoration = `
-        <path d="M 600 150 Q 610 130, 620 150 T 630 150" fill="none" stroke="#7f8c8d" stroke-width="2"/>
-        <line x1="620" y1="140" x2="620" y2="100" stroke="#7f8c8d" stroke-width="2"/>
-        <circle cx="600" cy="110" r="10" stroke="#7f8c8d" stroke-width="2" fill="none"/>
-      `;
-    }
-
-    if (currentBeat === 'Llamado') {
-      drawingContent = `
-        ${bgDecoration}
-        <!-- Stick figure calling -->
-        <circle cx="300" cy="280" r="20" fill="none" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="300" y1="300" x2="300" y2="390" stroke="#2c3e50" stroke-width="4"/>
-        <path d="M 300 320 Q 340 310 330 280" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <line x1="300" y1="320" x2="260" y2="350" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <line x1="300" y1="390" x2="280" y2="460" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <line x1="300" y1="390" x2="320" y2="460" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 360 250 C 400 230, 440 270, 480 250" fill="none" stroke="#2c3e50" stroke-width="3" stroke-dasharray="2,2"/>
-        <path d="M 370 275 C 410 255, 450 295, 490 275" fill="none" stroke="#2c3e50" stroke-width="3" stroke-dasharray="2,2"/>
-        <line x1="50" y1="460" x2="750" y2="460" stroke="#2c3e50" stroke-width="4"/>
-      `;
-    } else if (currentBeat === 'Encuentro') {
-      drawingContent = `
-        ${bgDecoration}
-        <!-- Stick figure 1 (left) -->
-        <circle cx="280" cy="290" r="20" fill="none" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="280" y1="310" x2="280" y2="390" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="280" y1="330" x2="340" y2="320" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <line x1="280" y1="390" x2="260" y2="460" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="280" y1="390" x2="295" y2="460" stroke="#2c3e50" stroke-width="4"/>
-
-        <!-- Stick figure 2 (right) -->
-        <circle cx="480" cy="290" r="20" fill="none" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="480" y1="310" x2="480" y2="390" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="480" y1="330" x2="420" y2="320" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <line x1="480" y1="390" x2="465" y2="460" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="480" y1="390" x2="500" y2="460" stroke="#2c3e50" stroke-width="4"/>
-
-        <!-- Handshake / Exchanged Object -->
-        <circle cx="380" cy="320" r="8" fill="none" stroke="#e74c3c" stroke-width="3"/>
-        <line x1="50" y1="460" x2="750" y2="460" stroke="#2c3e50" stroke-width="4"/>
-      `;
-    } else if (currentBeat === 'Prueba') {
-      drawingContent = `
-        ${bgDecoration}
-        <path d="M 350 460 C 450 400, 500 300, 650 250 L 750 250 L 750 460 Z" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-        <circle cx="320" cy="320" r="20" fill="none" stroke="#2c3e50" stroke-width="4"/>
-        <path d="M 320 340 L 340 390 L 370 410" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-        <line x1="330" y1="350" x2="400" y2="330" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 370 410 L 350 450 L 380 460" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-        <path d="M 370 410 L 380 430 L 410 435" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-        <line x1="50" y1="460" x2="750" y2="460" stroke="#2c3e50" stroke-width="4"/>
-      `;
-    } else {
-      drawingContent = `
-        ${bgDecoration}
-        <circle cx="280" cy="270" r="18" fill="none" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="280" y1="288" x2="280" y2="360" stroke="#2c3e50" stroke-width="4"/>
-        <path d="M 280 305 L 240 260" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 280 305 L 320 260" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 280 360 L 260 420 L 245 425" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-        <path d="M 280 360 L 300 420 L 315 425" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-
-        <circle cx="480" cy="270" r="18" fill="none" stroke="#2c3e50" stroke-width="4"/>
-        <line x1="480" y1="288" x2="480" y2="360" stroke="#2c3e50" stroke-width="4"/>
-        <path d="M 480 305 L 440 260" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 480 305 L 520 260" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 480 360 L 460 420 L 445 425" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-        <path d="M 480 360 L 500 420 L 515 425" fill="none" stroke="#2c3e50" stroke-width="4" stroke-linejoin="round"/>
-
-        <circle cx="380" cy="180" r="25" fill="none" stroke="#e67e22" stroke-width="4"/>
-        <line x1="380" y1="145" x2="380" y2="135" stroke="#e67e22" stroke-width="3"/>
-        <line x1="380" y1="215" x2="380" y2="225" stroke="#e67e22" stroke-width="3"/>
-        <line x1="345" y1="180" x2="335" y2="180" stroke="#e67e22" stroke-width="3"/>
-        <line x1="415" y1="180" x2="425" y2="180" stroke="#e67e22" stroke-width="3"/>
-
-        <line x1="50" y1="440" x2="750" y2="440" stroke="#2c3e50" stroke-width="4"/>
-      `;
-    }
-
-    const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-        <defs>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ebe9e3" stroke-width="1"/>
-          </pattern>
-        </defs>
-        <rect width="800" height="600" fill="#fcfbf9"/>
-        <rect width="800" height="600" fill="url(#grid)"/>
-        <rect x="25" y="25" width="750" height="550" fill="none" stroke="#bdc3c7" stroke-width="2" stroke-dasharray="8,8"/>
-        ${drawingContent}
-        <rect x="40" y="525" width="450" height="35" rx="5" fill="#2c3e50" opacity=".95"/>
-        <text x="55" y="548" fill="#fff" font-family="Courier New, monospace" font-size="16" font-weight="bold">${this.culture.toUpperCase()} · ${element.toUpperCase()} [${currentBeat.toUpperCase()}]</text>
-      </svg>`;
-      
-    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    const list = this.realImages[this.culture];
+    const offset = (seed + index) % list.length;
+    return list[offset];
   }
 }

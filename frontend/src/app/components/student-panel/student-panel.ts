@@ -386,34 +386,62 @@ export class StudentPanel implements OnInit {
 
   ngOnInit() {
     this.loadUserData();
-    this.loadNarratives();
   }
 
   loadUserData() {
-    this.getCurrentUserUseCase.execute().subscribe((user) => {
-      if (user) {
-        const rawName = user.nombreCompleto || 'Creador';
-        this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
-        this.userAvatar = user.fotoPerfilUrl || '';
-        this.currentAuthorId = user.authorId || this.currentAuthorId;
+    // Safety timeout: if user/narratives never respond, stop spinner after 5 s
+    const safetyTimer = setTimeout(() => {
+      this.isLoading = false;
+    }, 5000);
+
+    this.getCurrentUserUseCase.execute().subscribe({
+      next: (user) => {
+        if (user) {
+          const rawName = user.nombreCompleto || 'Creador';
+          this.userName = rawName.charAt(0).toUpperCase() + rawName.slice(1).split(' ')[0];
+          this.userAvatar = user.fotoPerfilUrl || '';
+          this.currentAuthorId = user.authorId || this.currentAuthorId;
+        }
+        clearTimeout(safetyTimer);
+        this.loadNarratives();
+      },
+      error: () => {
+        clearTimeout(safetyTimer);
+        this.isLoading = false;
+      },
+      complete: () => {
+        // In case the observable completes without emitting (no user)
+        clearTimeout(safetyTimer);
+        this.isLoading = false;
       }
     });
   }
 
   loadNarratives() {
     this.isLoading = true;
-    
+
+    // Safety timeout in case the narrative observable hangs
+    const safetyTimer = setTimeout(() => {
+      this.isLoading = false;
+    }, 5000);
+
     this.listNarrativesUseCase.execute(this.currentAuthorId).subscribe({
       next: (data) => {
+        clearTimeout(safetyTimer);
         this.narratives = data;
         this.isLoading = false;
-        
+
         if (data.length > 0 && !this.vocationPrediction) {
           this.analyzeStudentVocation(data[0]);
         }
       },
       error: (err) => {
+        clearTimeout(safetyTimer);
         console.error('Error cargando narrativas:', err);
+        this.isLoading = false;
+      },
+      complete: () => {
+        clearTimeout(safetyTimer);
         this.isLoading = false;
       }
     });
