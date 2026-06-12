@@ -55,4 +55,10 @@ public class NarrativaController {
         );
         return ResponseEntity.ok(new MejoraNarrativaResponse(resultado));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarNarrativa(@PathVariable UUID id, @RequestParam UUID autorId) {
+        narrativaUseCase.eliminarNarrativa(id, autorId);
+        return ResponseEntity.noContent().build();
+    }
 }

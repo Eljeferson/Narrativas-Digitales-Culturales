@@ -42,4 +42,9 @@ public class JpaNarrativaRepositoryAdapter implements NarrativaRepositoryPort {
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
+    }
 }

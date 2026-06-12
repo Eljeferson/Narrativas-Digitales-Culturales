@@ -11,4 +11,5 @@ public interface NarrativaRepositoryPort {
     Optional<NarrativaCultural> findById(UUID id);
     List<NarrativaCultural> findByAutorId(UUID autorId);
     List<NarrativaCultural> findByGrado(String grado);
+    void deleteById(UUID id);
 }

@@ -115,4 +115,17 @@ public class NarrativaService implements NarrativaUseCase {
         params.put("type", "improvement");
         return aiPort.generarTexto(prompt, params);
     }
+
+    @Override
+    public void eliminarNarrativa(UUID id, UUID autorId) {
+        NarrativaCultural narrativa = repositoryPort.findById(id)
+                .orElseThrow(() -> new RuntimeException("Narrativa no encontrada"));
+        
+        // Validación de Autorización
+        if (!narrativa.getAutor().getId().equals(autorId)) {
+            throw new RuntimeException("Acceso denegado: El usuario no tiene permisos para eliminar esta narrativa");
+        }
+        
+        repositoryPort.deleteById(id);
+    }
 }

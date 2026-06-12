@@ -6,6 +6,8 @@ services:
     container_name: culturastory-backend
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     restart: always
