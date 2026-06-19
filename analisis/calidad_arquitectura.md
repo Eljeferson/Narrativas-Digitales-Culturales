@@ -1,0 +1,3 @@
+# Evaluación Arquitectónica
+
+es un documento que recopila la información relevante sobre un proyecto arquitectónico, con el fin de evaluar su viabilidad, calidad y cumplimiento de los objetivos establecidos. En este informe se incluyen aspectos como la descripción del proyecto, el análisis de su contexto, la evaluación de su diseño y funcionalidad, la revisión de los materiales y tecnologías utilizadas, así como la estimación de costos y plazos de ejecución. El informe de Evaluación Arquitectónica es una herramienta fundamental para tomar decisiones informadas sobre un proyecto y garantizar su éxito.

@@ -1,0 +1,3 @@
+# Infraestructura
+
+El pront de Dependencias es un documento que detalla las necesidades y requerimientos de recursos humanos, materiales y financieros para llevar a cabo un proyecto o actividad específica. En este documento se especifican las diferentes áreas o departamentos involucrados, así como las responsabilidades y tareas de cada uno. También se incluye un presupuesto detallado que indica los costos estimados de cada una de las actividades y recursos necesarios. El pront de Dependencias es fundamental para la planificación y gestión eficiente de proyectos, ya que permite identificar y asignar los recursos necesarios para alcanzar los objetivos establecidos.
