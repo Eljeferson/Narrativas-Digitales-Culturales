@@ -1,27 +1,32 @@
-# Inventario de Archivos
+# Inventario de Archivos - CulturaStory AI
 
-Prompt: "Actúa como un Auditor de Software Senior.
+A continuación se presenta un inventario de alto nivel de los directorios y archivos principales del proyecto, obtenido durante la fase de auditoría.
 
-Analiza la estructura completa del proyecto.
+## Raíz del Proyecto
+- `backendCulturaStory/`: Contiene el backend desarrollado en Spring Boot.
+- `frontend/`: Contiene el frontend desarrollado en Angular.
+- `IA/`: Directorio con scripts y pruebas de concepto relacionadas a la Inteligencia Artificial (Python).
+- `docs/`: Carpeta destinada a la documentación del proyecto.
+- `docker-compose.yml`: Archivo de orquestación de contenedores para levantar los servicios.
+- `README.md`: Documentación principal con la descripción general, arquitectura y guías.
+- `culturastory_db_completa.sql` y `culturastory_sp_fn_triggers_vistas.sql`: Scripts de base de datos PostgreSQL.
 
-Objetivo:
-Identificar todas las tecnologías utilizadas sin asumir previamente ningún lenguaje o framework.
+## Estructura del Backend (`backendCulturaStory/`)
+- `pom.xml`: Archivo de configuración de Maven con las dependencias del proyecto.
+- `Dockerfile`: Archivo para la creación de la imagen Docker del backend.
+- `src/main/java/com/pollitocorp/backendCulturaStory/`:
+  - `infrastructure/`: Configuración, adaptadores de seguridad, excepciones globales.
+  - `modules/`: Módulos de negocio (Modular Monolith) separados por contexto.
+    - `auth/`: Módulo de autenticación y seguridad.
+    - `institucion/`: Módulo de gestión de instituciones educativas.
+    - `narrativa/`: Módulo central de narrativas culturales.
 
-Determina:
-
-1. Lenguajes encontrados.
-2. Frameworks encontrados.
-3. Tecnologías Backend.
-4. Tecnologías Frontend.
-5. Bases de datos.
-6. Herramientas DevOps.
-7. Servicios externos.
-8. Sistemas de autenticación.
-9. Sistema de despliegue.
-
-Genera una tabla:
-
-| Categoría | Tecnología | Evidencia | Confianza |
-
-Finalmente genera una conclusión técnica.
-"
+## Estructura del Frontend (`frontend/`)
+- `package.json`: Archivo de dependencias de npm y scripts de ejecución.
+- `angular.json`: Configuración del workspace de Angular.
+- `Dockerfile`: Archivo para la imagen Docker del frontend.
+- `tailwind.config.js` / `postcss.config.json`: Configuración de Tailwind CSS.
+- `src/app/`:
+  - `core/`: Servicios globales, interceptores y guards.
+  - `components/`: Componentes reutilizables o features específicos.
+  - Archivos de enrutamiento (`app.routes.ts`) y configuración base (`app.config.ts`).
